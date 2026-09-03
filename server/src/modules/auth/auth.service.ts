@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { StringValue } from 'ms';
 
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
@@ -8,6 +9,7 @@ import { randomInt } from 'crypto';
 import { DatabaseService } from '../../database/database.service.js';
 import { MailService } from '../mail/mail.service.js';
 import { LoginDto } from './dto/login.dto.js';
+import { VerifyOtpDto } from './dto/verify-otp.dto.js';
 
 
 
@@ -20,6 +22,57 @@ export class AuthService {
         private readonly configService: ConfigService,
         private readonly mailService: MailService,
     ) { }
+
+
+    private async generateAccessToken(user: {
+        id: number;
+        email: string;
+        role: string;
+    }) {
+        const secret = this.configService.getOrThrow<string>(
+            'JWT_ACCESS_SECRET',
+        );
+
+        const expiresIn = this.configService.getOrThrow<string>(
+            'JWT_ACCESS_EXPIRES_IN',
+        ) as StringValue;
+
+        return this.jwtService.signAsync(
+            {
+                sub: user.id,
+                email: user.email,
+                role: user.role,
+            },
+            {
+                secret,
+                expiresIn,
+            },
+        );
+    }
+
+
+
+    private async generateRefreshToken(user: {
+        id: number;
+    }) {
+        const secret = this.configService.getOrThrow<string>(
+            'JWT_REFRESH_SECRET',
+        );
+
+        const expiresIn = this.configService.getOrThrow<string>(
+            'JWT_REFRESH_EXPIRES_IN',
+        ) as StringValue;
+
+        return this.jwtService.signAsync(
+            {
+                sub: user.id,
+            },
+            {
+                secret,
+                expiresIn,
+            },
+        );
+    }
 
     async login(loginDto: LoginDto) {
         const { email, password } = loginDto;
@@ -71,7 +124,7 @@ export class AuthService {
             },
         });
 
-        
+
 
         // Create OTP record
         await this.databaseService.loginOtp.create({
@@ -90,6 +143,93 @@ export class AuthService {
 
         return {
             message: 'OTP sent successfully',
+        };
+    }
+
+
+
+    async verifyOtp(verifyOtpDto: VerifyOtpDto) {
+        const { email, otp } = verifyOtpDto;
+
+        const user = await this.databaseService.user.findUnique({
+            where: {
+                email,
+            },
+        });
+
+        if (!user || user.status !== 'ACTIVE') {
+            throw new UnauthorizedException('Invalid or expired OTP');
+        }
+
+        const loginOtp = await this.databaseService.loginOtp.findFirst({
+            where: {
+                userId: user.id,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        if (!loginOtp) {
+            throw new UnauthorizedException('Invalid or expired OTP');
+        }
+
+        if (loginOtp.expiresAt < new Date()) {
+            await this.databaseService.loginOtp.delete({
+                where: {
+                    id: loginOtp.id,
+                },
+            });
+
+            throw new UnauthorizedException('Invalid or expired OTP');
+        }
+
+        const isOtpValid = await bcrypt.compare(
+            otp,
+            loginOtp.otpHash,
+        );
+
+        if (!isOtpValid) {
+            throw new UnauthorizedException('Invalid or expired OTP');
+        }
+
+        // OTP can only be used once
+        await this.databaseService.loginOtp.delete({
+            where: {
+                id: loginOtp.id,
+            },
+        });
+
+        // Generate tokens
+        const accessToken = await this.generateAccessToken({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+        });
+
+        const refreshToken = await this.generateRefreshToken({
+            id: user.id,
+        });
+
+        // Hash refresh token before storing it
+        const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+
+        // Calculate refresh token expiration
+        const refreshExpiresAt = new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000,
+        );
+
+        await this.databaseService.refreshToken.create({
+            data: {
+                tokenHash: refreshTokenHash,
+                expiresAt: refreshExpiresAt,
+                userId: user.id,
+            },
+        });
+
+        return {
+            accessToken,
+            refreshToken,
         };
     }
 }

@@ -8,6 +8,7 @@ import {
 
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
+import { VerifyOtpDto } from './dto/verify-otp.dto.js';
 
 @Controller('auth')
 export class AuthController {
@@ -21,5 +22,14 @@ export class AuthController {
         @Body() loginDto: LoginDto,
     ) {
         return this.authService.login(loginDto);
+    }
+
+
+    @Post('verify-otp')
+    @HttpCode(HttpStatus.OK)
+    async verifyOtp(
+        @Body() verifyOtpDto: VerifyOtpDto,
+    ) {
+        return this.authService.verifyOtp(verifyOtpDto);
     }
 }
