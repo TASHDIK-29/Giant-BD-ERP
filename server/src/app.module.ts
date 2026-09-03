@@ -4,6 +4,8 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { DatabaseModule } from './database/database.module.js';
 import { SeederModule } from './modules/seeder/seeder.module.js';
+import { AuthModule } from './modules/auth/auth.module.js';
+import { MailModule } from './modules/mail/mail.module.js';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { SeederModule } from './modules/seeder/seeder.module.js';
     }),
     DatabaseModule,
     SeederModule,
+    AuthModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
