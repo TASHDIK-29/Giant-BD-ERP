@@ -6,7 +6,9 @@ import {
     Post,
     Req,
     Res,
-    UnauthorizedException
+    UnauthorizedException,
+    Get,
+    UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -15,6 +17,10 @@ import type { Request, Response } from 'express';
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { VerifyOtpDto } from './dto/verify-otp.dto.js';
+
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+// import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { AuthGuard } from '@nestjs/passport';
 
 
 @Controller('auth')
@@ -209,6 +215,23 @@ export class AuthController {
 
         return {
             message: 'Logged out successfully',
+        };
+    }
+
+
+
+    @Get('session')
+    @UseGuards(AuthGuard('jwt'))
+    getSession(
+        @CurrentUser() user: {
+            id: number;
+            email: string;
+            role: string;
+        },
+    ) {
+        return {
+            user,
+            permissions: [],
         };
     }
 }

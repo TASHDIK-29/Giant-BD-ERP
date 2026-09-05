@@ -4,13 +4,24 @@ import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
 import { MailModule } from '../mail/mail.module.js';
 
+import { PassportModule } from '@nestjs/passport';
+// import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { JwtStrategy } from './strategies/jwt.strategy.js';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+
 @Module({
   imports: [
+    PassportModule,
     JwtModule.register({}),
     MailModule,
   ],
-  providers: [AuthService],
   controllers: [AuthController],
-  exports: [AuthService]
+  providers: [
+    AuthService,
+    JwtStrategy,
+  ],
+  exports: [
+    AuthService,
+  ]
 })
-export class AuthModule {}
+export class AuthModule { }
