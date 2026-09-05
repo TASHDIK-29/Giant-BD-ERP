@@ -2,11 +2,13 @@ import {
     BadRequestException,
     ConflictException,
     Injectable,
+    NotFoundException,
 } from '@nestjs/common';
 
 import { DatabaseService } from '../../database/database.service.js';
 
 import { CreatePermissionGroupDto } from './dto/create-permission-group.dto.js';
+import { UpdatePermissionGroupDto } from './dto/update-permission-group.dto.js';
 
 import { QueryPermissionDto } from './dto/query-permission.dto.js';
 
@@ -162,7 +164,7 @@ export class PermissionsService {
             }
             : {};
 
-            
+
 
         const [permissionGroups, total] =
             await this.databaseService.$transaction([
@@ -214,4 +216,537 @@ export class PermissionsService {
             },
         };
     }
+
+
+
+
+
+    // async updatePermissionGroup(
+    //     id: number,
+    //     updatePermissionGroupDto: UpdatePermissionGroupDto,
+    // ) {
+    //     const existingGroup =
+    //         await this.databaseService.permissionGroup.findUnique({
+    //             where: {
+    //                 id,
+    //             },
+    //             include: {
+    //                 permissions: true,
+    //             },
+    //         });
+
+    //     if (!existingGroup) {
+    //         throw new NotFoundException(
+    //             `Permission group with ID ${id} was not found.`,
+    //         );
+    //     }
+
+    //     /*
+    //      * ------------------------------
+    //      * Normalize group key
+    //      * ------------------------------
+    //      */
+
+    //     const normalizedKey = updatePermissionGroupDto.key
+    //         ? normalizePermissionKey(updatePermissionGroupDto.key)
+    //         : existingGroup.key;
+
+    //     if (!normalizedKey) {
+    //         throw new BadRequestException(
+    //             'Permission group key is invalid after normalization.',
+    //         );
+    //     }
+
+    //     /*
+    //      * ------------------------------
+    //      * Check duplicate group key
+    //      * ------------------------------
+    //      */
+
+    //     if (normalizedKey !== existingGroup.key) {
+    //         const duplicateGroup =
+    //             await this.databaseService.permissionGroup.findUnique({
+    //                 where: {
+    //                     key: normalizedKey,
+    //                 },
+    //             });
+
+    //         if (duplicateGroup) {
+    //             throw new ConflictException(
+    //                 `Permission group with key "${normalizedKey}" already exists.`,
+    //             );
+    //         }
+    //     }
+
+    //     /*
+    //      * ------------------------------
+    //      * Normalize actions
+    //      * ------------------------------
+    //      */
+
+    //     const normalizedActions =
+    //         updatePermissionGroupDto.actions !== undefined
+    //             ? [
+    //                 ...new Set(
+    //                     updatePermissionGroupDto.actions
+    //                         .map(normalizePermissionAction)
+    //                         .filter(Boolean),
+    //                 ),
+    //             ]
+    //             : existingGroup.permissions.map(
+    //                 (permission) => permission.action,
+    //             );
+
+    //     if (normalizedActions.length === 0) {
+    //         throw new BadRequestException(
+    //             'At least one valid permission action is required.',
+    //         );
+    //     }
+
+    //     /*
+    //      * ------------------------------
+    //      * Calculate permission changes
+    //      * ------------------------------
+    //      */
+
+    //     const existingActions = new Set(
+    //         existingGroup.permissions.map(
+    //             (permission) => permission.action,
+    //         ),
+    //     );
+
+    //     const requestedActions = new Set(normalizedActions);
+
+    //     const actionsToAdd = normalizedActions.filter(
+    //         (action) => !existingActions.has(action),
+    //     );
+
+    //     const permissionsToDelete =
+    //         existingGroup.permissions.filter(
+    //             (permission) =>
+    //                 !requestedActions.has(permission.action),
+    //         );
+
+    //     /*
+    //      * ------------------------------
+    //      * Transaction
+    //      * ------------------------------
+    //      */
+
+    //     return this.databaseService.$transaction(
+    //         async (tx) => {
+    //             /*
+    //              * Update permission group
+    //              */
+
+    //             const updatedGroup =
+    //                 await tx.permissionGroup.update({
+    //                     where: {
+    //                         id,
+    //                     },
+    //                     data: {
+    //                         name:
+    //                             updatePermissionGroupDto.name?.trim() ??
+    //                             existingGroup.name,
+
+    //                         key: normalizedKey,
+
+    //                         description:
+    //                             updatePermissionGroupDto.description !== undefined
+    //                                 ? updatePermissionGroupDto.description.trim() ||
+    //                                 null
+    //                                 : existingGroup.description,
+    //                     },
+    //                 });
+
+    //             /*
+    //              * Rename existing permissions
+    //              *
+    //              * Necessary if group key changes:
+    //              *
+    //              * product:create
+    //              *       ↓
+    //              * inventory:create
+    //              */
+
+    //             if (normalizedKey !== existingGroup.key) {
+    //                 for (const permission of existingGroup.permissions) {
+    //                     if (
+    //                         !permissionsToDelete.some(
+    //                             (item) => item.id === permission.id,
+    //                         )
+    //                     ) {
+    //                         await tx.permission.update({
+    //                             where: {
+    //                                 id: permission.id,
+    //                             },
+    //                             data: {
+    //                                 name: `${normalizedKey}:${permission.action}`,
+    //                             },
+    //                         });
+    //                     }
+    //                 }
+    //             }
+
+    //             /*
+    //              * Delete removed permissions
+    //              *
+    //              * Because RolePermission references Permission,
+    //              * we must remove RolePermission records first.
+    //              */
+
+    //             if (permissionsToDelete.length > 0) {
+    //                 const permissionIds =
+    //                     permissionsToDelete.map(
+    //                         (permission) => permission.id,
+    //                     );
+
+    //                 await tx.rolePermission.deleteMany({
+    //                     where: {
+    //                         permissionId: {
+    //                             in: permissionIds,
+    //                         },
+    //                     },
+    //                 });
+
+    //                 await tx.permission.deleteMany({
+    //                     where: {
+    //                         id: {
+    //                             in: permissionIds,
+    //                         },
+    //                     },
+    //                 });
+    //             }
+
+    //             /*
+    //              * Create new permissions
+    //              */
+
+    //             if (actionsToAdd.length > 0) {
+    //                 await tx.permission.createMany({
+    //                     data: actionsToAdd.map((action) => ({
+    //                         name: `${normalizedKey}:${action}`,
+    //                         action,
+    //                         permissionGroupId: id,
+    //                     })),
+    //                 });
+    //             }
+
+    //             /*
+    //              * Return updated group
+    //              */
+
+    //             return tx.permissionGroup.findUnique({
+    //                 where: {
+    //                     id: updatedGroup.id,
+    //                 },
+    //                 include: {
+    //                     permissions: {
+    //                         orderBy: {
+    //                             id: 'asc',
+    //                         },
+    //                     },
+    //                     _count: {
+    //                         select: {
+    //                             permissions: true,
+    //                         },
+    //                     },
+    //                 },
+    //             });
+    //         },
+    //     );
+    // }
+
+
+
+    async updatePermissionGroup(
+        id: number,
+        updatePermissionGroupDto: UpdatePermissionGroupDto,
+    ) {
+        const existingGroup =
+            await this.databaseService.permissionGroup.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    permissions: true,
+                },
+            });
+
+        if (!existingGroup) {
+            throw new NotFoundException(
+                `Permission group with ID ${id} was not found.`,
+            );
+        }
+
+        /*
+         * If actions are not provided,
+         * keep the existing permissions unchanged.
+         */
+
+        const normalizedActions =
+            updatePermissionGroupDto.actions !== undefined
+                ? [
+                    ...new Set(
+                        updatePermissionGroupDto.actions
+                            .map(normalizePermissionAction)
+                            .filter(Boolean),
+                    ),
+                ]
+                : existingGroup.permissions.map(
+                    (permission) => permission.action,
+                );
+
+        if (normalizedActions.length === 0) {
+            throw new BadRequestException(
+                'At least one valid permission action is required.',
+            );
+        }
+
+        const existingActions = new Set(
+            existingGroup.permissions.map(
+                (permission) => permission.action,
+            ),
+        );
+
+        const requestedActions = new Set(normalizedActions);
+
+        /*
+         * Actions that need to be created
+         */
+
+        const actionsToAdd = normalizedActions.filter(
+            (action) => !existingActions.has(action),
+        );
+
+        /*
+         * Permissions that need to be removed
+         */
+
+        const permissionsToDelete =
+            existingGroup.permissions.filter(
+                (permission) =>
+                    !requestedActions.has(permission.action),
+            );
+
+        /*
+         * Run the entire update operation
+         * inside a database transaction.
+         */
+
+        return this.databaseService.$transaction(
+            async (tx) => {
+                /*
+                 * Update basic group information.
+                 */
+
+                const updatedGroup =
+                    await tx.permissionGroup.update({
+                        where: {
+                            id,
+                        },
+                        data: {
+                            name:
+                                updatePermissionGroupDto.name?.trim() ??
+                                existingGroup.name,
+
+                            description:
+                                updatePermissionGroupDto.description !== undefined
+                                    ? updatePermissionGroupDto.description.trim() || null
+                                    : existingGroup.description,
+                        },
+                    });
+
+                /*
+                 * Delete permissions that were removed.
+                 *
+                 * First delete RolePermission records
+                 * referencing those permissions.
+                 */
+
+                if (permissionsToDelete.length > 0) {
+                    const permissionIds =
+                        permissionsToDelete.map(
+                            (permission) => permission.id,
+                        );
+
+                    await tx.rolePermission.deleteMany({
+                        where: {
+                            permissionId: {
+                                in: permissionIds,
+                            },
+                        },
+                    });
+
+                    await tx.permission.deleteMany({
+                        where: {
+                            id: {
+                                in: permissionIds,
+                            },
+                        },
+                    });
+                }
+
+                /*
+                 * Create newly added permissions.
+                 */
+
+                if (actionsToAdd.length > 0) {
+                    await tx.permission.createMany({
+                        data: actionsToAdd.map((action) => ({
+                            name: `${existingGroup.key}:${action}`,
+                            action,
+                            permissionGroupId: id,
+                        })),
+                    });
+                }
+
+                /*
+                 * Return the final state.
+                 */
+
+                return tx.permissionGroup.findUnique({
+                    where: {
+                        id: updatedGroup.id,
+                    },
+                    include: {
+                        permissions: {
+                            orderBy: {
+                                id: 'asc',
+                            },
+                        },
+                        _count: {
+                            select: {
+                                permissions: true,
+                            },
+                        },
+                    },
+                });
+            },
+        );
+    }
+
+
+
+
+    async findOnePermissionGroup(id: number) {
+        const permissionGroup =
+            await this.databaseService.permissionGroup.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    permissions: {
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    },
+                    _count: {
+                        select: {
+                            permissions: true,
+                        },
+                    },
+                },
+            });
+
+        if (!permissionGroup) {
+            throw new NotFoundException(
+                `Permission group with ID ${id} was not found.`,
+            );
+        }
+
+        return {
+            id: permissionGroup.id,
+            name: permissionGroup.name,
+            key: permissionGroup.key,
+            description: permissionGroup.description,
+
+            permissions: permissionGroup.permissions,
+
+            permissionCount:
+                permissionGroup._count.permissions,
+
+            createdAt: permissionGroup.createdAt,
+            updatedAt: permissionGroup.updatedAt,
+        };
+    }
+
+
+
+
+    async removePermissionGroup(id: number) {
+        const existingGroup =
+            await this.databaseService.permissionGroup.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    permissions: {
+                        select: {
+                            id: true,
+                        },
+                    },
+                },
+            });
+
+        if (!existingGroup) {
+            throw new NotFoundException(
+                `Permission group with ID ${id} was not found.`,
+            );
+        }
+
+        const permissionIds = existingGroup.permissions.map(
+            (permission) => permission.id,
+        );
+
+        await this.databaseService.$transaction(
+            async (tx) => {
+                /*
+                 * Step 1:
+                 * Remove role-permission relationships.
+                 */
+
+                if (permissionIds.length > 0) {
+                    await tx.rolePermission.deleteMany({
+                        where: {
+                            permissionId: {
+                                in: permissionIds,
+                            },
+                        },
+                    });
+                }
+
+                /*
+                 * Step 2:
+                 * Delete all permissions belonging to this group.
+                 */
+
+                await tx.permission.deleteMany({
+                    where: {
+                        permissionGroupId: id,
+                    },
+                });
+
+                /*
+                 * Step 3:
+                 * Delete the permission group itself.
+                 */
+
+                await tx.permissionGroup.delete({
+                    where: {
+                        id,
+                    },
+                });
+            },
+        );
+
+        return {
+            message: 'Permission group deleted successfully',
+        };
+    }
+
+
+
+
+    
 }

@@ -1,26 +1,19 @@
 import {
+  ArrayNotEmpty,
   ArrayUnique,
   IsArray,
+  IsNotEmpty,
   IsOptional,
   IsString,
-  Matches,
   MaxLength,
 } from 'class-validator';
 
 export class UpdatePermissionGroupDto {
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(100)
   name?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  @Matches(/^[a-z]+(?:-[a-z]+)*$/, {
-    message:
-      'key must contain lowercase letters and hyphens only',
-  })
-  key?: string;
 
   @IsOptional()
   @IsString()
@@ -29,8 +22,10 @@ export class UpdatePermissionGroupDto {
 
   @IsOptional()
   @IsArray()
+  @ArrayNotEmpty()
   @ArrayUnique()
   @IsString({ each: true })
+  @IsNotEmpty({ each: true })
   @MaxLength(50, { each: true })
   actions?: string[];
 }
