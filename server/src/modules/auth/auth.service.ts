@@ -12,6 +12,9 @@ import { LoginDto } from './dto/login.dto.js';
 import { VerifyOtpDto } from './dto/verify-otp.dto.js';
 
 
+interface RefreshTokenPayload {
+    sub: number;
+}
 
 
 @Injectable()
@@ -73,6 +76,29 @@ export class AuthService {
             },
         );
     }
+
+
+
+    private async verifyRefreshToken(
+        refreshToken: string,
+    ): Promise<RefreshTokenPayload> {
+        const secret = this.configService.getOrThrow<string>(
+            'JWT_REFRESH_SECRET',
+        );
+
+        try {
+            return await this.jwtService.verifyAsync<RefreshTokenPayload>(
+                refreshToken,
+                {
+                    secret,
+                },
+            );
+        } catch {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+    }
+
+
 
     async login(loginDto: LoginDto) {
         const { email, password } = loginDto;
@@ -232,4 +258,154 @@ export class AuthService {
             refreshToken,
         };
     }
+
+
+
+
+    async refresh(refreshToken: string) {
+        // 1. Verify the JWT
+        const payload =
+            await this.verifyRefreshToken(refreshToken);
+
+        // 2. Find the user
+        const user = await this.databaseService.user.findUnique({
+            where: {
+                id: payload.sub,
+            },
+        });
+
+        // 3. Check user exists and is active
+        if (!user || user.status !== 'ACTIVE') {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
+        // 4. Find active refresh tokens for this user
+        const storedTokens =
+            await this.databaseService.refreshToken.findMany({
+                where: {
+                    userId: user.id,
+                    revokedAt: null,
+                    expiresAt: {
+                        gt: new Date(),
+                    },
+                },
+            });
+
+        // 5. Compare provided token with stored hashes
+        let matchedToken = null;
+
+        for (const storedToken of storedTokens) {
+            const isMatch = await bcrypt.compare(
+                refreshToken,
+                storedToken.tokenHash,
+            );
+
+            if (isMatch) {
+                matchedToken = storedToken;
+                break;
+            }
+        }
+
+        // Token is not found in the database
+        if (!matchedToken) {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
+        /*
+         * 6. Rotate the refresh token.
+         *
+         * Revoke the old token before creating a new one.
+         */
+        await this.databaseService.refreshToken.update({
+            where: {
+                id: matchedToken.id,
+            },
+            data: {
+                revokedAt: new Date(),
+            },
+        });
+
+        // 7. Generate new access token
+        const accessToken = await this.generateAccessToken({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+        });
+
+        // 8. Generate new refresh token
+        const newRefreshToken =
+            await this.generateRefreshToken({
+                id: user.id,
+            });
+
+        // 9. Hash the new refresh token
+        const refreshTokenHash =
+            await bcrypt.hash(newRefreshToken, 10);
+
+        /*
+         * Temporary:
+         * We will improve the expiration calculation shortly.
+         */
+        const refreshExpiresAt = new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000,
+        );
+
+        // 10. Store the new refresh token
+        await this.databaseService.refreshToken.create({
+            data: {
+                tokenHash: refreshTokenHash,
+                expiresAt: refreshExpiresAt,
+                userId: user.id,
+            },
+        });
+
+        return {
+            accessToken,
+            refreshToken: newRefreshToken,
+        };
+    }
+
+
+
+    async logout(refreshToken: string) {
+        // Find active refresh tokens
+        const storedTokens =
+            await this.databaseService.refreshToken.findMany({
+                where: {
+                    revokedAt: null,
+                },
+            });
+
+        let matchedToken = null;
+
+        // Compare the provided refresh token with stored hashes
+        for (const storedToken of storedTokens) {
+            const isMatch = await bcrypt.compare(
+                refreshToken,
+                storedToken.tokenHash,
+            );
+
+            if (isMatch) {
+                matchedToken = storedToken;
+                break;
+            }
+        }
+
+        // Revoke the matching token
+        if (matchedToken) {
+            await this.databaseService.refreshToken.update({
+                where: {
+                    id: matchedToken.id,
+                },
+                data: {
+                    revokedAt: new Date(),
+                },
+            });
+        }
+
+        return {
+            message: 'Logged out successfully',
+        };
+    }
+
 }

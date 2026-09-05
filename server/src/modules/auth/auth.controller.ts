@@ -4,11 +4,13 @@ import {
     HttpCode,
     HttpStatus,
     Post,
-    Res
+    Req,
+    Res,
+    UnauthorizedException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
@@ -74,6 +76,139 @@ export class AuthController {
 
         return {
             message: 'Login successful',
+        };
+    }
+
+
+
+
+    @Post('refresh')
+    @HttpCode(HttpStatus.OK)
+    async refresh(
+        @Req() request: Request,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+
+
+        const accessTokenCookieName =
+            this.configService.get<string>(
+                'ACCESS_TOKEN_COOKIE_NAME',
+            ) ?? 'access_token';
+
+        const refreshTokenCookieName =
+            this.configService.get<string>(
+                'REFRESH_TOKEN_COOKIE_NAME',
+            ) ?? 'refresh_token';
+
+
+        const refreshToken =
+            request.cookies?.[refreshTokenCookieName];
+
+        if (!refreshToken) {
+            throw new UnauthorizedException(
+                'Refresh token not found',
+            );
+        }
+
+        const {
+            accessToken,
+            refreshToken: newRefreshToken,
+        } = await this.authService.refresh(refreshToken);
+
+        const isSecure =
+            this.configService.get<string>(
+                'COOKIE_SECURE',
+            ) === 'true';
+
+        const sameSite =
+            this.configService.get<
+                'lax' | 'strict' | 'none'
+            >('COOKIE_SAME_SITE') ?? 'lax';
+
+
+
+
+        response.cookie(accessTokenCookieName, accessToken, {
+            httpOnly: true,
+            secure: isSecure,
+            sameSite,
+            maxAge: 15 * 60 * 1000,
+            path: '/',
+        });
+
+
+        response.cookie(
+            refreshTokenCookieName,
+            newRefreshToken,
+            {
+                httpOnly: true,
+                secure: isSecure,
+                sameSite,
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                path: '/api/v1/auth',
+            },
+        );
+
+        return {
+            message: 'Token refreshed successfully',
+        };
+    }
+
+
+
+    @Post('logout')
+    @HttpCode(HttpStatus.OK)
+    async logout(
+        @Req() request: Request,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+        const accessTokenCookieName =
+            this.configService.get<string>(
+                'ACCESS_TOKEN_COOKIE_NAME',
+            ) ?? 'access_token';
+
+        const refreshTokenCookieName =
+            this.configService.get<string>(
+                'REFRESH_TOKEN_COOKIE_NAME',
+            ) ?? 'refresh_token';
+
+        const refreshToken =
+            request.cookies?.[refreshTokenCookieName];
+
+        // Revoke the token on the server
+        if (refreshToken) {
+            await this.authService.logout(refreshToken);
+        }
+
+        const isSecure =
+            this.configService.get<string>(
+                'COOKIE_SECURE',
+            ) === 'true';
+
+        const sameSite =
+            this.configService.get<
+                'lax' | 'strict' | 'none'
+            >('COOKIE_SAME_SITE') ?? 'lax';
+
+        // Clear the access token cookie
+        response.clearCookie(accessTokenCookieName, {
+            httpOnly: true,
+            secure: isSecure,
+            sameSite,
+            path: '/',
+        });
+
+        // Clear the refresh token cookie
+        // IMPORTANT: path must match the original cookie path
+        response.clearCookie(refreshTokenCookieName, {
+            httpOnly: true,
+            secure: isSecure,
+            sameSite,
+            path: '/api/v1/auth',
+        });
+
+        return {
+            message: 'Logged out successfully',
         };
     }
 }
