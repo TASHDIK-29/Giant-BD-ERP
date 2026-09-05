@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Matches,
   MaxLength,
 } from 'class-validator';
 
@@ -18,10 +17,6 @@ export class CreatePermissionGroupDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
-  @Matches(/^[a-z]+(?:-[a-z]+)*$/, {
-    message:
-      'key must contain lowercase letters and hyphens only',
-  })
   key: string;
 
   @IsOptional()
