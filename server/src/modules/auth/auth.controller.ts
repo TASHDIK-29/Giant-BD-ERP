@@ -226,11 +226,17 @@ export class AuthController {
         @CurrentUser() user: {
             id: number;
             email: string;
+            name: string;
             role: string;
         },
     ) {
         return {
-            user,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+            },
             permissions: [],
         };
     }

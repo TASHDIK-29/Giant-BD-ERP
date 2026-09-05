@@ -6,6 +6,7 @@ import { DatabaseModule } from './database/database.module.js';
 import { SeederModule } from './modules/seeder/seeder.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { MailModule } from './modules/mail/mail.module.js';
+import { PermissionsModule } from './modules/permissions/permissions.module.js';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MailModule } from './modules/mail/mail.module.js';
     SeederModule,
     AuthModule,
     MailModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
