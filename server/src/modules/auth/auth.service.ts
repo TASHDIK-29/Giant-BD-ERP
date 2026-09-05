@@ -30,7 +30,6 @@ export class AuthService {
     private async generateAccessToken(user: {
         id: number;
         email: string;
-        role: string;
     }) {
         const secret = this.configService.getOrThrow<string>(
             'JWT_ACCESS_SECRET',
@@ -44,7 +43,6 @@ export class AuthService {
             {
                 sub: user.id,
                 email: user.email,
-                role: user.role,
             },
             {
                 secret,
@@ -181,6 +179,9 @@ export class AuthService {
             where: {
                 email,
             },
+            include: {
+                role: true,
+            },
         });
 
         if (!user || user.status !== 'ACTIVE') {
@@ -230,7 +231,6 @@ export class AuthService {
         const accessToken = await this.generateAccessToken({
             id: user.id,
             email: user.email,
-            role: user.role,
         });
 
         const refreshToken = await this.generateRefreshToken({
@@ -271,6 +271,9 @@ export class AuthService {
         const user = await this.databaseService.user.findUnique({
             where: {
                 id: payload.sub,
+            },
+            include: {
+                role: true,
             },
         });
 
@@ -329,7 +332,6 @@ export class AuthService {
         const accessToken = await this.generateAccessToken({
             id: user.id,
             email: user.email,
-            role: user.role,
         });
 
         // 8. Generate new refresh token

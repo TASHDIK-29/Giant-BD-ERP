@@ -19,14 +19,77 @@ model User {
   name     String
   number   String?
   gender   Gender?
-  role     Role
-  status   Status  @default(ACTIVE)
+  // role     Role
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  status Status @default(ACTIVE)
 
   refreshTokens RefreshToken[]
   loginOtps     LoginOtp[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  status      Status  @default(ACTIVE)
+
+  users       User[]
+  permissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PermissionGroup {
+  id Int @id @default(autoincrement())
+
+  name String
+  key  String @unique
+
+  description String?
+
+  permissions Permission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Permission {
+  id Int @id @default(autoincrement())
+
+  name   String @unique
+  action String
+
+  permissionGroupId Int
+  permissionGroup   PermissionGroup @relation(fields: [permissionGroupId], references: [id], onDelete: Cascade)
+
+  rolePermissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([permissionGroupId, action])
+  @@index([permissionGroupId])
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
 }
 
 model RefreshToken {
@@ -38,7 +101,7 @@ model RefreshToken {
   revokedAt DateTime?
 
   userId Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -46,25 +109,18 @@ model RefreshToken {
   @@index([userId])
 }
 
-
 model LoginOtp {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   otpHash   String
   expiresAt DateTime
 
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
   @@index([userId])
-}
-
-enum Role {
-  SUPER_ADMIN
-  ADMIN
-  USER
 }
 
 enum Gender {

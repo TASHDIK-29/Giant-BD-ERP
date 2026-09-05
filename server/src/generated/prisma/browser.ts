@@ -23,6 +23,26 @@ export * from './enums.js';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model PermissionGroup
+ * 
+ */
+export type PermissionGroup = Prisma.PermissionGroupModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
  * Model RefreshToken
  * 
  */

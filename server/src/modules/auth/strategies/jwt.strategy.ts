@@ -17,7 +17,6 @@ import { DatabaseService } from '../../../database/database.service.js';
 interface AccessTokenPayload {
     sub: number;
     email: string;
-    role: string;
 }
 
 @Injectable()
@@ -43,15 +42,32 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    // async validate(payload: {
-    //     sub: number;
-    //     email: string;
-    //     role: string;
-    // }) {
+
+    // async validate(payload: AccessTokenPayload) {
+    //     const user = await this.databaseService.user.findUnique({
+    //         where: {
+    //             id: payload.sub,
+    //         },
+    //         select: {
+    //             id: true,
+    //             email: true,
+    //             name: true,
+    //             role: true,
+    //             status: true,
+    //         },
+    //     });
+
+    //     if (!user || user.status !== 'ACTIVE') {
+    //         throw new UnauthorizedException(
+    //             'Unauthorized',
+    //         );
+    //     }
+
     //     return {
-    //         id: payload.sub,
-    //         email: payload.email,
-    //         role: payload.role,
+    //         id: user.id,
+    //         email: user.email,
+    //         name: user.name,
+    //         role: user.role.name,
     //     };
     // }
 
@@ -65,12 +81,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                 id: true,
                 email: true,
                 name: true,
-                role: true,
                 status: true,
+
+                role: {
+                    select: {
+                        id: true,
+                        name: true,
+                        status: true,
+                    },
+                },
             },
         });
 
-        if (!user || user.status !== 'ACTIVE') {
+        if (
+            !user ||
+            user.status !== 'ACTIVE' ||
+            user.role.status !== 'ACTIVE'
+        ) {
             throw new UnauthorizedException(
                 'Unauthorized',
             );
@@ -80,7 +107,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             id: user.id,
             email: user.email,
             name: user.name,
-            role: user.role,
+            role: user.role.name,
+            roleId: user.role.id,
         };
     }
 }
