@@ -17,6 +17,10 @@ import { CreateRoleDto } from './dto/create-role.dto.js';
 import { QueryRoleDto } from './dto/query-role.dto.js';
 import { UpdateRoleDto } from './dto/update-role.dto.js';
 
+import {
+  RequirePermission,
+} from '../../common/decorators/require-permission.decorator.js';
+
 
 
 @Controller('roles')
@@ -28,6 +32,7 @@ export class RolesController {
 
 
     @Post()
+    @RequirePermission('role:create')
     @HttpCode(HttpStatus.CREATED)
     async createRole(
         @Body()
@@ -47,6 +52,7 @@ export class RolesController {
 
 
     @Get()
+    @RequirePermission('role:read')
     @HttpCode(HttpStatus.OK)
     async findAllRoles(
         @Query() queryRoleDto: QueryRoleDto,
@@ -59,6 +65,7 @@ export class RolesController {
 
 
     @Get(':id')
+    @RequirePermission('role:read')
     @HttpCode(HttpStatus.OK)
     async findOneRole(
         @Param('id', ParseIntPipe) id: number,
@@ -69,6 +76,7 @@ export class RolesController {
 
 
     @Put(':id')
+    @RequirePermission('role:update')
     @HttpCode(HttpStatus.OK)
     async updateRole(
         @Param('id', ParseIntPipe) id: number,
@@ -90,6 +98,7 @@ export class RolesController {
 
 
     @Delete(':id')
+    @RequirePermission('role:delete')
     async remove(
         @Param('id', ParseIntPipe) id: number,
     ) {

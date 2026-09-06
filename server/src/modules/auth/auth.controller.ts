@@ -23,6 +23,9 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { AuthGuard } from '@nestjs/passport';
 
 
+import { Public } from '../../common/decorators/public.decorator.js';
+
+
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -30,6 +33,8 @@ export class AuthController {
         private readonly configService: ConfigService,
     ) { }
 
+
+    @Public()
     @Post('login')
     @HttpCode(HttpStatus.OK)
     async login(
@@ -39,6 +44,8 @@ export class AuthController {
     }
 
 
+
+    @Public()
     @Post('verify-otp')
     @HttpCode(HttpStatus.OK)
     async verifyOtp(
@@ -88,6 +95,7 @@ export class AuthController {
 
 
 
+    @Public()
     @Post('refresh')
     @HttpCode(HttpStatus.OK)
     async refresh(

@@ -73,29 +73,32 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 
     async validate(payload: AccessTokenPayload) {
-        const user = await this.databaseService.user.findUnique({
-            where: {
-                id: payload.sub,
-            },
-            select: {
-                id: true,
-                email: true,
-                name: true,
-                status: true,
+        const user =
+            await this.databaseService.user.findUnique({
+                where: {
+                    id: payload.sub,
+                },
 
-                role: {
-                    select: {
-                        id: true,
-                        name: true,
-                        status: true,
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    status: true,
+                    roleId: true,
+
+                    role: {
+                        select: {
+                            name: true,
+                            status: true,
+                        },
                     },
                 },
-            },
-        });
+            });
 
         if (
             !user ||
             user.status !== 'ACTIVE' ||
+            !user.role ||
             user.role.status !== 'ACTIVE'
         ) {
             throw new UnauthorizedException(
@@ -107,8 +110,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             id: user.id,
             email: user.email,
             name: user.name,
+            roleId: user.roleId,
             role: user.role.name,
-            roleId: user.role.id,
         };
     }
 }
