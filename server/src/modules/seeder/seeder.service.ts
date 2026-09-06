@@ -224,6 +224,7 @@ export class SeederService implements OnModuleInit {
                         email,
                         password: hashedPassword,
                         name,
+                        isSystem: true,
 
                         role: {
                             connect: {

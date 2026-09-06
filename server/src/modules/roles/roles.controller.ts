@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -83,6 +84,16 @@ export class RolesController {
             message: 'Role updated successfully',
             data: role,
         };
+    }
+
+
+
+
+    @Delete(':id')
+    async remove(
+        @Param('id', ParseIntPipe) id: number,
+    ) {
+        return this.rolesService.remove(id);
     }
 
 

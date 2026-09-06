@@ -25,6 +25,234 @@ export class RolesService {
 
 
 
+    private readonly criticalRolePermissions: string[] = [
+        'role:update',
+        'role:delete',
+    ];
+
+
+
+    private async preventSuperAdminLockout(
+        roleId: number,
+        newPermissionIds: number[],
+    ) {
+        const targetRole =
+            await this.databaseService.role.findUnique({
+                where: {
+                    id: roleId,
+                },
+
+                select: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    isSystem: true,
+                },
+            });
+
+        if (!targetRole) {
+            throw new NotFoundException(
+                `Role with ID ${roleId} was not found.`,
+            );
+        }
+
+        /*
+         * Only protect the active SUPER_ADMIN
+         * system role.
+         */
+
+        const isProtectedSuperAdmin =
+            targetRole.isSystem &&
+            targetRole.name === 'SUPER_ADMIN' &&
+            targetRole.status === 'ACTIVE';
+
+        if (!isProtectedSuperAdmin) {
+            return;
+        }
+
+        /*
+         * Fetch the permissions that would exist
+         * after synchronization.
+         */
+
+        const permissions =
+            await this.databaseService.permission.findMany({
+                where: {
+                    id: {
+                        in: newPermissionIds,
+                    },
+                },
+
+                select: {
+                    permissionGroup: {
+                        select: {
+                            key: true,
+                        },
+                    },
+                },
+            });
+
+        const newPermissionKeys =
+            new Set(
+                permissions.map(
+                    (permission) => permission.permissionGroup.key,
+                ),
+            );
+
+        /*
+         * Determine whether critical permissions
+         * would be removed.
+         */
+
+        const missingCriticalPermissions =
+            this.criticalRolePermissions.filter(
+                (permissionKey) =>
+                    !newPermissionKeys.has(permissionKey),
+            );
+
+        if (missingCriticalPermissions.length > 0) {
+            throw new BadRequestException(
+                `Cannot remove critical permissions from the SUPER_ADMIN role: ${missingCriticalPermissions.join(', ')}`,
+            );
+        }
+    }
+
+
+
+    // private async preventSuperAdminLockout(
+    //     roleId: number,
+    //     newPermissionIds: number[],
+    // ) {
+    //     /*
+    //      * Find the role being modified.
+    //      */
+
+    //     const targetRole =
+    //         await this.databaseService.role.findUnique({
+    //             where: {
+    //                 id: roleId,
+    //             },
+
+    //             include: {
+    //                 permissions: {
+    //                     include: {
+    //                         permission: true,
+    //                     },
+    //                 },
+
+    //                 _count: {
+    //                     select: {
+    //                         users: true,
+    //                     },
+    //                 },
+    //             },
+    //         });
+
+    //     if (!targetRole) {
+    //         throw new NotFoundException(
+    //             `Role with ID ${roleId} was not found.`,
+    //         );
+    //     }
+
+    //     /*
+    //      * Only apply this protection to
+    //      * the SUPER_ADMIN system role.
+    //      */
+
+    //     const isSuperAdminRole =
+    //         targetRole.isSystem &&
+    //         targetRole.name === 'SUPER_ADMIN';
+
+    //     if (!isSuperAdminRole) {
+    //         return;
+    //     }
+
+    //     /*
+    //      * Find all active SUPER_ADMIN roles.
+    //      *
+    //      * Currently, your system should only have
+    //      * one protected SUPER_ADMIN role.
+    //      *
+    //      * We still write the logic defensively.
+    //      */
+
+    //     const activeSuperAdminRoles =
+    //         await this.databaseService.role.findMany({
+    //             where: {
+    //                 name: 'SUPER_ADMIN',
+    //                 status: 'ACTIVE',
+    //             },
+
+    //             include: {
+    //                 permissions: {
+    //                     include: {
+    //                         permission: {
+    //                             select: {
+    //                                 id: true,
+    //                                 key: true,
+    //                             },
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         });
+
+    //     /*
+    //      * Determine whether this is the last
+    //      * active SUPER_ADMIN role.
+    //      */
+
+    //     if (activeSuperAdminRoles.length !== 1) {
+    //         return;
+    //     }
+
+    //     /*
+    //      * Fetch the permissions that will remain
+    //      * after this update.
+    //      */
+
+    //     const newPermissions =
+    //         await this.databaseService.permission.findMany({
+    //             where: {
+    //                 id: {
+    //                     in: newPermissionIds,
+    //                 },
+    //             },
+
+    //             select: {
+    //                 id: true,
+    //                 key: true,
+    //             },
+    //         });
+
+    //     const newPermissionKeys =
+    //         new Set<string>(
+    //             newPermissions.map(
+    //                 (permission) => permission.key,
+    //             ),
+    //         );
+
+    //     /*
+    //      * Check whether all critical permissions
+    //      * will remain.
+    //      */
+
+    //     const missingCriticalPermissions =
+    //         this.criticalRolePermissions.filter(
+    //             (permissionKey) =>
+    //                 !newPermissionKeys.has(permissionKey),
+    //         );
+
+    //     if (missingCriticalPermissions.length > 0) {
+    //         throw new BadRequestException(
+    //             `Cannot revoke critical permissions from the last active SUPER_ADMIN role: ${missingCriticalPermissions.join(', ')}`,
+    //         );
+    //     }
+    // }
+
+
+
+
     async createRole(
         createRoleDto: CreateRoleDto,
     ) {
@@ -612,6 +840,14 @@ export class RolesService {
             }
         }
 
+
+        if (shouldSyncPermissions) {
+            await this.preventSuperAdminLockout(
+                id,
+                finalPermissionIds,
+            );
+        }
+
         /*
          * Perform role update and permission
          * synchronization inside one transaction.
@@ -759,6 +995,62 @@ export class RolesService {
     }
 
 
+
+    async remove(id: number) {
+        const role = await this.databaseService.role.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                isSystem: true,
+                _count: {
+                    select: {
+                        users: true,
+                        permissions: true,
+                    },
+                },
+            },
+        });
+
+        if (!role) {
+            throw new NotFoundException(`Role with ID ${id} not found`);
+        }
+
+        if (role.isSystem) {
+            throw new ConflictException(
+                'System roles cannot be deleted',
+            );
+        }
+
+        if (role._count.users > 0) {
+            throw new ConflictException(
+                `Role "${role.name}" cannot be deleted because it is assigned to ${role._count.users} user(s)`,
+            );
+        }
+
+        try {
+            await this.databaseService.$transaction(async (tx) => {
+                await tx.role.delete({
+                    where: { id },
+                });
+            });
+        } catch (error) {
+            if (
+                error instanceof Prisma.PrismaClientKnownRequestError &&
+                error.code === 'P2003'
+            ) {
+                throw new ConflictException(
+                    `Role "${role.name}" cannot be deleted because it is still referenced by another record`,
+                );
+            }
+
+            throw error;
+        }
+
+        return {
+            message: `Role "${role.name}" deleted successfully`,
+        };
+    }
 
 
 
