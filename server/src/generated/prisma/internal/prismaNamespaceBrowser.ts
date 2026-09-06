@@ -97,6 +97,7 @@ export const RoleScalarFieldEnum = {
   name: 'name',
   description: 'description',
   status: 'status',
+  isSystem: 'isSystem',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
