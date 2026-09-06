@@ -36,7 +36,7 @@ export class PermissionsController {
 
     @Post('groups')
     @HttpCode(HttpStatus.CREATED)
-    // @RequirePermission('permission:create')
+    @RequirePermission('permission:create')
     async createPermissionGroup(
         @Body()
         createPermissionGroupDto: CreatePermissionGroupDto,
@@ -54,7 +54,7 @@ export class PermissionsController {
 
 
     @Get('groups')
-    // @RequirePermission('permission:read')
+    @RequirePermission('permission:read')
     async findAllPermissionGroups(
         @Query()
         queryPermissionDto: QueryPermissionDto,
@@ -68,7 +68,7 @@ export class PermissionsController {
 
 
     @Put('groups/:id')
-    // @RequirePermission('permission:read')
+    @RequirePermission('permission:read')
     async updatePermissionGroup(
         @Param('id', ParseIntPipe)
         id: number,
@@ -91,7 +91,7 @@ export class PermissionsController {
 
 
     @Get('groups/:id')
-    // @RequirePermission('permission:update')
+    @RequirePermission('permission:update')
     async findOnePermissionGroup(
         @Param('id', ParseIntPipe)
         id: number,
@@ -109,7 +109,7 @@ export class PermissionsController {
 
     @Delete('groups/:id')
     @HttpCode(HttpStatus.OK)
-    // @RequirePermission('permission:delete')
+    @RequirePermission('permission:delete')
     async removePermissionGroup(
         @Param('id', ParseIntPipe)
         id: number,
