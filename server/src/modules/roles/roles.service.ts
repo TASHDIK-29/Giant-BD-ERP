@@ -14,6 +14,7 @@ import { DatabaseService } from '../../database/database.service.js';
 import { CreateRoleDto } from './dto/create-role.dto.js';
 
 import { QueryRoleDto } from './dto/query-role.dto.js';
+import { UpdateRoleDto } from './dto/update-role.dto.js';
 
 @Injectable()
 export class RolesService {
@@ -431,4 +432,334 @@ export class RolesService {
             updatedAt: role.updatedAt,
         };
     }
+
+
+
+    async updateRole(
+        id: number,
+        updateRoleDto: UpdateRoleDto,
+    ) {
+        const {
+            name,
+            description,
+            status,
+            permissionIds,
+            grantAll,
+        } = updateRoleDto;
+
+        /*
+         * Find the role first.
+         */
+
+        const existingRole =
+            await this.databaseService.role.findUnique({
+                where: {
+                    id,
+                },
+            });
+
+        if (!existingRole) {
+            throw new NotFoundException(
+                `Role with ID ${id} was not found.`,
+            );
+        }
+
+        /*
+         * Prevent modification of protected
+         * system role identity/status.
+         */
+
+        if (existingRole.isSystem) {
+            if (name !== undefined) {
+                throw new BadRequestException(
+                    'System role name cannot be changed.',
+                );
+            }
+
+            if (status !== undefined) {
+                throw new BadRequestException(
+                    'System role status cannot be changed.',
+                );
+            }
+        }
+
+        /*
+         * Validate grantAll and permissionIds.
+         */
+
+        if (
+            grantAll === true &&
+            permissionIds !== undefined
+        ) {
+            throw new BadRequestException(
+                'grantAll and permissionIds cannot be used together.',
+            );
+        }
+
+        /*
+         * Normalize role name.
+         */
+
+        const normalizedName =
+            name !== undefined
+                ? name.trim()
+                : undefined;
+
+        /*
+         * Check duplicate role name.
+         */
+
+        if (
+            normalizedName !== undefined &&
+            normalizedName.toUpperCase() === 'SUPER_ADMIN' &&
+            !existingRole.isSystem
+        ) {
+            throw new BadRequestException(
+                'SUPER_ADMIN is a protected system role name.',
+            );
+        }
+
+        if (
+            normalizedName !== undefined &&
+            normalizedName !== existingRole.name
+        ) {
+            const duplicateRole =
+                await this.databaseService.role.findFirst({
+                    where: {
+                        name: {
+                            equals: normalizedName,
+                            mode: 'insensitive',
+                        },
+                        NOT: {
+                            id,
+                        },
+                    },
+                });
+
+            if (duplicateRole) {
+                throw new ConflictException(
+                    `Role "${normalizedName}" already exists.`,
+                );
+            }
+        }
+
+        /*
+         * Determine whether permissions need
+         * synchronization.
+         */
+
+        let shouldSyncPermissions = false;
+        let finalPermissionIds: number[] = [];
+
+        if (grantAll === true) {
+            shouldSyncPermissions = true;
+
+            const permissions =
+                await this.databaseService.permission.findMany({
+                    select: {
+                        id: true,
+                    },
+                });
+
+            finalPermissionIds = permissions.map(
+                (permission) => permission.id,
+            );
+        } else if (permissionIds !== undefined) {
+            shouldSyncPermissions = true;
+
+            finalPermissionIds = [
+                ...new Set(permissionIds),
+            ];
+
+            /*
+             * Verify that every permission exists.
+             */
+
+            const existingPermissions =
+                await this.databaseService.permission.findMany({
+                    where: {
+                        id: {
+                            in: finalPermissionIds,
+                        },
+                    },
+                    select: {
+                        id: true,
+                    },
+                });
+
+            if (
+                existingPermissions.length !==
+                finalPermissionIds.length
+            ) {
+                const existingPermissionIds =
+                    new Set(
+                        existingPermissions.map(
+                            (permission) => permission.id,
+                        ),
+                    );
+
+                const invalidPermissionIds =
+                    finalPermissionIds.filter(
+                        (permissionId) =>
+                            !existingPermissionIds.has(
+                                permissionId,
+                            ),
+                    );
+
+                throw new BadRequestException(
+                    `Invalid permission IDs: ${invalidPermissionIds.join(', ')}`,
+                );
+            }
+        }
+
+        /*
+         * Perform role update and permission
+         * synchronization inside one transaction.
+         */
+
+        const updatedRole =
+            await this.databaseService.$transaction(
+                async (tx) => {
+                    /*
+                     * Update role fields only when
+                     * they are actually provided.
+                     */
+
+                    const role =
+                        await tx.role.update({
+                            where: {
+                                id,
+                            },
+
+                            data: {
+                                ...(normalizedName !== undefined && {
+                                    name: normalizedName,
+                                }),
+
+                                ...(description !== undefined && {
+                                    description:
+                                        description.trim() || null,
+                                }),
+
+                                ...(status !== undefined && {
+                                    status,
+                                }),
+                            },
+                        });
+
+                    /*
+                     * Synchronize permissions.
+                     *
+                     * Delete all existing relationships
+                     * and recreate the requested set.
+                     */
+
+                    if (shouldSyncPermissions) {
+                        await tx.rolePermission.deleteMany({
+                            where: {
+                                roleId: id,
+                            },
+                        });
+
+                        if (finalPermissionIds.length > 0) {
+                            await tx.rolePermission.createMany({
+                                data: finalPermissionIds.map(
+                                    (permissionId) => ({
+                                        roleId: id,
+                                        permissionId,
+                                    }),
+                                ),
+                            });
+                        }
+                    }
+
+                    /*
+                     * Return the complete updated role.
+                     */
+
+                    return tx.role.findUnique({
+                        where: {
+                            id,
+                        },
+
+                        include: {
+                            permissions: {
+                                include: {
+                                    permission: {
+                                        include: {
+                                            permissionGroup: true,
+                                        },
+                                    },
+                                },
+
+                                orderBy: {
+                                    permission: {
+                                        permissionGroup: {
+                                            key: 'asc',
+                                        },
+                                    },
+                                },
+                            },
+
+                            _count: {
+                                select: {
+                                    users: true,
+                                    permissions: true,
+                                },
+                            },
+                        },
+                    });
+                },
+            );
+
+        return {
+            id: updatedRole!.id,
+            name: updatedRole!.name,
+            description: updatedRole!.description,
+            status: updatedRole!.status,
+            isSystem: updatedRole!.isSystem,
+
+            permissions:
+                updatedRole!.permissions.map(
+                    (rolePermission) => ({
+                        id: rolePermission.permission.id,
+                        key: rolePermission.permission.permissionGroup.key,
+                        action:
+                            rolePermission.permission.action,
+
+                        permissionGroup: {
+                            id:
+                                rolePermission.permission
+                                    .permissionGroup.id,
+
+                            name:
+                                rolePermission.permission
+                                    .permissionGroup.name,
+
+                            key:
+                                rolePermission.permission
+                                    .permissionGroup.key,
+
+                            description:
+                                rolePermission.permission
+                                    .permissionGroup.description,
+                        },
+                    }),
+                ),
+
+            userCount:
+                updatedRole!._count.users,
+
+            permissionCount:
+                updatedRole!._count.permissions,
+
+            createdAt: updatedRole!.createdAt,
+            updatedAt: updatedRole!.updatedAt,
+        };
+    }
+
+
+
+
+
 }

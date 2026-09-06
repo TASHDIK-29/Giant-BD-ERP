@@ -7,12 +7,16 @@ import {
     Param,
     ParseIntPipe,
     Post,
+    Put,
     Query,
 } from '@nestjs/common';
 
 import { RolesService } from './roles.service.js';
 import { CreateRoleDto } from './dto/create-role.dto.js';
 import { QueryRoleDto } from './dto/query-role.dto.js';
+import { UpdateRoleDto } from './dto/update-role.dto.js';
+
+
 
 @Controller('roles')
 export class RolesController {
@@ -63,6 +67,24 @@ export class RolesController {
 
 
 
+    @Put(':id')
+    @HttpCode(HttpStatus.OK)
+    async updateRole(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateRoleDto: UpdateRoleDto,
+    ) {
+        const role =
+            await this.rolesService.updateRole(
+                id,
+                updateRoleDto,
+            );
 
-    
+        return {
+            message: 'Role updated successfully',
+            data: role,
+        };
+    }
+
+
+
 }
