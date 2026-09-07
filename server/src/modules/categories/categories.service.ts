@@ -831,4 +831,61 @@ export class CategoriesService {
 
 
 
+    async remove(id: number) {
+        const category =
+            await this.databaseService.category.findUnique({
+                where: {
+                    id,
+                },
+
+                include: {
+                    _count: {
+                        select: {
+                            children: true,
+                        },
+                    },
+                },
+            });
+
+
+        if (!category) {
+            throw new NotFoundException(
+                `Category with ID ${id} was not found.`,
+            );
+        }
+
+
+        /*
+         * Prevent deleting a top-level category
+         * that still has sub-categories.
+         */
+        if (category._count.children > 0) {
+            throw new BadRequestException(
+                'Cannot delete a category that contains sub-categories.',
+            );
+        }
+
+
+        /*
+         * Future product protection.
+         *
+         * When the Product/Master Finished Good module
+         * is implemented, add a database relation check here.
+         */
+
+
+        await this.databaseService.category.delete({
+            where: {
+                id,
+            },
+        });
+
+
+        return {
+            message: 'Category deleted successfully.',
+        };
+    }
+
+
+
 }

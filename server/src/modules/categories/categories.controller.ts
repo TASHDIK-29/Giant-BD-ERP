@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -120,6 +121,16 @@ export class CategoriesController {
     }
 
 
+
+    @Delete(':id')
+    @HttpCode(HttpStatus.OK)
+    @RequirePermission('category:delete')
+    async remove(
+        @Param('id', ParseIntPipe)
+        id: number,
+    ) {
+        return this.categoriesService.remove(id);
+    }
 
 
 
