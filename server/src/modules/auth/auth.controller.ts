@@ -228,24 +228,39 @@ export class AuthController {
 
 
 
+    // @Get('session')
+    // @UseGuards(AuthGuard('jwt'))
+    // getSession(
+    //     @CurrentUser() user: {
+    //         id: number;
+    //         email: string;
+    //         name: string;
+    //         role: string;
+    //     },
+    // ) {
+    //     return {
+    //         user: {
+    //             id: user.id,
+    //             email: user.email,
+    //             name: user.name,
+    //             role: user.role,
+    //         },
+    //         permissions: [],
+    //     };
+    // }
+
+
     @Get('session')
     @UseGuards(AuthGuard('jwt'))
     getSession(
-        @CurrentUser() user: {
+        @CurrentUser()
+        user: {
             id: number;
             email: string;
             name: string;
             role: string;
         },
     ) {
-        return {
-            user: {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-                role: user.role,
-            },
-            permissions: [],
-        };
+        return this.authService.getSession(user.id);
     }
 }

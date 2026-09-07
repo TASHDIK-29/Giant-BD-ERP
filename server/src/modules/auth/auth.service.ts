@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { StringValue } from 'ms';
@@ -407,6 +407,59 @@ export class AuthService {
 
         return {
             message: 'Logged out successfully',
+        };
+    }
+
+
+
+
+    async getSession(userId: number) {
+        const user = await this.databaseService.user.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                id: true,
+                email: true,
+                name: true,
+
+                role: {
+                    select: {
+                        name: true,
+
+                        permissions: {
+                            select: {
+                                permission: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (!user) {
+            throw new NotFoundException('User not found.');
+        }
+
+        return {
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role.name,
+            },
+
+            permissions: user.role.permissions.map(
+                ({ permission }) => ({
+                    id: permission.id,
+                    name: permission.name,
+                }),
+            ),
         };
     }
 
