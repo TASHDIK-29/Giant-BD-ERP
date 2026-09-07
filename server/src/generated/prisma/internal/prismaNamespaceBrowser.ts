@@ -58,7 +58,8 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   RefreshToken: 'RefreshToken',
   LoginOtp: 'LoginOtp',
-  Category: 'Category'
+  Category: 'Category',
+  Material: 'Material'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -179,6 +180,17 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const MaterialScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MaterialScalarFieldEnum = (typeof MaterialScalarFieldEnum)[keyof typeof MaterialScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -57,3 +57,8 @@ export type LoginOtp = Prisma.LoginOtpModel
  * 
  */
 export type Category = Prisma.CategoryModel
+/**
+ * Model Material
+ * 
+ */
+export type Material = Prisma.MaterialModel

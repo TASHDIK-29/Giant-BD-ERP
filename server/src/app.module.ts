@@ -15,6 +15,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard.js';
 import { PermissionGuard } from './common/guards/permission.guard.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { CategoriesModule } from './modules/categories/categories.module.js';
+import { MaterialsModule } from './modules/materials/materials.module.js';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CategoriesModule } from './modules/categories/categories.module.js';
     RolesModule,
     UsersModule,
     CategoriesModule,
+    MaterialsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -404,7 +404,8 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   RefreshToken: 'RefreshToken',
   LoginOtp: 'LoginOtp',
-  Category: 'Category'
+  Category: 'Category',
+  Material: 'Material'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category"
+    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1016,6 +1017,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Material: {
+      payload: Prisma.$MaterialPayload<ExtArgs>
+      fields: Prisma.MaterialFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MaterialFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MaterialFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>
+        }
+        findFirst: {
+          args: Prisma.MaterialFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MaterialFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>
+        }
+        findMany: {
+          args: Prisma.MaterialFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>[]
+        }
+        create: {
+          args: Prisma.MaterialCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>
+        }
+        createMany: {
+          args: Prisma.MaterialCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MaterialCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>[]
+        }
+        delete: {
+          args: Prisma.MaterialDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>
+        }
+        update: {
+          args: Prisma.MaterialUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>
+        }
+        deleteMany: {
+          args: Prisma.MaterialDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MaterialUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MaterialUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>[]
+        }
+        upsert: {
+          args: Prisma.MaterialUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaterialPayload>
+        }
+        aggregate: {
+          args: Prisma.MaterialAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaterial>
+        }
+        groupBy: {
+          args: Prisma.MaterialGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MaterialGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MaterialCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MaterialCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1157,6 +1232,17 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const MaterialScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MaterialScalarFieldEnum = (typeof MaterialScalarFieldEnum)[keyof typeof MaterialScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1438,6 +1524,7 @@ export type GlobalOmitConfig = {
   refreshToken?: Prisma.RefreshTokenOmit
   loginOtp?: Prisma.LoginOtpOmit
   category?: Prisma.CategoryOmit
+  material?: Prisma.MaterialOmit
 }
 
 /* Types for Logging */
