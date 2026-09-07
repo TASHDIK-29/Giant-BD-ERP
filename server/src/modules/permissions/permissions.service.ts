@@ -23,6 +23,96 @@ export class PermissionsService {
         private readonly databaseService: DatabaseService,
     ) { }
 
+
+    // OLD VERSION OF createPermissionGroup
+    // async createPermissionGroup(
+    //     createPermissionGroupDto: CreatePermissionGroupDto,
+    // ) {
+    //     const normalizedKey = normalizePermissionKey(
+    //         createPermissionGroupDto.key,
+    //     );
+
+    //     const normalizedActions = [
+    //         ...new Set(
+    //             createPermissionGroupDto.actions
+    //                 .map(normalizePermissionAction)
+    //                 .filter(Boolean),
+    //         ),
+    //     ];
+
+    //     if (!normalizedKey) {
+    //         throw new BadRequestException(
+    //             'Permission group key is invalid after normalization.',
+    //         );
+    //     }
+
+    //     if (normalizedActions.length === 0) {
+    //         throw new BadRequestException(
+    //             'At least one valid permission action is required.',
+    //         );
+    //     }
+
+    //     const existingGroup =
+    //         await this.databaseService.permissionGroup.findUnique({
+    //             where: {
+    //                 key: normalizedKey,
+    //             },
+    //         });
+
+    //     if (existingGroup) {
+    //         throw new ConflictException(
+    //             `Permission group with key "${normalizedKey}" already exists.`,
+    //         );
+    //     }
+
+    //     const permissionNames = normalizedActions.map(
+    //         (action) => `${normalizedKey}:${action}`,
+    //     );
+
+    //     const existingPermission =
+    //         await this.databaseService.permission.findFirst({
+    //             where: {
+    //                 name: {
+    //                     in: permissionNames,
+    //                 },
+    //             },
+    //         });
+
+    //     if (existingPermission) {
+    //         throw new ConflictException(
+    //             `Permission "${existingPermission.name}" already exists.`,
+    //         );
+    //     }
+
+    //     const permissionGroup =
+    //         await this.databaseService.permissionGroup.create({
+    //             data: {
+    //                 name: createPermissionGroupDto.name.trim(),
+    //                 key: normalizedKey,
+    //                 description:
+    //                     createPermissionGroupDto.description?.trim() || null,
+
+    //                 permissions: {
+    //                     create: normalizedActions.map((action) => ({
+    //                         name: `${normalizedKey}:${action}`,
+    //                         action,
+    //                     })),
+    //                 },
+    //             },
+
+    //             include: {
+    //                 permissions: {
+    //                     orderBy: {
+    //                         id: 'asc',
+    //                     },
+    //                 },
+    //             },
+    //         });
+
+    //     return permissionGroup;
+    // }
+
+
     async createPermissionGroup(
         createPermissionGroupDto: CreatePermissionGroupDto,
     ) {
@@ -50,25 +140,26 @@ export class PermissionsService {
             );
         }
 
-        const existingGroup =
-            await this.databaseService.permissionGroup.findUnique({
+        return this.databaseService.$transaction(async (tx) => {
+            // 1. Check if permission group already exists
+            const existingGroup = await tx.permissionGroup.findUnique({
                 where: {
                     key: normalizedKey,
                 },
             });
 
-        if (existingGroup) {
-            throw new ConflictException(
-                `Permission group with key "${normalizedKey}" already exists.`,
+            if (existingGroup) {
+                throw new ConflictException(
+                    `Permission group with key "${normalizedKey}" already exists.`,
+                );
+            }
+
+            // 2. Check if any permission already exists
+            const permissionNames = normalizedActions.map(
+                (action) => `${normalizedKey}:${action}`,
             );
-        }
 
-        const permissionNames = normalizedActions.map(
-            (action) => `${normalizedKey}:${action}`,
-        );
-
-        const existingPermission =
-            await this.databaseService.permission.findFirst({
+            const existingPermission = await tx.permission.findFirst({
                 where: {
                     name: {
                         in: permissionNames,
@@ -76,38 +167,64 @@ export class PermissionsService {
                 },
             });
 
-        if (existingPermission) {
-            throw new ConflictException(
-                `Permission "${existingPermission.name}" already exists.`,
-            );
-        }
+            if (existingPermission) {
+                throw new ConflictException(
+                    `Permission "${existingPermission.name}" already exists.`,
+                );
+            }
 
-        const permissionGroup =
-            await this.databaseService.permissionGroup.create({
-                data: {
-                    name: createPermissionGroupDto.name.trim(),
-                    key: normalizedKey,
-                    description:
-                        createPermissionGroupDto.description?.trim() || null,
-
-                    permissions: {
-                        create: normalizedActions.map((action) => ({
-                            name: `${normalizedKey}:${action}`,
-                            action,
-                        })),
-                    },
-                },
-
-                include: {
-                    permissions: {
-                        orderBy: {
-                            id: 'asc',
-                        },
-                    },
+            // 3. Find super admin role
+            const superAdminRole = await tx.role.findUnique({
+                where: {
+                    name: 'SUPER_ADMIN',
+                    // isSystem: true,
                 },
             });
 
-        return permissionGroup;
+            if (!superAdminRole) {
+                throw new NotFoundException(
+                    'Super admin role does not exist.',
+                );
+            }
+
+            // 4. Create permission group + permissions
+            const permissionGroup =
+                await tx.permissionGroup.create({
+                    data: {
+                        name: createPermissionGroupDto.name.trim(),
+                        key: normalizedKey,
+                        description:
+                            createPermissionGroupDto.description?.trim() || null,
+
+                        permissions: {
+                            create: normalizedActions.map((action) => ({
+                                name: `${normalizedKey}:${action}`,
+                                action,
+                            })),
+                        },
+                    },
+
+                    include: {
+                        permissions: {
+                            orderBy: {
+                                id: 'asc',
+                            },
+                        },
+                    },
+                });
+
+            // 5. Assign newly created permissions to super admin
+            await tx.rolePermission.createMany({
+                data: permissionGroup.permissions.map((permission) => ({
+                    roleId: superAdminRole.id,
+                    permissionId: permission.id,
+                })),
+                skipDuplicates: true,
+            });
+
+            // 6. Return the created permission group
+            return permissionGroup;
+        });
     }
 
 
@@ -655,6 +772,8 @@ export class PermissionsService {
             );
         }
 
+        console.log({ permissionGroup });
+
         return {
             id: permissionGroup.id,
             name: permissionGroup.name,
@@ -748,5 +867,5 @@ export class PermissionsService {
 
 
 
-    
+
 }

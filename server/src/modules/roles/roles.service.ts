@@ -25,97 +25,10 @@ export class RolesService {
 
 
 
-    private readonly criticalRolePermissions: string[] = [
-        'role:update',
-        'role:delete',
-    ];
-
-
-
-    private async preventSuperAdminLockout(
-        roleId: number,
-        newPermissionIds: number[],
-    ) {
-        const targetRole =
-            await this.databaseService.role.findUnique({
-                where: {
-                    id: roleId,
-                },
-
-                select: {
-                    id: true,
-                    name: true,
-                    status: true,
-                    isSystem: true,
-                },
-            });
-
-        if (!targetRole) {
-            throw new NotFoundException(
-                `Role with ID ${roleId} was not found.`,
-            );
-        }
-
-        /*
-         * Only protect the active SUPER_ADMIN
-         * system role.
-         */
-
-        const isProtectedSuperAdmin =
-            targetRole.isSystem &&
-            targetRole.name === 'SUPER_ADMIN' &&
-            targetRole.status === 'ACTIVE';
-
-        if (!isProtectedSuperAdmin) {
-            return;
-        }
-
-        /*
-         * Fetch the permissions that would exist
-         * after synchronization.
-         */
-
-        const permissions =
-            await this.databaseService.permission.findMany({
-                where: {
-                    id: {
-                        in: newPermissionIds,
-                    },
-                },
-
-                select: {
-                    permissionGroup: {
-                        select: {
-                            key: true,
-                        },
-                    },
-                },
-            });
-
-        const newPermissionKeys =
-            new Set(
-                permissions.map(
-                    (permission) => permission.permissionGroup.key,
-                ),
-            );
-
-        /*
-         * Determine whether critical permissions
-         * would be removed.
-         */
-
-        const missingCriticalPermissions =
-            this.criticalRolePermissions.filter(
-                (permissionKey) =>
-                    !newPermissionKeys.has(permissionKey),
-            );
-
-        if (missingCriticalPermissions.length > 0) {
-            throw new BadRequestException(
-                `Cannot remove critical permissions from the SUPER_ADMIN role: ${missingCriticalPermissions.join(', ')}`,
-            );
-        }
-    }
+    // private readonly criticalRolePermissions: string[] = [
+    //     'role:update',
+    //     'role:delete',
+    // ];
 
 
 
@@ -249,6 +162,89 @@ export class RolesService {
     //         );
     //     }
     // }
+
+
+
+    private readonly criticalRolePermissions: string[] = [
+        'role:update',
+        'role:delete',
+    ];
+
+    private async preventSuperAdminLockout(
+        roleId: number,
+        newPermissionIds: number[],
+    ) {
+        /*
+         * Find the role being modified.
+         */
+        const targetRole =
+            await this.databaseService.role.findUnique({
+                where: {
+                    id: roleId,
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    isSystem: true,
+                },
+            });
+
+        if (!targetRole) {
+            throw new NotFoundException(
+                `Role with ID ${roleId} was not found.`,
+            );
+        }
+
+        /*
+         * Only apply this protection to SUPER_ADMIN.
+         */
+        const isSuperAdminRole =
+            targetRole.isSystem &&
+            targetRole.name === 'SUPER_ADMIN';
+
+        if (!isSuperAdminRole) {
+            return;
+        }
+
+        /*
+         * Fetch the permissions that will remain
+         * after the update.
+         */
+        const newPermissions =
+            await this.databaseService.permission.findMany({
+                where: {
+                    id: {
+                        in: newPermissionIds,
+                    },
+                },
+                select: {
+                    id: true,
+                    name: true,
+                },
+            });
+
+        const newPermissionNames = new Set(
+            newPermissions.map(
+                (permission) => permission.name,
+            ),
+        );
+
+        /*
+         * Check whether any critical permission
+         * is being removed.
+         */
+        const missingCriticalPermissions =
+            this.criticalRolePermissions.filter(
+                (permissionName) =>
+                    !newPermissionNames.has(permissionName),
+            );
+
+        if (missingCriticalPermissions.length > 0) {
+            throw new BadRequestException(
+                `Cannot revoke critical permissions from SUPER_ADMIN role: ${missingCriticalPermissions.join(', ')}`,
+            );
+        }
+    }
 
 
 
