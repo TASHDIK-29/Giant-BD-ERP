@@ -6,9 +6,13 @@ import {
     HttpStatus,
     Param,
     ParseIntPipe,
+    Patch,
     Post,
     Query,
+    Req,
 } from '@nestjs/common';
+
+import type Request from 'express';
 
 import { UsersService } from './users.service.js';
 
@@ -16,7 +20,13 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 
 import { QueryUsersDto } from './dto/query-users.dto.js';
 
+import { UpdateUserDto } from './dto/update-user.dto.js';
+
+import { UpdateUserStatusDto } from './dto/update-user-status.dto.js';
+
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+
 
 
 @Controller('users')
@@ -63,7 +73,52 @@ export class UsersController {
 
 
 
+    @Patch(':id')
+    @RequirePermission('user:update')
+    async update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto,
+        @CurrentUser()
+        user: {
+            id: number;
+            email: string;
+            name: string;
+            role: string;
+        },
+    ) {
+        const currentUserId = user.id;
 
-    
+        return this.usersService.update(
+            id,
+            updateUserDto,
+            currentUserId
+        );
+    }
+
+
+    @Patch(':id/status')
+    @RequirePermission('user:update')
+    async updateStatus(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateUserStatusDto: UpdateUserStatusDto,
+        @CurrentUser()
+        user: {
+            id: number;
+            email: string;
+            name: string;
+            role: string;
+        },
+    ) {
+        const currentUserId = user.id;
+
+        return this.usersService.updateStatus(
+            id,
+            updateUserStatusDto.status,
+            currentUserId,
+        );
+    }
+
+
+
 
 }

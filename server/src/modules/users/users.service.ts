@@ -14,9 +14,10 @@ import { DatabaseService } from '../../database/database.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 
 
-import { Prisma } from '../../generated/prisma/client.js';
+import { Prisma, Status } from '../../generated/prisma/client.js';
 
 import { QueryUsersDto } from './dto/query-users.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 
 @Injectable()
@@ -350,6 +351,299 @@ export class UsersService {
 
 
 
+
+    async update(
+        id: number,
+        updateUserDto: UpdateUserDto,
+        currentUserId: number,
+    ) {
+        /*
+         * Ensure the target user exists.
+         */
+        const existingUser =
+            await this.databaseService.user.findUnique({
+                where: {
+                    id,
+                },
+                select: {
+                    id: true,
+                    email: true,
+                    roleId: true,
+                },
+            });
+
+        if (!existingUser) {
+            throw new NotFoundException(
+                'User not found.',
+            );
+        }
+
+
+        const {
+            name,
+            email,
+            phone,
+            gender,
+            avatar,
+            signature,
+            roleId,
+        } = updateUserDto;
+
+
+        /*
+         * Prevent users from changing their own role.
+         */
+        if (
+            currentUserId === id &&
+            roleId !== undefined
+            // roleId !== existingUser.roleId
+        ) {
+            throw new BadRequestException(
+                'You cannot change your own role.',
+            );
+        }
+
+
+        const data: Prisma.UserUpdateInput = {};
+
+
+        /*
+         * Update name.
+         */
+        if (name !== undefined) {
+            data.name = name.trim();
+        }
+
+
+        /*
+         * Update email.
+         */
+        if (email !== undefined) {
+            const normalizedEmail =
+                email.trim().toLowerCase();
+
+            if (normalizedEmail !== existingUser.email) {
+                const userWithSameEmail =
+                    await this.databaseService.user.findUnique({
+                        where: {
+                            email: normalizedEmail,
+                        },
+                        select: {
+                            id: true,
+                        },
+                    });
+
+                if (
+                    userWithSameEmail &&
+                    userWithSameEmail.id !== id
+                ) {
+                    throw new ConflictException(
+                        'A user with this email already exists.',
+                    );
+                }
+
+                data.email = normalizedEmail;
+            }
+        }
+
+
+        /*
+         * Update role.
+         */
+        if (
+            roleId !== undefined &&
+            roleId !== existingUser.roleId
+        ) {
+            const role =
+                await this.databaseService.role.findUnique({
+                    where: {
+                        id: roleId,
+                    },
+                    select: {
+                        id: true,
+                        status: true,
+                    },
+                });
+
+            if (!role) {
+                throw new NotFoundException(
+                    'Role not found.',
+                );
+            }
+
+            if (role.status !== 'ACTIVE') {
+                throw new BadRequestException(
+                    'Cannot assign an inactive role to a user.',
+                );
+            }
+
+            /*
+             * Prisma relation update.
+             */
+            data.role = {
+                connect: {
+                    id: roleId,
+                },
+            };
+        }
+
+
+        /*
+         * Optional fields.
+         */
+        if (phone !== undefined) {
+            data.phone = phone;
+        }
+
+        if (gender !== undefined) {
+            data.gender = gender;
+        }
+
+        if (avatar !== undefined) {
+            data.avatar = avatar;
+        }
+
+        if (signature !== undefined) {
+            data.signature = signature;
+        }
+
+
+        /*
+         * Update user.
+         */
+        const updatedUser =
+            await this.databaseService.user.update({
+                where: {
+                    id,
+                },
+                data,
+
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    phone: true,
+                    gender: true,
+                    avatar: true,
+                    signature: true,
+                    status: true,
+                    roleId: true,
+
+                    role: {
+                        select: {
+                            id: true,
+                            name: true,
+                            description: true,
+                            status: true,
+                        },
+                    },
+
+                    updatedAt: true,
+                },
+            });
+
+
+        return {
+            message: 'User updated successfully.',
+            user: updatedUser,
+        };
+    }
+
+
+
+    async updateStatus(
+        id: number,
+        status: Status,
+        currentUserId: number,
+    ) {
+        /*
+         * Prevent users from changing
+         * their own account status.
+         */
+        if (id === currentUserId) {
+            throw new BadRequestException(
+                'You cannot change your own account status.',
+            );
+        }
+
+
+        const user =
+            await this.databaseService.user.findUnique({
+                where: {
+                    id,
+                },
+                select: {
+                    id: true,
+                    status: true,
+                },
+            });
+
+
+        if (!user) {
+            throw new NotFoundException(
+                'User not found.',
+            );
+        }
+
+
+        /*
+         * Optional optimization:
+         * Don't perform an unnecessary update.
+         */
+        if (user.status === status) {
+            return {
+                message: `User is already ${status}.`,
+            };
+        }
+
+
+        const updatedUser =
+            await this.databaseService.user.update({
+                where: {
+                    id,
+                },
+
+                data: {
+                    status,
+                },
+
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    status: true,
+                    roleId: true,
+
+                    updatedAt: true,
+                },
+            });
+
+
+        /*
+         * Security:
+         *
+         * If the user becomes inactive,
+         * revoke all existing refresh tokens.
+         */
+        if (status === 'INACTIVE') {
+            await this.databaseService.refreshToken.updateMany({
+                where: {
+                    userId: id,
+                    revokedAt: null,
+                },
+
+                data: {
+                    revokedAt: new Date(),
+                },
+            });
+        }
+
+
+        return {
+            message: 'User status updated successfully.',
+            user: updatedUser,
+        };
+    }
 
 
 
