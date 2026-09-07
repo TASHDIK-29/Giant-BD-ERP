@@ -287,6 +287,67 @@ export class UsersService {
 
 
 
+    async findOne(id: number) {
+        const user =
+            await this.databaseService.user.findUnique({
+                where: {
+                    id,
+                },
+
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    phone: true,
+                    gender: true,
+                    avatar: true,
+                    signature: true,
+                    status: true,
+                    roleId: true,
+
+                    role: {
+                        select: {
+                            id: true,
+                            name: true,
+                            description: true,
+                            status: true,
+
+                            permissions: {
+                                select: {
+                                    permission: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            action: true,
+
+                                            permissionGroup: {
+                                                select: {
+                                                    id: true,
+                                                    name: true,
+                                                    key: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+
+                    createdAt: true,
+                    updatedAt: true,
+                },
+            });
+
+        if (!user) {
+            throw new NotFoundException(
+                'User not found.',
+            );
+        }
+
+        return user;
+    }
+
 
 
 
