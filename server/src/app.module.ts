@@ -13,6 +13,7 @@ import { RolesModule } from './modules/roles/roles.module.js';
 
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard.js';
 import { PermissionGuard } from './common/guards/permission.guard.js';
+import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PermissionGuard } from './common/guards/permission.guard.js';
     MailModule,
     PermissionsModule,
     RolesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
