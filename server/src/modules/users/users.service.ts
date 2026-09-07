@@ -648,4 +648,62 @@ export class UsersService {
 
 
 
+    async remove(id: number, currentUserId: number) {
+
+
+        if (id === currentUserId) {
+            throw new BadRequestException(
+                'You cannot delete your own account.',
+            );
+        }
+
+
+        const user =
+            await this.databaseService.user.findUnique({
+                where: {
+                    id,
+                },
+                select: {
+                    id: true,
+                    status: true,
+                    roleId: true,
+
+                    role: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            });
+
+        if (!user) {
+            throw new NotFoundException('User not found.');
+        }
+
+        const isSuperAdmin = user.role.name === 'SUPER_ADMIN';
+
+
+        if (isSuperAdmin) {
+            throw new BadRequestException(
+                'Cannot delete a SUPER_ADMIN user.',
+            );
+        }
+
+        return await this.databaseService.user.delete({
+            where: {
+                id,
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                status: true,
+                roleId: true,
+            },
+        });
+
+
+    }
+
+
 }

@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -73,27 +74,7 @@ export class UsersController {
 
 
 
-    @Patch(':id')
-    @RequirePermission('user:update')
-    async update(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() updateUserDto: UpdateUserDto,
-        @CurrentUser()
-        user: {
-            id: number;
-            email: string;
-            name: string;
-            role: string;
-        },
-    ) {
-        const currentUserId = user.id;
 
-        return this.usersService.update(
-            id,
-            updateUserDto,
-            currentUserId
-        );
-    }
 
 
     @Patch(':id/status')
@@ -120,5 +101,41 @@ export class UsersController {
 
 
 
+
+    @Patch(':id')
+    @RequirePermission('user:update')
+    async update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto,
+        @CurrentUser()
+        user: {
+            id: number;
+            email: string;
+            name: string;
+            role: string;
+        },
+    ) {
+        const currentUserId = user.id;
+
+        return this.usersService.update(
+            id,
+            updateUserDto,
+            currentUserId
+        );
+    }
+
+
+    @Delete(':id')
+    @RequirePermission('user:delete')
+    async remove(
+        @Param('id', ParseIntPipe) id: number,
+        @CurrentUser()
+        user: {
+            id: number;
+        },
+    ) {
+
+        return this.usersService.remove(id, user.id);
+    }
 
 }
