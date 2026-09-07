@@ -1,14 +1,20 @@
 import {
     Body,
     Controller,
+    Get,
     HttpCode,
     HttpStatus,
+    Param,
+    ParseIntPipe,
     Post,
+    Query,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service.js';
 
 import { CreateUserDto } from './dto/create-user.dto.js';
+
+import { QueryUsersDto } from './dto/query-users.dto.js';
 
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 
@@ -31,4 +37,21 @@ export class UsersController {
             createUserDto,
         );
     }
+
+
+
+
+    @Get()
+    @RequirePermission('user:read')
+    async findAll(
+        @Query() queryUsersDto: QueryUsersDto,
+    ) {
+        return this.usersService.findAll(
+            queryUsersDto,
+        );
+    }
+
+
+
+    
 }

@@ -14,6 +14,11 @@ import { DatabaseService } from '../../database/database.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 
 
+import { Prisma } from '../../generated/prisma/client.js';
+
+import { QueryUsersDto } from './dto/query-users.dto.js';
+
+
 @Injectable()
 export class UsersService {
 
@@ -184,4 +189,108 @@ export class UsersService {
             user,
         };
     }
+
+
+
+
+    async findAll(queryUsersDto: QueryUsersDto) {
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            roleId,
+            status,
+        } = queryUsersDto;
+
+        const skip = (page - 1) * limit;
+
+        const where: Prisma.UserWhereInput = {
+            ...(roleId && {
+                roleId,
+            }),
+
+            ...(status && {
+                status,
+            }),
+
+            ...(search?.trim() && {
+                OR: [
+                    {
+                        name: {
+                            contains: search.trim(),
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        email: {
+                            contains: search.trim(),
+                            mode: 'insensitive',
+                        },
+                    },
+                ],
+            }),
+        };
+
+        const [users, total] =
+            await this.databaseService.$transaction([
+                this.databaseService.user.findMany({
+                    where,
+                    skip,
+                    take: limit,
+
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        phone: true,
+                        gender: true,
+                        avatar: true,
+                        signature: true,
+                        status: true,
+                        roleId: true,
+
+                        role: {
+                            select: {
+                                id: true,
+                                name: true,
+                                description: true,
+                                status: true,
+                            },
+                        },
+
+                        createdAt: true,
+                        updatedAt: true,
+                    },
+                }),
+
+                this.databaseService.user.count({
+                    where,
+                }),
+            ]);
+
+        return {
+            data: users,
+
+            meta: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
+    }
+
+
+
+
+
+
+
+
+
+
 }
