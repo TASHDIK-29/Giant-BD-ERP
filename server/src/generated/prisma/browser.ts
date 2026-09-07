@@ -52,3 +52,8 @@ export type RefreshToken = Prisma.RefreshTokenModel
  * 
  */
 export type LoginOtp = Prisma.LoginOtpModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel

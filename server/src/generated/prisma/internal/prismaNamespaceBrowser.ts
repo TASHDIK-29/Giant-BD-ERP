@@ -57,7 +57,8 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   RefreshToken: 'RefreshToken',
-  LoginOtp: 'LoginOtp'
+  LoginOtp: 'LoginOtp',
+  Category: 'Category'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -162,6 +163,22 @@ export const LoginOtpScalarFieldEnum = {
 } as const
 
 export type LoginOtpScalarFieldEnum = (typeof LoginOtpScalarFieldEnum)[keyof typeof LoginOtpScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  parentId: 'parentId',
+  mediaId: 'mediaId',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
 export const SortOrder = {
