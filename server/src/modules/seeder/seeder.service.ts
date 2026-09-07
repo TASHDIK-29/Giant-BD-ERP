@@ -122,6 +122,138 @@ export class SeederService implements OnModuleInit {
         await this.seedSuperAdmin();
     }
 
+
+
+    // OLD VERSION OF seedSuperAdmin
+    // private async seedSuperAdmin() {
+    //     try {
+    //         const email = this.configService.get<string>(
+    //             'SUPER_ADMIN_EMAIL',
+    //         );
+
+    //         const password = this.configService.get<string>(
+    //             'SUPER_ADMIN_PASSWORD',
+    //         );
+
+    //         const name = this.configService.get<string>(
+    //             'SUPER_ADMIN_NAME',
+    //         );
+
+    //         const saltRounds = Number(
+    //             this.configService.get<string>(
+    //                 'BCRYPT_SALT_ROUNDS',
+    //             ) ?? 10,
+    //         );
+
+    //         if (!email || !password || !name) {
+    //             throw new Error(
+    //                 'SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, or SUPER_ADMIN_NAME is missing from environment variables.',
+    //             );
+    //         }
+
+    //         if (
+    //             Number.isNaN(saltRounds) ||
+    //             saltRounds < 10
+    //         ) {
+    //             throw new Error(
+    //                 'BCRYPT_SALT_ROUNDS must be a valid number greater than or equal to 10.',
+    //             );
+    //         }
+
+    //         // --------------------------------------------------
+    //         // STEP 1: Find or create the SUPER_ADMIN role
+    //         // --------------------------------------------------
+
+    //         let superAdminRole =
+    //             await this.databaseService.role.findUnique({
+    //                 where: {
+    //                     name: 'SUPER_ADMIN',
+    //                 },
+    //             });
+
+    //         if (!superAdminRole) {
+    //             superAdminRole =
+    //                 await this.databaseService.role.create({
+    //                     data: {
+    //                         name: 'SUPER_ADMIN',
+    //                         description:
+    //                             'System Super Administrator with full access',
+    //                         status: 'ACTIVE',
+    //                     },
+    //                 });
+
+    //             this.logger.log(
+    //                 'SUPER_ADMIN role created successfully.',
+    //             );
+    //         }
+
+    //         // --------------------------------------------------
+    //         // STEP 2: Check whether any user has SUPER_ADMIN role
+    //         // --------------------------------------------------
+
+    //         const existingSuperAdmin =
+    //             await this.databaseService.user.findFirst({
+    //                 where: {
+    //                     role: {
+    //                         name: 'SUPER_ADMIN',
+    //                     },
+    //                 },
+    //             });
+
+    //         if (existingSuperAdmin) {
+    //             this.logger.log(
+    //                 `SUPER_ADMIN already exists (${existingSuperAdmin.email}). Skipping user seed.`,
+    //             );
+
+    //             return;
+    //         }
+
+    //         // --------------------------------------------------
+    //         // STEP 3: Hash password
+    //         // --------------------------------------------------
+
+    //         const hashedPassword = await bcrypt.hash(
+    //             password,
+    //             saltRounds,
+    //         );
+
+    //         // --------------------------------------------------
+    //         // STEP 4: Create SUPER_ADMIN user
+    //         // --------------------------------------------------
+
+    //         const superAdmin =
+    //             await this.databaseService.user.create({
+    //                 data: {
+    //                     email,
+    //                     password: hashedPassword,
+    //                     name,
+    //                     isSystem: true,
+
+    //                     role: {
+    //                         connect: {
+    //                             id: superAdminRole.id,
+    //                         },
+    //                     },
+    //                 },
+    //             });
+
+    //         this.logger.log(
+    //             `SUPER_ADMIN created successfully with email: ${superAdmin.email}`,
+    //         );
+    //     } catch (error) {
+    //         this.logger.error(
+    //             'Failed to seed SUPER_ADMIN',
+    //             error instanceof Error
+    //                 ? error.stack
+    //                 : String(error),
+    //         );
+
+    //         throw error;
+    //     }
+    // }
+
+
+
     private async seedSuperAdmin() {
         try {
             const email = this.configService.get<string>(
@@ -148,17 +280,14 @@ export class SeederService implements OnModuleInit {
                 );
             }
 
-            if (
-                Number.isNaN(saltRounds) ||
-                saltRounds < 10
-            ) {
+            if (Number.isNaN(saltRounds) || saltRounds < 10) {
                 throw new Error(
                     'BCRYPT_SALT_ROUNDS must be a valid number greater than or equal to 10.',
                 );
             }
 
             // --------------------------------------------------
-            // STEP 1: Find or create the SUPER_ADMIN role
+            // STEP 1: Find or create SUPER_ADMIN role
             // --------------------------------------------------
 
             let superAdminRole =
@@ -176,6 +305,7 @@ export class SeederService implements OnModuleInit {
                             description:
                                 'System Super Administrator with full access',
                             status: 'ACTIVE',
+                            isSystem: true,
                         },
                     });
 
@@ -185,28 +315,56 @@ export class SeederService implements OnModuleInit {
             }
 
             // --------------------------------------------------
-            // STEP 2: Check whether any user has SUPER_ADMIN role
+            // STEP 2: Find all existing permissions
+            // --------------------------------------------------
+
+            const permissions =
+                await this.databaseService.permission.findMany({
+                    select: {
+                        id: true,
+                    },
+                });
+
+            // --------------------------------------------------
+            // STEP 3: Assign all existing permissions
+            // to SUPER_ADMIN role
+            // --------------------------------------------------
+
+            if (permissions.length > 0) {
+                await this.databaseService.rolePermission.createMany({
+                    data: permissions.map((permission) => ({
+                        roleId: superAdminRole.id,
+                        permissionId: permission.id,
+                    })),
+                    skipDuplicates: true,
+                });
+
+                this.logger.log(
+                    `Assigned ${permissions.length} permissions to SUPER_ADMIN role.`,
+                );
+            }
+
+            // --------------------------------------------------
+            // STEP 4: Check whether SUPER_ADMIN user exists
             // --------------------------------------------------
 
             const existingSuperAdmin =
                 await this.databaseService.user.findFirst({
                     where: {
-                        role: {
-                            name: 'SUPER_ADMIN',
-                        },
+                        roleId: superAdminRole.id,
                     },
                 });
 
             if (existingSuperAdmin) {
                 this.logger.log(
-                    `SUPER_ADMIN already exists (${existingSuperAdmin.email}). Skipping user seed.`,
+                    `SUPER_ADMIN user already exists (${existingSuperAdmin.email}). Skipping user seed.`,
                 );
 
                 return;
             }
 
             // --------------------------------------------------
-            // STEP 3: Hash password
+            // STEP 5: Hash password
             // --------------------------------------------------
 
             const hashedPassword = await bcrypt.hash(
@@ -215,7 +373,7 @@ export class SeederService implements OnModuleInit {
             );
 
             // --------------------------------------------------
-            // STEP 4: Create SUPER_ADMIN user
+            // STEP 6: Create SUPER_ADMIN user
             // --------------------------------------------------
 
             const superAdmin =
@@ -224,13 +382,7 @@ export class SeederService implements OnModuleInit {
                         email,
                         password: hashedPassword,
                         name,
-                        isSystem: true,
-
-                        role: {
-                            connect: {
-                                id: superAdminRole.id,
-                            },
-                        },
+                        roleId: superAdminRole.id,
                     },
                 });
 
