@@ -66,7 +66,8 @@ export const ModelName = {
   Warehouse: 'Warehouse',
   Zone: 'Zone',
   SubZone: 'SubZone',
-  Rack: 'Rack'
+  Rack: 'Rack',
+  Buyer: 'Buyer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -298,6 +299,18 @@ export const RackScalarFieldEnum = {
 } as const
 
 export type RackScalarFieldEnum = (typeof RackScalarFieldEnum)[keyof typeof RackScalarFieldEnum]
+
+
+export const BuyerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
 
 
 export const SortOrder = {

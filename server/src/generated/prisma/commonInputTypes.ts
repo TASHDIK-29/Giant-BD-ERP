@@ -287,6 +287,23 @@ export type EnumPackagingTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
 }
 
+export type EnumBuyerTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BuyerType | Prisma.EnumBuyerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBuyerTypeFilter<$PrismaModel> | $Enums.BuyerType
+}
+
+export type EnumBuyerTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BuyerType | Prisma.EnumBuyerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBuyerTypeWithAggregatesFilter<$PrismaModel> | $Enums.BuyerType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBuyerTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBuyerTypeFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -571,6 +588,23 @@ export type NestedEnumPackagingTypeWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumBuyerTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BuyerType | Prisma.EnumBuyerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBuyerTypeFilter<$PrismaModel> | $Enums.BuyerType
+}
+
+export type NestedEnumBuyerTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BuyerType | Prisma.EnumBuyerTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BuyerType[] | Prisma.ListEnumBuyerTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBuyerTypeWithAggregatesFilter<$PrismaModel> | $Enums.BuyerType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBuyerTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBuyerTypeFilter<$PrismaModel>
 }
 
 

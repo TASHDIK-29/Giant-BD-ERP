@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const BuyerType = {
+  LOCAL: 'LOCAL',
+  INTERNATIONAL: 'INTERNATIONAL'
+} as const
+
+export type BuyerType = (typeof BuyerType)[keyof typeof BuyerType]
+
+
 export const Gender = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'

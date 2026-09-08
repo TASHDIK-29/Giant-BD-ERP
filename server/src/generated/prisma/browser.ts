@@ -97,3 +97,8 @@ export type SubZone = Prisma.SubZoneModel
  * 
  */
 export type Rack = Prisma.RackModel
+/**
+ * Model Buyer
+ * 
+ */
+export type Buyer = Prisma.BuyerModel

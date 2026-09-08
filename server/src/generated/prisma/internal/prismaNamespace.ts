@@ -412,7 +412,8 @@ export const ModelName = {
   Warehouse: 'Warehouse',
   Zone: 'Zone',
   SubZone: 'SubZone',
-  Rack: 'Rack'
+  Rack: 'Rack',
+  Buyer: 'Buyer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material" | "color" | "masterProduct" | "productVariant" | "warehouse" | "zone" | "subZone" | "rack"
+    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material" | "color" | "masterProduct" | "productVariant" | "warehouse" | "zone" | "subZone" | "rack" | "buyer"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1616,6 +1617,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Buyer: {
+      payload: Prisma.$BuyerPayload<ExtArgs>
+      fields: Prisma.BuyerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BuyerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BuyerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        findFirst: {
+          args: Prisma.BuyerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BuyerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        findMany: {
+          args: Prisma.BuyerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>[]
+        }
+        create: {
+          args: Prisma.BuyerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        createMany: {
+          args: Prisma.BuyerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BuyerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>[]
+        }
+        delete: {
+          args: Prisma.BuyerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        update: {
+          args: Prisma.BuyerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        deleteMany: {
+          args: Prisma.BuyerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BuyerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BuyerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>[]
+        }
+        upsert: {
+          args: Prisma.BuyerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        aggregate: {
+          args: Prisma.BuyerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBuyer>
+        }
+        groupBy: {
+          args: Prisma.BuyerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuyerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BuyerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuyerCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1870,6 +1945,18 @@ export const RackScalarFieldEnum = {
 export type RackScalarFieldEnum = (typeof RackScalarFieldEnum)[keyof typeof RackScalarFieldEnum]
 
 
+export const BuyerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2002,6 +2089,20 @@ export type EnumPackagingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'PackagingType[]'
  */
 export type ListEnumPackagingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PackagingType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BuyerType'
+ */
+export type EnumBuyerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BuyerType'>
+    
+
+
+/**
+ * Reference to a field of type 'BuyerType[]'
+ */
+export type ListEnumBuyerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BuyerType[]'>
     
 
 
@@ -2185,6 +2286,7 @@ export type GlobalOmitConfig = {
   zone?: Prisma.ZoneOmit
   subZone?: Prisma.SubZoneOmit
   rack?: Prisma.RackOmit
+  buyer?: Prisma.BuyerOmit
 }
 
 /* Types for Logging */

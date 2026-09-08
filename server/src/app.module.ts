@@ -22,6 +22,7 @@ import { WarehousesModule } from './modules/warehouses/warehouses.module.js';
 import { ZonesModule } from './modules/zones/zones.module.js';
 import { SubZonesModule } from './modules/sub-zones/sub-zones.module.js';
 import { RacksModule } from './modules/racks/racks.module.js';
+import { BuyersModule } from './modules/buyers/buyers.module.js';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { RacksModule } from './modules/racks/racks.module.js';
     ZonesModule,
     SubZonesModule,
     RacksModule,
+    BuyersModule,
   ],
   controllers: [AppController],
   providers: [
