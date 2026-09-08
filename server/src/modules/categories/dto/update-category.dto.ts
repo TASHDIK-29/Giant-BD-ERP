@@ -23,20 +23,6 @@ export class UpdateCategoryDto {
     description?: string | null;
 
 
-    /*
-     * null → Top-level category
-     * number → Sub-category
-     */
-    @IsOptional()
-    @ValidateIf(
-        (object) => object.parentId !== null,
-    )
-    @Type(() => Number)
-    @IsInt()
-    @Min(1)
-    parentId?: number | null;
-
-
     @IsOptional()
     @ValidateIf(
         (object) => object.mediaId !== null,

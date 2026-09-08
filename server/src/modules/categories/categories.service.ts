@@ -601,94 +601,7 @@ export class CategoriesService {
         }
 
 
-        /*
-         * We must use hasOwnProperty because:
-         *
-         * parentId: undefined
-         * means don't update parent.
-         *
-         * parentId: null
-         * means explicitly remove the parent.
-         */
-        const isParentChanging =
-            Object.prototype.hasOwnProperty.call(
-                updateCategoryDto,
-                'parentId',
-            );
-
-
-        if (isParentChanging) {
-            throw new BadRequestException("Parent can not be changed")
-        }
-
-
-        // if (isParentChanging) {
-        //     const newParentId =
-        //         updateCategoryDto.parentId;
-
-
-        //     /*
-        //      * Prevent a category from becoming
-        //      * its own parent.
-        //      */
-        //     if (newParentId === id) {
-        //         throw new BadRequestException(
-        //             'A category cannot be its own parent.',
-        //         );
-        //     }
-
-
-        //     /*
-        //      * If a parent ID is provided,
-        //      * it must be a valid top-level category.
-        //      */
-        //     if (
-        //         newParentId !== null &&
-        //         newParentId !== undefined
-        //     ) {
-        //         const newParent =
-        //             await this.databaseService.category.findUnique({
-        //                 where: {
-        //                     id: newParentId,
-        //                 },
-        //                 select: {
-        //                     id: true,
-        //                     parentId: true,
-        //                 },
-        //             });
-
-
-        //         if (!newParent) {
-        //             throw new NotFoundException(
-        //                 'New parent category not found.',
-        //             );
-        //         }
-
-
-        //         /*
-        //          * A sub-category cannot become
-        //          * another category's parent.
-        //          */
-        //         if (newParent.parentId !== null) {
-        //             throw new BadRequestException(
-        //                 'A sub-category cannot be used as a parent category.',
-        //             );
-        //         }
-
-
-        //         /*
-        //          * A category that already has children
-        //          * cannot become a sub-category.
-        //          */
-        //         if (
-        //             existingCategory._count.children > 0
-        //         ) {
-        //             throw new BadRequestException(
-        //                 'A category with sub-categories cannot become a sub-category.',
-        //             );
-        //         }
-        //     }
-        // }
+        
 
 
         /*
@@ -729,10 +642,6 @@ export class CategoriesService {
                             null,
                     }),
 
-                    // ...(isParentChanging && {
-                    //     parentId:
-                    //         updateCategoryDto.parentId,
-                    // }),
 
                     ...(updateCategoryDto.mediaId !== undefined && {
                         mediaId:
