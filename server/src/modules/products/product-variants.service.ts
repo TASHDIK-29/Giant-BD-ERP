@@ -10,8 +10,9 @@ import { DatabaseService } from '../../database/database.service.js';
 import {
     CreateProductVariantsDto,
 } from './dto/create-product-variants.dto.js';
-import { Prisma } from '../../generated/prisma/client.js';
+import { Prisma, Status } from '../../generated/prisma/client.js';
 import { ProductVariantQueryDto } from './dto/product-variant-query.dto.js';
+import { UpdateProductVariantDto } from './dto/update-product-variant.dto.js';
 
 
 @Injectable()
@@ -601,5 +602,336 @@ export class ProductVariantsService {
     }
 
 
+
+
+    async update(
+        id: number,
+        updateProductVariantDto: UpdateProductVariantDto,
+    ) {
+        const existingVariant =
+            await this.databaseService.productVariant.findUnique({
+                where: {
+                    id,
+                },
+            });
+
+
+        if (!existingVariant) {
+            throw new NotFoundException(
+                'Product Variant was not found.',
+            );
+        }
+
+
+        const {
+            masterProductId,
+            colorId,
+            gender,
+            size,
+            modelNumber,
+            uom,
+            productsPerPacket,
+            packagingType,
+        } = updateProductVariantDto;
+
+
+        /*
+         * Determine the final values.
+         *
+         * If a value is not provided in the update request,
+         * keep the existing value.
+         */
+        const finalMasterProductId =
+            masterProductId ?? existingVariant.masterProductId;
+
+        const finalColorId =
+            colorId ?? existingVariant.colorId;
+
+        const finalGender =
+            gender ?? existingVariant.gender;
+
+        const finalSize =
+            size?.trim() ?? existingVariant.size;
+
+
+        /*
+         * Validate Master Product when changed.
+         */
+        if (
+            masterProductId !== undefined &&
+            masterProductId !== existingVariant.masterProductId
+        ) {
+            const masterProduct =
+                await this.databaseService.masterProduct.findFirst({
+                    where: {
+                        id: masterProductId,
+                        status: 'ACTIVE',
+                    },
+                });
+
+
+            if (!masterProduct) {
+                throw new NotFoundException(
+                    'Master Product was not found.',
+                );
+            }
+        }
+
+
+        /*
+         * Validate Color when changed.
+         */
+        if (
+            colorId !== undefined &&
+            colorId !== existingVariant.colorId
+        ) {
+            const color =
+                await this.databaseService.color.findUnique({
+                    where: {
+                        id: colorId,
+                    },
+                });
+
+
+            if (!color) {
+                throw new NotFoundException(
+                    'Color was not found.',
+                );
+            }
+        }
+
+
+        /*
+         * Check whether SKU-defining fields changed.
+         */
+        const shouldRegenerateSku =
+            finalMasterProductId !==
+            existingVariant.masterProductId ||
+            finalColorId !== existingVariant.colorId ||
+            finalGender !== existingVariant.gender ||
+            finalSize !== existingVariant.size;
+
+
+        let updatedSku = existingVariant.sku;
+
+
+        if (shouldRegenerateSku) {
+            const masterProduct =
+                await this.databaseService.masterProduct.findUnique({
+                    where: {
+                        id: finalMasterProductId,
+                    },
+
+                    select: {
+                        sku: true,
+                    },
+                });
+
+
+            const color =
+                await this.databaseService.color.findUnique({
+                    where: {
+                        id: finalColorId,
+                    },
+
+                    select: {
+                        name: true,
+                    },
+                });
+
+
+            if (!masterProduct || !color) {
+                throw new BadRequestException(
+                    'Unable to generate Product Variant SKU.',
+                );
+            }
+
+
+            updatedSku = this.generateVariantSku(
+                masterProduct.sku,
+                finalSize,
+                color.name,
+                finalGender,
+            );
+
+
+            /*
+             * Prevent duplicate SKU.
+             */
+            const duplicateVariant =
+                await this.databaseService.productVariant.findFirst({
+                    where: {
+                        sku: updatedSku,
+
+                        id: {
+                            not: id,
+                        },
+                    },
+                });
+
+
+            if (duplicateVariant) {
+                throw new ConflictException(
+                    `Another Product Variant already exists with SKU: ${updatedSku}`,
+                );
+            }
+        }
+
+
+        const updatedVariant =
+            await this.databaseService.productVariant.update({
+                where: {
+                    id,
+                },
+
+                data: {
+                    ...(masterProductId !== undefined && {
+                        masterProductId,
+                    }),
+
+                    ...(colorId !== undefined && {
+                        colorId,
+                    }),
+
+                    ...(gender !== undefined && {
+                        gender,
+                    }),
+
+                    ...(size !== undefined && {
+                        size: finalSize,
+                    }),
+
+                    ...(modelNumber !== undefined && {
+                        modelNumber: modelNumber.trim(),
+                    }),
+
+                    ...(uom !== undefined && {
+                        uom,
+                    }),
+
+                    ...(productsPerPacket !== undefined && {
+                        productsPerPacket,
+                    }),
+
+                    ...(packagingType !== undefined && {
+                        packagingType,
+                    }),
+
+                    ...(shouldRegenerateSku && {
+                        sku: updatedSku,
+                    }),
+                },
+
+                include: {
+                    masterProduct: {
+                        select: {
+                            id: true,
+                            name: true,
+                            sku: true,
+                        },
+                    },
+
+                    color: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+            });
+
+
+        return {
+            message: 'Product Variant updated successfully.',
+            data: updatedVariant,
+        };
+    }
+
+
+
+
+
+
+    async updateStatus(
+        id: number,
+        status: Status,
+    ) {
+        const variant =
+            await this.databaseService.productVariant.findUnique({
+                where: {
+                    id,
+                },
+            });
+
+
+        if (!variant) {
+            throw new NotFoundException(
+                'Product Variant was not found.',
+            );
+        }
+
+
+        const updatedVariant =
+            await this.databaseService.productVariant.update({
+                where: {
+                    id,
+                },
+
+                data: {
+                    status,
+                },
+
+                select: {
+                    id: true,
+                    sku: true,
+                    status: true,
+                },
+            });
+
+
+        return {
+            message:
+                'Product Variant status updated successfully.',
+
+            data: updatedVariant,
+        };
+    }
+
+
+
+
+    async remove(id: number) {
+        const variant =
+            await this.databaseService.productVariant.findUnique({
+                where: {
+                    id,
+                },
+
+                select: {
+                    id: true,
+                    sku: true,
+                },
+            });
+
+
+        if (!variant) {
+            throw new NotFoundException(
+                'Product Variant was not found.',
+            );
+        }
+
+
+        await this.databaseService.productVariant.delete({
+            where: {
+                id,
+            },
+        });
+
+
+        return {
+            message:
+                'Product Variant deleted successfully.',
+        };
+    }
 
 }
