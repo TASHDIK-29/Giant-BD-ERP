@@ -10,6 +10,8 @@ import { DatabaseService } from '../../database/database.service.js';
 import {
     CreateProductVariantsDto,
 } from './dto/create-product-variants.dto.js';
+import { Prisma } from '../../generated/prisma/client.js';
+import { ProductVariantQueryDto } from './dto/product-variant-query.dto.js';
 
 
 @Injectable()
@@ -388,6 +390,213 @@ export class ProductVariantsService {
                 `${createdVariants.length} Product Variant(s) created successfully.`,
 
             data: createdVariants,
+        };
+    }
+
+
+
+
+    async findAll(
+        query: ProductVariantQueryDto,
+    ) {
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            masterProductId,
+            colorId,
+            gender,
+            status,
+        } = query;
+
+
+        const skip = (page - 1) * limit;
+
+
+        const where: Prisma.ProductVariantWhereInput = {
+            ...(masterProductId && {
+                masterProductId,
+            }),
+
+            ...(colorId && {
+                colorId,
+            }),
+
+            ...(gender && {
+                gender,
+            }),
+
+            ...(status && {
+                status,
+            }),
+
+            ...(search && {
+                OR: [
+                    {
+                        sku: {
+                            contains: search.trim(),
+                            mode: 'insensitive',
+                        },
+                    },
+
+                    {
+                        size: {
+                            contains: search.trim(),
+                            mode: 'insensitive',
+                        },
+                    },
+
+                    {
+                        modelNumber: {
+                            contains: search.trim(),
+                            mode: 'insensitive',
+                        },
+                    },
+
+                    {
+                        masterProduct: {
+                            name: {
+                                contains: search.trim(),
+                                mode: 'insensitive',
+                            },
+                        },
+                    },
+
+                    {
+                        color: {
+                            name: {
+                                contains: search.trim(),
+                                mode: 'insensitive',
+                            },
+                        },
+                    },
+                ],
+            }),
+        };
+
+
+        const [
+            variants,
+            total,
+        ] = await this.databaseService.$transaction([
+            this.databaseService.productVariant.findMany({
+                where,
+
+                skip,
+
+                take: limit,
+
+                orderBy: {
+                    createdAt: 'desc',
+                },
+
+                include: {
+                    masterProduct: {
+                        select: {
+                            id: true,
+                            name: true,
+                            sku: true,
+                            status: true,
+                        },
+                    },
+
+                    color: {
+                        select: {
+                            id: true,
+                            name: true,
+                            // status: true,
+                        },
+                    },
+                },
+            }),
+
+            this.databaseService.productVariant.count({
+                where,
+            }),
+        ]);
+
+
+        return {
+            data: variants,
+
+            meta: {
+                total,
+
+                page,
+
+                limit,
+
+                totalPages: Math.ceil(
+                    total / limit,
+                ),
+            },
+        };
+    }
+
+
+
+
+    async findOne(id: number) {
+        const variant =
+            await this.databaseService.productVariant.findUnique({
+                where: {
+                    id,
+                },
+
+                include: {
+                    masterProduct: {
+                        select: {
+                            id: true,
+                            name: true,
+                            sku: true,
+                            status: true,
+
+                            category: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    slug: true,
+                                },
+                            },
+
+                            subCategory: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    slug: true,
+                                },
+                            },
+
+                            material: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+
+                    color: {
+                        select: {
+                            id: true,
+                            name: true,
+                            description: true,
+                            // status: true,
+                        },
+                    },
+                },
+            });
+
+
+        if (!variant) {
+            throw new NotFoundException(
+                'Product Variant was not found.',
+            );
+        }
+
+
+        return {
+            data: variant,
         };
     }
 
