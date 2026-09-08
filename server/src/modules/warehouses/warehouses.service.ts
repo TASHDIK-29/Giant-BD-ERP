@@ -30,7 +30,7 @@ import {
 export class WarehousesService {
     constructor(
         private readonly databaseService: DatabaseService,
-    ) {}
+    ) { }
 
 
     /*
@@ -332,11 +332,50 @@ export class WarehousesService {
      * we will update this method to prevent
      * deletion when Zones exist.
      */
+    // async remove(id: number) {
+    //     const warehouse =
+    //         await this.databaseService.warehouse.findUnique({
+    //             where: {
+    //                 id,
+    //             },
+    //         });
+
+
+    //     if (!warehouse) {
+    //         throw new NotFoundException(
+    //             'Warehouse was not found.',
+    //         );
+    //     }
+
+
+    //     await this.databaseService.warehouse.delete({
+    //         where: {
+    //             id,
+    //         },
+    //     });
+
+
+    //     return {
+    //         message:
+    //             'Warehouse deleted successfully.',
+    //     };
+    // }
+
+
+
     async remove(id: number) {
         const warehouse =
             await this.databaseService.warehouse.findUnique({
                 where: {
                     id,
+                },
+
+                include: {
+                    _count: {
+                        select: {
+                            zones: true,
+                        },
+                    },
                 },
             });
 
@@ -344,6 +383,13 @@ export class WarehousesService {
         if (!warehouse) {
             throw new NotFoundException(
                 'Warehouse was not found.',
+            );
+        }
+
+
+        if (warehouse._count.zones > 0) {
+            throw new ConflictException(
+                'Cannot delete this Warehouse because it contains Zones.',
             );
         }
 
