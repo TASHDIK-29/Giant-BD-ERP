@@ -16,6 +16,7 @@ import { PermissionGuard } from './common/guards/permission.guard.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { CategoriesModule } from './modules/categories/categories.module.js';
 import { MaterialsModule } from './modules/materials/materials.module.js';
+import { ColorsModule } from './modules/colors/colors.module.js';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MaterialsModule } from './modules/materials/materials.module.js';
     UsersModule,
     CategoriesModule,
     MaterialsModule,
+    ColorsModule,
   ],
   controllers: [AppController],
   providers: [

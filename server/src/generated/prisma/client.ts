@@ -86,3 +86,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Material = Prisma.MaterialModel
+/**
+ * Model Color
+ * 
+ */
+export type Color = Prisma.ColorModel
