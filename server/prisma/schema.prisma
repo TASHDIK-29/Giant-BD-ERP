@@ -270,6 +270,74 @@ model ProductVariant {
   @@index([colorId])
 }
 
+model Warehouse {
+  id          Int     @id @default(autoincrement())
+  name        String
+  code        String  @unique
+  description String?
+  status      Status  @default(ACTIVE)
+
+  zones Zone[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Zone {
+  id          Int     @id @default(autoincrement())
+  name        String
+  code        String
+  description String?
+  status      Status  @default(ACTIVE)
+
+  warehouseId Int
+  warehouse   Warehouse @relation( fields: [warehouseId],references: [id], onDelete: Restrict)
+
+  subZones SubZone[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([warehouseId, code])
+  @@index([warehouseId])
+}
+
+model SubZone {
+  id          Int     @id @default(autoincrement())
+  name        String
+  code        String
+  description String?
+  status      Status  @default(ACTIVE)
+
+  zoneId Int
+  zone        Zone @relation(fields: [zoneId],references: [id],onDelete: Restrict)
+
+  racks Rack[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([zoneId, code])
+  @@index([zoneId])
+}
+
+model Rack {
+  id          Int     @id @default(autoincrement())
+  name        String
+  code        String
+  description String?
+  status      Status  @default(ACTIVE)
+
+  subZoneId Int
+  subZone     SubZone @relation(fields: [subZoneId],references: [id],onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([subZoneId, code])
+  @@index([subZoneId])
+}
+
 enum Gender {
   MALE
   FEMALE

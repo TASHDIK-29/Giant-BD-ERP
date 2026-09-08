@@ -77,3 +77,23 @@ export type MasterProduct = Prisma.MasterProductModel
  * 
  */
 export type ProductVariant = Prisma.ProductVariantModel
+/**
+ * Model Warehouse
+ * 
+ */
+export type Warehouse = Prisma.WarehouseModel
+/**
+ * Model Zone
+ * 
+ */
+export type Zone = Prisma.ZoneModel
+/**
+ * Model SubZone
+ * 
+ */
+export type SubZone = Prisma.SubZoneModel
+/**
+ * Model Rack
+ * 
+ */
+export type Rack = Prisma.RackModel
