@@ -30,7 +30,7 @@ import {
 export class SubZonesService {
     constructor(
         private readonly databaseService: DatabaseService,
-    ) {}
+    ) { }
 
 
     /*
@@ -171,36 +171,36 @@ export class SubZonesService {
 
         const where:
             Prisma.SubZoneWhereInput = {
-                ...(zoneId !== undefined && {
-                    zoneId,
-                }),
+            ...(zoneId !== undefined && {
+                zoneId,
+            }),
 
-                ...(status !== undefined && {
-                    status,
-                }),
+            ...(status !== undefined && {
+                status,
+            }),
 
-                ...(search?.trim() && {
-                    OR: [
-                        {
-                            name: {
-                                contains:
-                                    search.trim(),
-                                mode:
-                                    'insensitive',
-                            },
+            ...(search?.trim() && {
+                OR: [
+                    {
+                        name: {
+                            contains:
+                                search.trim(),
+                            mode:
+                                'insensitive',
                         },
+                    },
 
-                        {
-                            code: {
-                                contains:
-                                    search.trim(),
-                                mode:
-                                    'insensitive',
-                            },
+                    {
+                        code: {
+                            contains:
+                                search.trim(),
+                            mode:
+                                'insensitive',
                         },
-                    ],
-                }),
-            };
+                    },
+                ],
+            }),
+        };
 
 
         const [
@@ -595,12 +595,27 @@ export class SubZonesService {
                 where: {
                     id,
                 },
+
+                include: {
+                    _count: {
+                        select: {
+                            racks: true,
+                        },
+                    },
+                },
             });
 
 
         if (!subZone) {
             throw new NotFoundException(
                 'Sub Zone was not found.',
+            );
+        }
+
+
+        if (subZone._count.racks > 0) {
+            throw new ConflictException(
+                'Cannot delete this Sub Zone because it contains Racks.',
             );
         }
 
