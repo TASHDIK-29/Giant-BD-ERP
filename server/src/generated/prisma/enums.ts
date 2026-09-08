@@ -23,3 +23,31 @@ export const Status = {
 } as const
 
 export type Status = (typeof Status)[keyof typeof Status]
+
+
+export const Uom = {
+  PCS: 'PCS',
+  PAIR: 'PAIR',
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT',
+  KG: 'KG',
+  GRAM: 'GRAM',
+  LITER: 'LITER',
+  ML: 'ML',
+  BOX: 'BOX',
+  PACK: 'PACK',
+  SET: 'SET'
+} as const
+
+export type Uom = (typeof Uom)[keyof typeof Uom]
+
+
+export const PackagingType = {
+  BOX: 'BOX',
+  CARTON: 'CARTON',
+  PACKET: 'PACKET',
+  POLYBAG: 'POLYBAG',
+  BUNDLE: 'BUNDLE'
+} as const
+
+export type PackagingType = (typeof PackagingType)[keyof typeof PackagingType]

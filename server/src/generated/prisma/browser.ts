@@ -67,3 +67,13 @@ export type Material = Prisma.MaterialModel
  * 
  */
 export type Color = Prisma.ColorModel
+/**
+ * Model MasterProduct
+ * 
+ */
+export type MasterProduct = Prisma.MasterProductModel
+/**
+ * Model ProductVariant
+ * 
+ */
+export type ProductVariant = Prisma.ProductVariantModel

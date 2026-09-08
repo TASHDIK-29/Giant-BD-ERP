@@ -236,6 +236,57 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumGenderFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+}
+
+export type EnumUomFilter<$PrismaModel = never> = {
+  equals?: $Enums.Uom | Prisma.EnumUomFieldRefInput<$PrismaModel>
+  in?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUomFilter<$PrismaModel> | $Enums.Uom
+}
+
+export type EnumPackagingTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PackagingType | Prisma.EnumPackagingTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel> | $Enums.PackagingType
+}
+
+export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type EnumUomWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Uom | Prisma.EnumUomFieldRefInput<$PrismaModel>
+  in?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUomWithAggregatesFilter<$PrismaModel> | $Enums.Uom
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumUomFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumUomFilter<$PrismaModel>
+}
+
+export type EnumPackagingTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PackagingType | Prisma.EnumPackagingTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPackagingTypeWithAggregatesFilter<$PrismaModel> | $Enums.PackagingType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -469,6 +520,57 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumGenderFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+}
+
+export type NestedEnumUomFilter<$PrismaModel = never> = {
+  equals?: $Enums.Uom | Prisma.EnumUomFieldRefInput<$PrismaModel>
+  in?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUomFilter<$PrismaModel> | $Enums.Uom
+}
+
+export type NestedEnumPackagingTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PackagingType | Prisma.EnumPackagingTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel> | $Enums.PackagingType
+}
+
+export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type NestedEnumUomWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Uom | Prisma.EnumUomFieldRefInput<$PrismaModel>
+  in?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Uom[] | Prisma.ListEnumUomFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUomWithAggregatesFilter<$PrismaModel> | $Enums.Uom
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumUomFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumUomFilter<$PrismaModel>
+}
+
+export type NestedEnumPackagingTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PackagingType | Prisma.EnumPackagingTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PackagingType[] | Prisma.ListEnumPackagingTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPackagingTypeWithAggregatesFilter<$PrismaModel> | $Enums.PackagingType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPackagingTypeFilter<$PrismaModel>
 }
 
 

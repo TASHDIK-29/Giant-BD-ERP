@@ -60,7 +60,9 @@ export const ModelName = {
   LoginOtp: 'LoginOtp',
   Category: 'Category',
   Material: 'Material',
-  Color: 'Color'
+  Color: 'Color',
+  MasterProduct: 'MasterProduct',
+  ProductVariant: 'ProductVariant'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -203,6 +205,40 @@ export const ColorScalarFieldEnum = {
 } as const
 
 export type ColorScalarFieldEnum = (typeof ColorScalarFieldEnum)[keyof typeof ColorScalarFieldEnum]
+
+
+export const MasterProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sku: 'sku',
+  categoryId: 'categoryId',
+  subCategoryId: 'subCategoryId',
+  materialId: 'materialId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MasterProductScalarFieldEnum = (typeof MasterProductScalarFieldEnum)[keyof typeof MasterProductScalarFieldEnum]
+
+
+export const ProductVariantScalarFieldEnum = {
+  id: 'id',
+  masterProductId: 'masterProductId',
+  colorId: 'colorId',
+  gender: 'gender',
+  size: 'size',
+  sku: 'sku',
+  modelNumber: 'modelNumber',
+  uom: 'uom',
+  productsPerPacket: 'productsPerPacket',
+  packagingType: 'packagingType',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
 
 
 export const SortOrder = {

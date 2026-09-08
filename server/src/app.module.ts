@@ -17,6 +17,7 @@ import { UsersModule } from './modules/users/users.module.js';
 import { CategoriesModule } from './modules/categories/categories.module.js';
 import { MaterialsModule } from './modules/materials/materials.module.js';
 import { ColorsModule } from './modules/colors/colors.module.js';
+import { ProductsModule } from './modules/products/products.module.js';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ColorsModule } from './modules/colors/colors.module.js';
     CategoriesModule,
     MaterialsModule,
     ColorsModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [

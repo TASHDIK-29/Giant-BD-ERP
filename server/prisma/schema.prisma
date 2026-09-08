@@ -173,6 +173,10 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  masterProductsAsCategory MasterProduct[] @relation("MasterProductCategory")
+
+  masterProductsAsSubCategory MasterProduct[] @relation("MasterProductSubCategory")
+
   @@index([parentId])
   @@index([status])
   @@index([sortOrder])
@@ -184,8 +188,9 @@ model Material {
   name        String  @unique
   description String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  masterProducts MasterProduct[]
 }
 
 model Color {
@@ -194,8 +199,75 @@ model Color {
   name        String  @unique
   description String?
 
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  productVariants ProductVariant[]
+}
+
+model MasterProduct {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  sku String @unique
+
+  categoryId Int
+
+  category Category @relation("MasterProductCategory", fields: [categoryId], references: [id], onDelete: Restrict)
+
+  subCategoryId Int?
+
+  subCategory Category? @relation("MasterProductSubCategory", fields: [subCategoryId], references: [id], onDelete: Restrict)
+
+  materialId Int
+
+  material Material @relation(fields: [materialId], references: [id], onDelete: Restrict)
+
+  status Status @default(ACTIVE)
+
+  variants ProductVariant[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([subCategoryId])
+  @@index([materialId])
+}
+
+model ProductVariant {
+  id Int @id @default(autoincrement())
+
+  masterProductId Int
+
+  masterProduct MasterProduct @relation(fields: [masterProductId], references: [id], onDelete: Restrict)
+
+  colorId Int
+
+  color Color @relation(fields: [colorId], references: [id], onDelete: Restrict)
+
+  gender Gender
+
+  size String
+
+  sku String @unique
+
+  modelNumber String?
+
+  uom Uom
+
+  productsPerPacket Int
+
+  packagingType PackagingType
+
+  status Status @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([masterProductId, colorId, gender, size])
+  @@index([masterProductId])
+  @@index([colorId])
 }
 
 enum Gender {
@@ -206,4 +278,26 @@ enum Gender {
 enum Status {
   ACTIVE
   INACTIVE
+}
+
+enum Uom {
+  PCS
+  PAIR
+  LEFT
+  RIGHT
+  KG
+  GRAM
+  LITER
+  ML
+  BOX
+  PACK
+  SET
+}
+
+enum PackagingType {
+  BOX
+  CARTON
+  PACKET
+  POLYBAG
+  BUNDLE
 }
