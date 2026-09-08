@@ -20,6 +20,7 @@ import { ColorsModule } from './modules/colors/colors.module.js';
 import { ProductsModule } from './modules/products/products.module.js';
 import { WarehousesModule } from './modules/warehouses/warehouses.module.js';
 import { ZonesModule } from './modules/zones/zones.module.js';
+import { SubZonesModule } from './modules/sub-zones/sub-zones.module.js';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ZonesModule } from './modules/zones/zones.module.js';
     ProductsModule,
     WarehousesModule,
     ZonesModule,
+    SubZonesModule,
   ],
   controllers: [AppController],
   providers: [

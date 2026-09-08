@@ -30,7 +30,7 @@ import {
 export class ZonesService {
     constructor(
         private readonly databaseService: DatabaseService,
-    ) {}
+    ) { }
 
 
     /*
@@ -146,36 +146,36 @@ export class ZonesService {
 
         const where:
             Prisma.ZoneWhereInput = {
-                ...(warehouseId !== undefined && {
-                    warehouseId,
-                }),
+            ...(warehouseId !== undefined && {
+                warehouseId,
+            }),
 
-                ...(status !== undefined && {
-                    status,
-                }),
+            ...(status !== undefined && {
+                status,
+            }),
 
-                ...(search?.trim() && {
-                    OR: [
-                        {
-                            name: {
-                                contains:
-                                    search.trim(),
-                                mode:
-                                    'insensitive',
-                            },
+            ...(search?.trim() && {
+                OR: [
+                    {
+                        name: {
+                            contains:
+                                search.trim(),
+                            mode:
+                                'insensitive',
                         },
+                    },
 
-                        {
-                            code: {
-                                contains:
-                                    search.trim(),
-                                mode:
-                                    'insensitive',
-                            },
+                    {
+                        code: {
+                            contains:
+                                search.trim(),
+                            mode:
+                                'insensitive',
                         },
-                    ],
-                }),
-            };
+                    },
+                ],
+            }),
+        };
 
 
         const [
@@ -528,12 +528,27 @@ export class ZonesService {
                 where: {
                     id,
                 },
+
+                include: {
+                    _count: {
+                        select: {
+                            subZones: true,
+                        },
+                    },
+                },
             });
 
 
         if (!zone) {
             throw new NotFoundException(
                 'Zone was not found.',
+            );
+        }
+
+
+        if (zone._count.subZones > 0) {
+            throw new ConflictException(
+                'Cannot delete this Zone because it contains Sub Zones.',
             );
         }
 
