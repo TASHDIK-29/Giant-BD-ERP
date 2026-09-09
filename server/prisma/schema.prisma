@@ -345,12 +345,50 @@ model Buyer {
   type   BuyerType
   status Status    @default(ACTIVE)
 
+  lettersOfCredit LetterOfCredit[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([name, type])
   @@index([type])
   @@index([status])
+}
+
+model LetterOfCredit {
+  id Int @id @default(autoincrement())
+
+  lcNumber String @unique
+
+  buyerId Int
+  buyer   Buyer @relation(fields: [buyerId], references: [id], onDelete: Restrict)
+
+  purchaseOrders PurchaseOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Prevent the same LC number
+  // from being created twice for one buyer
+  @@unique([buyerId, lcNumber])
+  @@index([buyerId])
+}
+
+model PurchaseOrder {
+  id Int @id @default(autoincrement())
+
+  poNumber String @unique
+
+  letterOfCreditId Int
+
+  letterOfCredit LetterOfCredit @relation(fields: [letterOfCreditId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Prevent duplicate PO numbers under the same LC
+  @@unique([letterOfCreditId, poNumber])
+  @@index([letterOfCreditId])
 }
 
 model StockIn {

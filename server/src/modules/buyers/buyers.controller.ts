@@ -35,6 +35,8 @@ import {
 import {
     BuyersService,
 } from './buyers.service.js';
+import { CreateLcDto } from './dto/create-lc.dto.js';
+import { CreatePoDto } from './dto/create-po.dto.js';
 
 
 @Controller('buyers')
@@ -42,7 +44,7 @@ export class BuyersController {
     constructor(
         private readonly buyersService:
             BuyersService,
-    ) {}
+    ) { }
 
 
     @Post()
@@ -123,4 +125,30 @@ export class BuyersController {
     ) {
         return this.buyersService.remove(id);
     }
+
+
+    @Post('lc')
+    @RequirePermission('buyer:create')
+    createLc(
+        @Body() createLcDto: CreateLcDto,
+    ) {
+        return this.buyersService.createLc(
+            createLcDto,
+        );
+    }
+
+
+
+    @Post('po')
+    @RequirePermission('buyer:create')
+    createPo(
+        @Body() createPoDto: CreatePoDto,
+    ) {
+        return this.buyersService.createPo(
+            createPoDto,
+        );
+    }
+
+
+
 }

@@ -103,6 +103,16 @@ export type Rack = Prisma.RackModel
  */
 export type Buyer = Prisma.BuyerModel
 /**
+ * Model LetterOfCredit
+ * 
+ */
+export type LetterOfCredit = Prisma.LetterOfCreditModel
+/**
+ * Model PurchaseOrder
+ * 
+ */
+export type PurchaseOrder = Prisma.PurchaseOrderModel
+/**
  * Model StockIn
  * 
  */

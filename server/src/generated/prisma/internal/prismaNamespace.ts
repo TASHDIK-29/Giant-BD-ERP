@@ -414,6 +414,8 @@ export const ModelName = {
   SubZone: 'SubZone',
   Rack: 'Rack',
   Buyer: 'Buyer',
+  LetterOfCredit: 'LetterOfCredit',
+  PurchaseOrder: 'PurchaseOrder',
   StockIn: 'StockIn',
   StockInItem: 'StockInItem',
   Inventory: 'Inventory'
@@ -432,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material" | "color" | "masterProduct" | "productVariant" | "warehouse" | "zone" | "subZone" | "rack" | "buyer" | "stockIn" | "stockInItem" | "inventory"
+    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material" | "color" | "masterProduct" | "productVariant" | "warehouse" | "zone" | "subZone" | "rack" | "buyer" | "letterOfCredit" | "purchaseOrder" | "stockIn" | "stockInItem" | "inventory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1694,6 +1696,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LetterOfCredit: {
+      payload: Prisma.$LetterOfCreditPayload<ExtArgs>
+      fields: Prisma.LetterOfCreditFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LetterOfCreditFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LetterOfCreditFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>
+        }
+        findFirst: {
+          args: Prisma.LetterOfCreditFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LetterOfCreditFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>
+        }
+        findMany: {
+          args: Prisma.LetterOfCreditFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>[]
+        }
+        create: {
+          args: Prisma.LetterOfCreditCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>
+        }
+        createMany: {
+          args: Prisma.LetterOfCreditCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LetterOfCreditCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>[]
+        }
+        delete: {
+          args: Prisma.LetterOfCreditDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>
+        }
+        update: {
+          args: Prisma.LetterOfCreditUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>
+        }
+        deleteMany: {
+          args: Prisma.LetterOfCreditDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LetterOfCreditUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LetterOfCreditUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>[]
+        }
+        upsert: {
+          args: Prisma.LetterOfCreditUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LetterOfCreditPayload>
+        }
+        aggregate: {
+          args: Prisma.LetterOfCreditAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLetterOfCredit>
+        }
+        groupBy: {
+          args: Prisma.LetterOfCreditGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LetterOfCreditGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LetterOfCreditCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LetterOfCreditCountAggregateOutputType> | number
+        }
+      }
+    }
+    PurchaseOrder: {
+      payload: Prisma.$PurchaseOrderPayload<ExtArgs>
+      fields: Prisma.PurchaseOrderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PurchaseOrderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PurchaseOrderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
+        }
+        findFirst: {
+          args: Prisma.PurchaseOrderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PurchaseOrderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
+        }
+        findMany: {
+          args: Prisma.PurchaseOrderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>[]
+        }
+        create: {
+          args: Prisma.PurchaseOrderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
+        }
+        createMany: {
+          args: Prisma.PurchaseOrderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PurchaseOrderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>[]
+        }
+        delete: {
+          args: Prisma.PurchaseOrderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
+        }
+        update: {
+          args: Prisma.PurchaseOrderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
+        }
+        deleteMany: {
+          args: Prisma.PurchaseOrderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PurchaseOrderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PurchaseOrderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>[]
+        }
+        upsert: {
+          args: Prisma.PurchaseOrderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderPayload>
+        }
+        aggregate: {
+          args: Prisma.PurchaseOrderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePurchaseOrder>
+        }
+        groupBy: {
+          args: Prisma.PurchaseOrderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PurchaseOrderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PurchaseOrderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PurchaseOrderCountAggregateOutputType> | number
+        }
+      }
+    }
     StockIn: {
       payload: Prisma.$StockInPayload<ExtArgs>
       fields: Prisma.StockInFieldRefs
@@ -2182,6 +2332,28 @@ export const BuyerScalarFieldEnum = {
 export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
 
 
+export const LetterOfCreditScalarFieldEnum = {
+  id: 'id',
+  lcNumber: 'lcNumber',
+  buyerId: 'buyerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LetterOfCreditScalarFieldEnum = (typeof LetterOfCreditScalarFieldEnum)[keyof typeof LetterOfCreditScalarFieldEnum]
+
+
+export const PurchaseOrderScalarFieldEnum = {
+  id: 'id',
+  poNumber: 'poNumber',
+  letterOfCreditId: 'letterOfCreditId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PurchaseOrderScalarFieldEnum = (typeof PurchaseOrderScalarFieldEnum)[keyof typeof PurchaseOrderScalarFieldEnum]
+
+
 export const StockInScalarFieldEnum = {
   id: 'id',
   batchId: 'batchId',
@@ -2562,6 +2734,8 @@ export type GlobalOmitConfig = {
   subZone?: Prisma.SubZoneOmit
   rack?: Prisma.RackOmit
   buyer?: Prisma.BuyerOmit
+  letterOfCredit?: Prisma.LetterOfCreditOmit
+  purchaseOrder?: Prisma.PurchaseOrderOmit
   stockIn?: Prisma.StockInOmit
   stockInItem?: Prisma.StockInItemOmit
   inventory?: Prisma.InventoryOmit

@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ConflictException,
     Injectable,
     NotFoundException,
@@ -24,13 +25,15 @@ import {
 import {
     BuyerQueryDto,
 } from './dto/buyer-query.dto.js';
+import { CreateLcDto } from './dto/create-lc.dto.js';
+import { CreatePoDto } from './dto/create-po.dto.js';
 
 
 @Injectable()
 export class BuyersService {
     constructor(
         private readonly databaseService: DatabaseService,
-    ) {}
+    ) { }
 
 
     /*
@@ -104,23 +107,23 @@ export class BuyersService {
 
         const where:
             Prisma.BuyerWhereInput = {
-                ...(type !== undefined && {
-                    type,
-                }),
+            ...(type !== undefined && {
+                type,
+            }),
 
-                ...(status !== undefined && {
-                    status,
-                }),
+            ...(status !== undefined && {
+                status,
+            }),
 
-                ...(search?.trim() && {
-                    name: {
-                        contains:
-                            search.trim(),
-                        mode:
-                            'insensitive',
-                    },
-                }),
-            };
+            ...(search?.trim() && {
+                name: {
+                    contains:
+                        search.trim(),
+                    mode:
+                        'insensitive',
+                },
+            }),
+        };
 
 
         const [
@@ -380,4 +383,162 @@ export class BuyersService {
                 'Buyer deleted successfully.',
         };
     }
+
+
+
+
+    async createLc(createLcDto: CreateLcDto) {
+        const {
+            buyerId,
+            lcNumber,
+        } = createLcDto;
+
+        const buyer =
+            await this.databaseService.buyer.findUnique({
+                where: {
+                    id: buyerId,
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    status: true,
+                },
+            });
+
+        if (!buyer) {
+            throw new NotFoundException(
+                `Buyer with ID ${buyerId} not found.`,
+            );
+        }
+
+        if (buyer.status !== 'ACTIVE') {
+            throw new BadRequestException(
+                'Cannot create an LC for an inactive buyer.',
+            );
+        }
+
+        const normalizedLcNumber =
+            lcNumber.trim();
+
+        const existingLc =
+            await this.databaseService.letterOfCredit.findUnique({
+                where: {
+                    lcNumber: normalizedLcNumber,
+                },
+            });
+
+        if (existingLc) {
+            throw new ConflictException(
+                `LC number "${normalizedLcNumber}" already exists.`,
+            );
+        }
+
+        const lc =
+            await this.databaseService.letterOfCredit.create({
+                data: {
+                    lcNumber: normalizedLcNumber,
+                    buyerId,
+                },
+
+                include: {
+                    buyer: {
+                        select: {
+                            id: true,
+                            name: true,
+                            type: true,
+                        },
+                    },
+                },
+            });
+
+        return {
+            message: 'LC created successfully.',
+            data: lc,
+        };
+    }
+
+
+
+    async createPo(createPoDto: CreatePoDto) {
+        const {
+            poNumber,
+            letterOfCreditId,
+        } = createPoDto;
+
+        const lc =
+            await this.databaseService.letterOfCredit.findUnique({
+                where: {
+                    id: letterOfCreditId,
+                },
+
+                include: {
+                    buyer: {
+                        select: {
+                            id: true,
+                            name: true,
+                            status: true,
+                        },
+                    },
+                },
+            });
+
+        if (!lc) {
+            throw new NotFoundException(
+                `LC with ID ${letterOfCreditId} not found.`,
+            );
+        }
+
+        if (lc.buyer.status !== 'ACTIVE') {
+            throw new BadRequestException(
+                'Cannot create a PO under an inactive buyer.',
+            );
+        }
+
+        const normalizedPoNumber =
+            poNumber.trim();
+
+        const existingPo =
+            await this.databaseService.purchaseOrder.findUnique({
+                where: {
+                    poNumber: normalizedPoNumber,
+                },
+            });
+
+        if (existingPo) {
+            throw new ConflictException(
+                `PO number "${normalizedPoNumber}" already exists.`,
+            );
+        }
+
+        const po =
+            await this.databaseService.purchaseOrder.create({
+                data: {
+                    poNumber: normalizedPoNumber,
+                    letterOfCreditId,
+                },
+
+                include: {
+                    letterOfCredit: {
+                        include: {
+                            buyer: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    type: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+
+        return {
+            message: 'PO created successfully.',
+            data: po,
+        };
+    }
+
+
+
+
 }

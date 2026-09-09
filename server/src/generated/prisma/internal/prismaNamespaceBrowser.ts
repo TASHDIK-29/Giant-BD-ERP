@@ -68,6 +68,8 @@ export const ModelName = {
   SubZone: 'SubZone',
   Rack: 'Rack',
   Buyer: 'Buyer',
+  LetterOfCredit: 'LetterOfCredit',
+  PurchaseOrder: 'PurchaseOrder',
   StockIn: 'StockIn',
   StockInItem: 'StockInItem',
   Inventory: 'Inventory'
@@ -314,6 +316,28 @@ export const BuyerScalarFieldEnum = {
 } as const
 
 export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
+
+
+export const LetterOfCreditScalarFieldEnum = {
+  id: 'id',
+  lcNumber: 'lcNumber',
+  buyerId: 'buyerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LetterOfCreditScalarFieldEnum = (typeof LetterOfCreditScalarFieldEnum)[keyof typeof LetterOfCreditScalarFieldEnum]
+
+
+export const PurchaseOrderScalarFieldEnum = {
+  id: 'id',
+  poNumber: 'poNumber',
+  letterOfCreditId: 'letterOfCreditId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PurchaseOrderScalarFieldEnum = (typeof PurchaseOrderScalarFieldEnum)[keyof typeof PurchaseOrderScalarFieldEnum]
 
 
 export const StockInScalarFieldEnum = {
