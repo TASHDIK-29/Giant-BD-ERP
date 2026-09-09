@@ -264,6 +264,7 @@ export type MasterProductWhereInput = {
   subCategory?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   material?: Prisma.XOR<Prisma.MaterialScalarRelationFilter, Prisma.MaterialWhereInput>
   variants?: Prisma.ProductVariantListRelationFilter
+  stockIns?: Prisma.StockInListRelationFilter
 }
 
 export type MasterProductOrderByWithRelationInput = {
@@ -280,6 +281,7 @@ export type MasterProductOrderByWithRelationInput = {
   subCategory?: Prisma.CategoryOrderByWithRelationInput
   material?: Prisma.MaterialOrderByWithRelationInput
   variants?: Prisma.ProductVariantOrderByRelationAggregateInput
+  stockIns?: Prisma.StockInOrderByRelationAggregateInput
 }
 
 export type MasterProductWhereUniqueInput = Prisma.AtLeast<{
@@ -299,6 +301,7 @@ export type MasterProductWhereUniqueInput = Prisma.AtLeast<{
   subCategory?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   material?: Prisma.XOR<Prisma.MaterialScalarRelationFilter, Prisma.MaterialWhereInput>
   variants?: Prisma.ProductVariantListRelationFilter
+  stockIns?: Prisma.StockInListRelationFilter
 }, "id" | "sku">
 
 export type MasterProductOrderByWithAggregationInput = {
@@ -343,6 +346,7 @@ export type MasterProductCreateInput = {
   subCategory?: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsSubCategoryInput
   material: Prisma.MaterialCreateNestedOneWithoutMasterProductsInput
   variants?: Prisma.ProductVariantCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductUncheckedCreateInput = {
@@ -356,6 +360,7 @@ export type MasterProductUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInUncheckedCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductUpdateInput = {
@@ -368,6 +373,7 @@ export type MasterProductUpdateInput = {
   subCategory?: Prisma.CategoryUpdateOneWithoutMasterProductsAsSubCategoryNestedInput
   material?: Prisma.MaterialUpdateOneRequiredWithoutMasterProductsNestedInput
   variants?: Prisma.ProductVariantUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateInput = {
@@ -381,6 +387,7 @@ export type MasterProductUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUncheckedUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductCreateManyInput = {
@@ -620,6 +627,20 @@ export type MasterProductUpdateOneRequiredWithoutVariantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MasterProductUpdateToOneWithWhereWithoutVariantsInput, Prisma.MasterProductUpdateWithoutVariantsInput>, Prisma.MasterProductUncheckedUpdateWithoutVariantsInput>
 }
 
+export type MasterProductCreateNestedOneWithoutStockInsInput = {
+  create?: Prisma.XOR<Prisma.MasterProductCreateWithoutStockInsInput, Prisma.MasterProductUncheckedCreateWithoutStockInsInput>
+  connectOrCreate?: Prisma.MasterProductCreateOrConnectWithoutStockInsInput
+  connect?: Prisma.MasterProductWhereUniqueInput
+}
+
+export type MasterProductUpdateOneRequiredWithoutStockInsNestedInput = {
+  create?: Prisma.XOR<Prisma.MasterProductCreateWithoutStockInsInput, Prisma.MasterProductUncheckedCreateWithoutStockInsInput>
+  connectOrCreate?: Prisma.MasterProductCreateOrConnectWithoutStockInsInput
+  upsert?: Prisma.MasterProductUpsertWithoutStockInsInput
+  connect?: Prisma.MasterProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MasterProductUpdateToOneWithWhereWithoutStockInsInput, Prisma.MasterProductUpdateWithoutStockInsInput>, Prisma.MasterProductUncheckedUpdateWithoutStockInsInput>
+}
+
 export type MasterProductCreateWithoutCategoryInput = {
   name: string
   sku: string
@@ -629,6 +650,7 @@ export type MasterProductCreateWithoutCategoryInput = {
   subCategory?: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsSubCategoryInput
   material: Prisma.MaterialCreateNestedOneWithoutMasterProductsInput
   variants?: Prisma.ProductVariantCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductUncheckedCreateWithoutCategoryInput = {
@@ -641,6 +663,7 @@ export type MasterProductUncheckedCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInUncheckedCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductCreateOrConnectWithoutCategoryInput = {
@@ -662,6 +685,7 @@ export type MasterProductCreateWithoutSubCategoryInput = {
   category: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsCategoryInput
   material: Prisma.MaterialCreateNestedOneWithoutMasterProductsInput
   variants?: Prisma.ProductVariantCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductUncheckedCreateWithoutSubCategoryInput = {
@@ -674,6 +698,7 @@ export type MasterProductUncheckedCreateWithoutSubCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInUncheckedCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductCreateOrConnectWithoutSubCategoryInput = {
@@ -742,6 +767,7 @@ export type MasterProductCreateWithoutMaterialInput = {
   category: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsCategoryInput
   subCategory?: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsSubCategoryInput
   variants?: Prisma.ProductVariantCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductUncheckedCreateWithoutMaterialInput = {
@@ -754,6 +780,7 @@ export type MasterProductUncheckedCreateWithoutMaterialInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutMasterProductInput
+  stockIns?: Prisma.StockInUncheckedCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductCreateOrConnectWithoutMaterialInput = {
@@ -791,6 +818,7 @@ export type MasterProductCreateWithoutVariantsInput = {
   category: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsCategoryInput
   subCategory?: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsSubCategoryInput
   material: Prisma.MaterialCreateNestedOneWithoutMasterProductsInput
+  stockIns?: Prisma.StockInCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductUncheckedCreateWithoutVariantsInput = {
@@ -803,6 +831,7 @@ export type MasterProductUncheckedCreateWithoutVariantsInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  stockIns?: Prisma.StockInUncheckedCreateNestedManyWithoutMasterProductInput
 }
 
 export type MasterProductCreateOrConnectWithoutVariantsInput = {
@@ -830,6 +859,7 @@ export type MasterProductUpdateWithoutVariantsInput = {
   category?: Prisma.CategoryUpdateOneRequiredWithoutMasterProductsAsCategoryNestedInput
   subCategory?: Prisma.CategoryUpdateOneWithoutMasterProductsAsSubCategoryNestedInput
   material?: Prisma.MaterialUpdateOneRequiredWithoutMasterProductsNestedInput
+  stockIns?: Prisma.StockInUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateWithoutVariantsInput = {
@@ -842,6 +872,73 @@ export type MasterProductUncheckedUpdateWithoutVariantsInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockIns?: Prisma.StockInUncheckedUpdateManyWithoutMasterProductNestedInput
+}
+
+export type MasterProductCreateWithoutStockInsInput = {
+  name: string
+  sku: string
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsCategoryInput
+  subCategory?: Prisma.CategoryCreateNestedOneWithoutMasterProductsAsSubCategoryInput
+  material: Prisma.MaterialCreateNestedOneWithoutMasterProductsInput
+  variants?: Prisma.ProductVariantCreateNestedManyWithoutMasterProductInput
+}
+
+export type MasterProductUncheckedCreateWithoutStockInsInput = {
+  id?: number
+  name: string
+  sku: string
+  categoryId: number
+  subCategoryId?: number | null
+  materialId: number
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutMasterProductInput
+}
+
+export type MasterProductCreateOrConnectWithoutStockInsInput = {
+  where: Prisma.MasterProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.MasterProductCreateWithoutStockInsInput, Prisma.MasterProductUncheckedCreateWithoutStockInsInput>
+}
+
+export type MasterProductUpsertWithoutStockInsInput = {
+  update: Prisma.XOR<Prisma.MasterProductUpdateWithoutStockInsInput, Prisma.MasterProductUncheckedUpdateWithoutStockInsInput>
+  create: Prisma.XOR<Prisma.MasterProductCreateWithoutStockInsInput, Prisma.MasterProductUncheckedCreateWithoutStockInsInput>
+  where?: Prisma.MasterProductWhereInput
+}
+
+export type MasterProductUpdateToOneWithWhereWithoutStockInsInput = {
+  where?: Prisma.MasterProductWhereInput
+  data: Prisma.XOR<Prisma.MasterProductUpdateWithoutStockInsInput, Prisma.MasterProductUncheckedUpdateWithoutStockInsInput>
+}
+
+export type MasterProductUpdateWithoutStockInsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.CategoryUpdateOneRequiredWithoutMasterProductsAsCategoryNestedInput
+  subCategory?: Prisma.CategoryUpdateOneWithoutMasterProductsAsSubCategoryNestedInput
+  material?: Prisma.MaterialUpdateOneRequiredWithoutMasterProductsNestedInput
+  variants?: Prisma.ProductVariantUpdateManyWithoutMasterProductNestedInput
+}
+
+export type MasterProductUncheckedUpdateWithoutStockInsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
+  subCategoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  materialId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductCreateManyCategoryInput = {
@@ -875,6 +972,7 @@ export type MasterProductUpdateWithoutCategoryInput = {
   subCategory?: Prisma.CategoryUpdateOneWithoutMasterProductsAsSubCategoryNestedInput
   material?: Prisma.MaterialUpdateOneRequiredWithoutMasterProductsNestedInput
   variants?: Prisma.ProductVariantUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateWithoutCategoryInput = {
@@ -887,6 +985,7 @@ export type MasterProductUncheckedUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUncheckedUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateManyWithoutCategoryInput = {
@@ -909,6 +1008,7 @@ export type MasterProductUpdateWithoutSubCategoryInput = {
   category?: Prisma.CategoryUpdateOneRequiredWithoutMasterProductsAsCategoryNestedInput
   material?: Prisma.MaterialUpdateOneRequiredWithoutMasterProductsNestedInput
   variants?: Prisma.ProductVariantUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateWithoutSubCategoryInput = {
@@ -921,6 +1021,7 @@ export type MasterProductUncheckedUpdateWithoutSubCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUncheckedUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateManyWithoutSubCategoryInput = {
@@ -954,6 +1055,7 @@ export type MasterProductUpdateWithoutMaterialInput = {
   category?: Prisma.CategoryUpdateOneRequiredWithoutMasterProductsAsCategoryNestedInput
   subCategory?: Prisma.CategoryUpdateOneWithoutMasterProductsAsSubCategoryNestedInput
   variants?: Prisma.ProductVariantUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateWithoutMaterialInput = {
@@ -966,6 +1068,7 @@ export type MasterProductUncheckedUpdateWithoutMaterialInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutMasterProductNestedInput
+  stockIns?: Prisma.StockInUncheckedUpdateManyWithoutMasterProductNestedInput
 }
 
 export type MasterProductUncheckedUpdateManyWithoutMaterialInput = {
@@ -986,10 +1089,12 @@ export type MasterProductUncheckedUpdateManyWithoutMaterialInput = {
 
 export type MasterProductCountOutputType = {
   variants: number
+  stockIns: number
 }
 
 export type MasterProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   variants?: boolean | MasterProductCountOutputTypeCountVariantsArgs
+  stockIns?: boolean | MasterProductCountOutputTypeCountStockInsArgs
 }
 
 /**
@@ -1009,6 +1114,13 @@ export type MasterProductCountOutputTypeCountVariantsArgs<ExtArgs extends runtim
   where?: Prisma.ProductVariantWhereInput
 }
 
+/**
+ * MasterProductCountOutputType without action
+ */
+export type MasterProductCountOutputTypeCountStockInsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockInWhereInput
+}
+
 
 export type MasterProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1024,6 +1136,7 @@ export type MasterProductSelect<ExtArgs extends runtime.Types.Extensions.Interna
   subCategory?: boolean | Prisma.MasterProduct$subCategoryArgs<ExtArgs>
   material?: boolean | Prisma.MaterialDefaultArgs<ExtArgs>
   variants?: boolean | Prisma.MasterProduct$variantsArgs<ExtArgs>
+  stockIns?: boolean | Prisma.MasterProduct$stockInsArgs<ExtArgs>
   _count?: boolean | Prisma.MasterProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["masterProduct"]>
 
@@ -1075,6 +1188,7 @@ export type MasterProductInclude<ExtArgs extends runtime.Types.Extensions.Intern
   subCategory?: boolean | Prisma.MasterProduct$subCategoryArgs<ExtArgs>
   material?: boolean | Prisma.MaterialDefaultArgs<ExtArgs>
   variants?: boolean | Prisma.MasterProduct$variantsArgs<ExtArgs>
+  stockIns?: boolean | Prisma.MasterProduct$stockInsArgs<ExtArgs>
   _count?: boolean | Prisma.MasterProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MasterProductIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1095,6 +1209,7 @@ export type $MasterProductPayload<ExtArgs extends runtime.Types.Extensions.Inter
     subCategory: Prisma.$CategoryPayload<ExtArgs> | null
     material: Prisma.$MaterialPayload<ExtArgs>
     variants: Prisma.$ProductVariantPayload<ExtArgs>[]
+    stockIns: Prisma.$StockInPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1504,6 +1619,7 @@ export interface Prisma__MasterProductClient<T, Null = never, ExtArgs extends ru
   subCategory<T extends Prisma.MasterProduct$subCategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MasterProduct$subCategoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   material<T extends Prisma.MaterialDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MaterialDefaultArgs<ExtArgs>>): Prisma.Prisma__MaterialClient<runtime.Types.Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   variants<T extends Prisma.MasterProduct$variantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MasterProduct$variantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductVariantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockIns<T extends Prisma.MasterProduct$stockInsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MasterProduct$stockInsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1983,6 +2099,30 @@ export type MasterProduct$variantsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ProductVariantScalarFieldEnum | Prisma.ProductVariantScalarFieldEnum[]
+}
+
+/**
+ * MasterProduct.stockIns
+ */
+export type MasterProduct$stockInsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockIn
+   */
+  select?: Prisma.StockInSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockIn
+   */
+  omit?: Prisma.StockInOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockInInclude<ExtArgs> | null
+  where?: Prisma.StockInWhereInput
+  orderBy?: Prisma.StockInOrderByWithRelationInput | Prisma.StockInOrderByWithRelationInput[]
+  cursor?: Prisma.StockInWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockInScalarFieldEnum | Prisma.StockInScalarFieldEnum[]
 }
 
 /**

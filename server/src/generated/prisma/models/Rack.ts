@@ -245,6 +245,8 @@ export type RackWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Rack"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rack"> | Date | string
   subZone?: Prisma.XOR<Prisma.SubZoneScalarRelationFilter, Prisma.SubZoneWhereInput>
+  stockInItems?: Prisma.StockInItemListRelationFilter
+  inventories?: Prisma.InventoryListRelationFilter
 }
 
 export type RackOrderByWithRelationInput = {
@@ -257,6 +259,8 @@ export type RackOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   subZone?: Prisma.SubZoneOrderByWithRelationInput
+  stockInItems?: Prisma.StockInItemOrderByRelationAggregateInput
+  inventories?: Prisma.InventoryOrderByRelationAggregateInput
 }
 
 export type RackWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +277,8 @@ export type RackWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Rack"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rack"> | Date | string
   subZone?: Prisma.XOR<Prisma.SubZoneScalarRelationFilter, Prisma.SubZoneWhereInput>
+  stockInItems?: Prisma.StockInItemListRelationFilter
+  inventories?: Prisma.InventoryListRelationFilter
 }, "id" | "subZoneId_code">
 
 export type RackOrderByWithAggregationInput = {
@@ -313,6 +319,8 @@ export type RackCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subZone: Prisma.SubZoneCreateNestedOneWithoutRacksInput
+  stockInItems?: Prisma.StockInItemCreateNestedManyWithoutRackInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutRackInput
 }
 
 export type RackUncheckedCreateInput = {
@@ -324,6 +332,8 @@ export type RackUncheckedCreateInput = {
   subZoneId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutRackInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutRackInput
 }
 
 export type RackUpdateInput = {
@@ -334,6 +344,8 @@ export type RackUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutRacksNestedInput
+  stockInItems?: Prisma.StockInItemUpdateManyWithoutRackNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutRackNestedInput
 }
 
 export type RackUncheckedUpdateInput = {
@@ -345,6 +357,8 @@ export type RackUncheckedUpdateInput = {
   subZoneId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutRackNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutRackNestedInput
 }
 
 export type RackCreateManyInput = {
@@ -436,6 +450,11 @@ export type RackSumOrderByAggregateInput = {
   subZoneId?: Prisma.SortOrder
 }
 
+export type RackScalarRelationFilter = {
+  is?: Prisma.RackWhereInput
+  isNot?: Prisma.RackWhereInput
+}
+
 export type RackCreateNestedManyWithoutSubZoneInput = {
   create?: Prisma.XOR<Prisma.RackCreateWithoutSubZoneInput, Prisma.RackUncheckedCreateWithoutSubZoneInput> | Prisma.RackCreateWithoutSubZoneInput[] | Prisma.RackUncheckedCreateWithoutSubZoneInput[]
   connectOrCreate?: Prisma.RackCreateOrConnectWithoutSubZoneInput | Prisma.RackCreateOrConnectWithoutSubZoneInput[]
@@ -478,6 +497,34 @@ export type RackUncheckedUpdateManyWithoutSubZoneNestedInput = {
   deleteMany?: Prisma.RackScalarWhereInput | Prisma.RackScalarWhereInput[]
 }
 
+export type RackCreateNestedOneWithoutStockInItemsInput = {
+  create?: Prisma.XOR<Prisma.RackCreateWithoutStockInItemsInput, Prisma.RackUncheckedCreateWithoutStockInItemsInput>
+  connectOrCreate?: Prisma.RackCreateOrConnectWithoutStockInItemsInput
+  connect?: Prisma.RackWhereUniqueInput
+}
+
+export type RackUpdateOneRequiredWithoutStockInItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.RackCreateWithoutStockInItemsInput, Prisma.RackUncheckedCreateWithoutStockInItemsInput>
+  connectOrCreate?: Prisma.RackCreateOrConnectWithoutStockInItemsInput
+  upsert?: Prisma.RackUpsertWithoutStockInItemsInput
+  connect?: Prisma.RackWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RackUpdateToOneWithWhereWithoutStockInItemsInput, Prisma.RackUpdateWithoutStockInItemsInput>, Prisma.RackUncheckedUpdateWithoutStockInItemsInput>
+}
+
+export type RackCreateNestedOneWithoutInventoriesInput = {
+  create?: Prisma.XOR<Prisma.RackCreateWithoutInventoriesInput, Prisma.RackUncheckedCreateWithoutInventoriesInput>
+  connectOrCreate?: Prisma.RackCreateOrConnectWithoutInventoriesInput
+  connect?: Prisma.RackWhereUniqueInput
+}
+
+export type RackUpdateOneRequiredWithoutInventoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.RackCreateWithoutInventoriesInput, Prisma.RackUncheckedCreateWithoutInventoriesInput>
+  connectOrCreate?: Prisma.RackCreateOrConnectWithoutInventoriesInput
+  upsert?: Prisma.RackUpsertWithoutInventoriesInput
+  connect?: Prisma.RackWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RackUpdateToOneWithWhereWithoutInventoriesInput, Prisma.RackUpdateWithoutInventoriesInput>, Prisma.RackUncheckedUpdateWithoutInventoriesInput>
+}
+
 export type RackCreateWithoutSubZoneInput = {
   name: string
   code: string
@@ -485,6 +532,8 @@ export type RackCreateWithoutSubZoneInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  stockInItems?: Prisma.StockInItemCreateNestedManyWithoutRackInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutRackInput
 }
 
 export type RackUncheckedCreateWithoutSubZoneInput = {
@@ -495,6 +544,8 @@ export type RackUncheckedCreateWithoutSubZoneInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutRackInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutRackInput
 }
 
 export type RackCreateOrConnectWithoutSubZoneInput = {
@@ -537,6 +588,130 @@ export type RackScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Rack"> | Date | string
 }
 
+export type RackCreateWithoutStockInItemsInput = {
+  name: string
+  code: string
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subZone: Prisma.SubZoneCreateNestedOneWithoutRacksInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutRackInput
+}
+
+export type RackUncheckedCreateWithoutStockInItemsInput = {
+  id?: number
+  name: string
+  code: string
+  description?: string | null
+  status?: $Enums.Status
+  subZoneId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutRackInput
+}
+
+export type RackCreateOrConnectWithoutStockInItemsInput = {
+  where: Prisma.RackWhereUniqueInput
+  create: Prisma.XOR<Prisma.RackCreateWithoutStockInItemsInput, Prisma.RackUncheckedCreateWithoutStockInItemsInput>
+}
+
+export type RackUpsertWithoutStockInItemsInput = {
+  update: Prisma.XOR<Prisma.RackUpdateWithoutStockInItemsInput, Prisma.RackUncheckedUpdateWithoutStockInItemsInput>
+  create: Prisma.XOR<Prisma.RackCreateWithoutStockInItemsInput, Prisma.RackUncheckedCreateWithoutStockInItemsInput>
+  where?: Prisma.RackWhereInput
+}
+
+export type RackUpdateToOneWithWhereWithoutStockInItemsInput = {
+  where?: Prisma.RackWhereInput
+  data: Prisma.XOR<Prisma.RackUpdateWithoutStockInItemsInput, Prisma.RackUncheckedUpdateWithoutStockInItemsInput>
+}
+
+export type RackUpdateWithoutStockInItemsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subZone?: Prisma.SubZoneUpdateOneRequiredWithoutRacksNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutRackNestedInput
+}
+
+export type RackUncheckedUpdateWithoutStockInItemsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  subZoneId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutRackNestedInput
+}
+
+export type RackCreateWithoutInventoriesInput = {
+  name: string
+  code: string
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subZone: Prisma.SubZoneCreateNestedOneWithoutRacksInput
+  stockInItems?: Prisma.StockInItemCreateNestedManyWithoutRackInput
+}
+
+export type RackUncheckedCreateWithoutInventoriesInput = {
+  id?: number
+  name: string
+  code: string
+  description?: string | null
+  status?: $Enums.Status
+  subZoneId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutRackInput
+}
+
+export type RackCreateOrConnectWithoutInventoriesInput = {
+  where: Prisma.RackWhereUniqueInput
+  create: Prisma.XOR<Prisma.RackCreateWithoutInventoriesInput, Prisma.RackUncheckedCreateWithoutInventoriesInput>
+}
+
+export type RackUpsertWithoutInventoriesInput = {
+  update: Prisma.XOR<Prisma.RackUpdateWithoutInventoriesInput, Prisma.RackUncheckedUpdateWithoutInventoriesInput>
+  create: Prisma.XOR<Prisma.RackCreateWithoutInventoriesInput, Prisma.RackUncheckedCreateWithoutInventoriesInput>
+  where?: Prisma.RackWhereInput
+}
+
+export type RackUpdateToOneWithWhereWithoutInventoriesInput = {
+  where?: Prisma.RackWhereInput
+  data: Prisma.XOR<Prisma.RackUpdateWithoutInventoriesInput, Prisma.RackUncheckedUpdateWithoutInventoriesInput>
+}
+
+export type RackUpdateWithoutInventoriesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subZone?: Prisma.SubZoneUpdateOneRequiredWithoutRacksNestedInput
+  stockInItems?: Prisma.StockInItemUpdateManyWithoutRackNestedInput
+}
+
+export type RackUncheckedUpdateWithoutInventoriesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  subZoneId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutRackNestedInput
+}
+
 export type RackCreateManySubZoneInput = {
   id?: number
   name: string
@@ -554,6 +729,8 @@ export type RackUpdateWithoutSubZoneInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockInItems?: Prisma.StockInItemUpdateManyWithoutRackNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutRackNestedInput
 }
 
 export type RackUncheckedUpdateWithoutSubZoneInput = {
@@ -564,6 +741,8 @@ export type RackUncheckedUpdateWithoutSubZoneInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutRackNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutRackNestedInput
 }
 
 export type RackUncheckedUpdateManyWithoutSubZoneInput = {
@@ -577,6 +756,44 @@ export type RackUncheckedUpdateManyWithoutSubZoneInput = {
 }
 
 
+/**
+ * Count Type RackCountOutputType
+ */
+
+export type RackCountOutputType = {
+  stockInItems: number
+  inventories: number
+}
+
+export type RackCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  stockInItems?: boolean | RackCountOutputTypeCountStockInItemsArgs
+  inventories?: boolean | RackCountOutputTypeCountInventoriesArgs
+}
+
+/**
+ * RackCountOutputType without action
+ */
+export type RackCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RackCountOutputType
+   */
+  select?: Prisma.RackCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * RackCountOutputType without action
+ */
+export type RackCountOutputTypeCountStockInItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockInItemWhereInput
+}
+
+/**
+ * RackCountOutputType without action
+ */
+export type RackCountOutputTypeCountInventoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InventoryWhereInput
+}
+
 
 export type RackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -588,6 +805,9 @@ export type RackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   subZone?: boolean | Prisma.SubZoneDefaultArgs<ExtArgs>
+  stockInItems?: boolean | Prisma.Rack$stockInItemsArgs<ExtArgs>
+  inventories?: boolean | Prisma.Rack$inventoriesArgs<ExtArgs>
+  _count?: boolean | Prisma.RackCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["rack"]>
 
 export type RackSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -628,6 +848,9 @@ export type RackSelectScalar = {
 export type RackOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "description" | "status" | "subZoneId" | "createdAt" | "updatedAt", ExtArgs["result"]["rack"]>
 export type RackInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subZone?: boolean | Prisma.SubZoneDefaultArgs<ExtArgs>
+  stockInItems?: boolean | Prisma.Rack$stockInItemsArgs<ExtArgs>
+  inventories?: boolean | Prisma.Rack$inventoriesArgs<ExtArgs>
+  _count?: boolean | Prisma.RackCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RackIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subZone?: boolean | Prisma.SubZoneDefaultArgs<ExtArgs>
@@ -640,6 +863,8 @@ export type $RackPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Rack"
   objects: {
     subZone: Prisma.$SubZonePayload<ExtArgs>
+    stockInItems: Prisma.$StockInItemPayload<ExtArgs>[]
+    inventories: Prisma.$InventoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1045,6 +1270,8 @@ readonly fields: RackFieldRefs;
 export interface Prisma__RackClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   subZone<T extends Prisma.SubZoneDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubZoneDefaultArgs<ExtArgs>>): Prisma.Prisma__SubZoneClient<runtime.Types.Result.GetResult<Prisma.$SubZonePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  stockInItems<T extends Prisma.Rack$stockInItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rack$stockInItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockInItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inventories<T extends Prisma.Rack$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rack$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1480,6 +1707,54 @@ export type RackDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Racks to delete.
    */
   limit?: number
+}
+
+/**
+ * Rack.stockInItems
+ */
+export type Rack$stockInItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockInItem
+   */
+  select?: Prisma.StockInItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockInItem
+   */
+  omit?: Prisma.StockInItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockInItemInclude<ExtArgs> | null
+  where?: Prisma.StockInItemWhereInput
+  orderBy?: Prisma.StockInItemOrderByWithRelationInput | Prisma.StockInItemOrderByWithRelationInput[]
+  cursor?: Prisma.StockInItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockInItemScalarFieldEnum | Prisma.StockInItemScalarFieldEnum[]
+}
+
+/**
+ * Rack.inventories
+ */
+export type Rack$inventoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Inventory
+   */
+  select?: Prisma.InventorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Inventory
+   */
+  omit?: Prisma.InventoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InventoryInclude<ExtArgs> | null
+  where?: Prisma.InventoryWhereInput
+  orderBy?: Prisma.InventoryOrderByWithRelationInput | Prisma.InventoryOrderByWithRelationInput[]
+  cursor?: Prisma.InventoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InventoryScalarFieldEnum | Prisma.InventoryScalarFieldEnum[]
 }
 
 /**

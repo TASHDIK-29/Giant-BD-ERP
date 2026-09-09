@@ -67,7 +67,10 @@ export const ModelName = {
   Zone: 'Zone',
   SubZone: 'SubZone',
   Rack: 'Rack',
-  Buyer: 'Buyer'
+  Buyer: 'Buyer',
+  StockIn: 'StockIn',
+  StockInItem: 'StockInItem',
+  Inventory: 'Inventory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -311,6 +314,56 @@ export const BuyerScalarFieldEnum = {
 } as const
 
 export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
+
+
+export const StockInScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  masterProductId: 'masterProductId',
+  colorId: 'colorId',
+  gender: 'gender',
+  stockInDate: 'stockInDate',
+  productionDate: 'productionDate',
+  expiryDate: 'expiryDate',
+  totalQuantity: 'totalQuantity',
+  totalPackages: 'totalPackages',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockInScalarFieldEnum = (typeof StockInScalarFieldEnum)[keyof typeof StockInScalarFieldEnum]
+
+
+export const StockInItemScalarFieldEnum = {
+  id: 'id',
+  stockInId: 'stockInId',
+  productVariantId: 'productVariantId',
+  quantity: 'quantity',
+  warehouseId: 'warehouseId',
+  zoneId: 'zoneId',
+  subZoneId: 'subZoneId',
+  rackId: 'rackId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockInItemScalarFieldEnum = (typeof StockInItemScalarFieldEnum)[keyof typeof StockInItemScalarFieldEnum]
+
+
+export const InventoryScalarFieldEnum = {
+  id: 'id',
+  productVariantId: 'productVariantId',
+  warehouseId: 'warehouseId',
+  zoneId: 'zoneId',
+  subZoneId: 'subZoneId',
+  rackId: 'rackId',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -23,6 +23,7 @@ import { ZonesModule } from './modules/zones/zones.module.js';
 import { SubZonesModule } from './modules/sub-zones/sub-zones.module.js';
 import { RacksModule } from './modules/racks/racks.module.js';
 import { BuyersModule } from './modules/buyers/buyers.module.js';
+import { StockInModule } from './modules/stock-in/stock-in.module.js';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { BuyersModule } from './modules/buyers/buyers.module.js';
     SubZonesModule,
     RacksModule,
     BuyersModule,
+    StockInModule,
   ],
   controllers: [AppController],
   providers: [

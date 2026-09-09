@@ -102,3 +102,18 @@ export type Rack = Prisma.RackModel
  * 
  */
 export type Buyer = Prisma.BuyerModel
+/**
+ * Model StockIn
+ * 
+ */
+export type StockIn = Prisma.StockInModel
+/**
+ * Model StockInItem
+ * 
+ */
+export type StockInItem = Prisma.StockInItemModel
+/**
+ * Model Inventory
+ * 
+ */
+export type Inventory = Prisma.InventoryModel

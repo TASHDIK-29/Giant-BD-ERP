@@ -12,27 +12,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// model User {
-//   id       Int     @id @default(autoincrement())
-//   email    String  @unique
-//   password String
-//   name     String
-//   number   String?
-//   gender   Gender?
-//   // role     Role
-
-//   roleId Int
-//   role   Role @relation(fields: [roleId], references: [id], onDelete: Restrict)
-
-//   status Status @default(ACTIVE)
-
-//   refreshTokens RefreshToken[]
-//   loginOtps     LoginOtp[]
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
-
 model User {
   id       Int    @id @default(autoincrement())
   email    String @unique
@@ -52,6 +31,8 @@ model User {
 
   refreshTokens RefreshToken[]
   loginOtps     LoginOtp[]
+
+  stockInsCreated StockIn[] @relation("StockInCreatedBy")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -199,9 +180,11 @@ model Color {
   name        String  @unique
   description String?
 
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
   productVariants ProductVariant[]
+  stockIns        StockIn[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model MasterProduct {
@@ -226,6 +209,8 @@ model MasterProduct {
   status Status @default(ACTIVE)
 
   variants ProductVariant[]
+
+  stockIns StockIn[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -262,6 +247,9 @@ model ProductVariant {
 
   status Status @default(ACTIVE)
 
+  stockInItems StockInItem[]
+  inventories  Inventory[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -279,6 +267,9 @@ model Warehouse {
 
   zones Zone[]
 
+  stockInItems StockInItem[]
+  inventories  Inventory[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -294,6 +285,9 @@ model Zone {
   warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
 
   subZones SubZone[]
+
+  stockInItems StockInItem[]
+  inventories  Inventory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -314,6 +308,9 @@ model SubZone {
 
   racks Rack[]
 
+  stockInItems StockInItem[]
+  inventories  Inventory[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -330,6 +327,9 @@ model Rack {
 
   subZoneId Int
   subZone   SubZone @relation(fields: [subZoneId], references: [id], onDelete: Restrict)
+
+  stockInItems StockInItem[]
+  inventories  Inventory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -351,6 +351,123 @@ model Buyer {
   @@unique([name, type])
   @@index([type])
   @@index([status])
+}
+
+model StockIn {
+  id Int @id @default(autoincrement())
+
+  batchId String @unique
+
+  masterProductId Int
+
+  masterProduct MasterProduct @relation(fields: [masterProductId], references: [id], onDelete: Restrict)
+
+  colorId Int
+
+  color Color @relation(fields: [colorId], references: [id], onDelete: Restrict)
+
+  gender Gender
+
+  stockInDate DateTime
+
+  productionDate DateTime
+
+  expiryDate DateTime?
+
+  totalQuantity Int
+
+  totalPackages Int
+
+  createdById Int
+
+  createdBy User @relation("StockInCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  items StockInItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([masterProductId])
+  @@index([colorId])
+  @@index([createdById])
+  @@index([stockInDate])
+}
+
+model StockInItem {
+  id Int @id @default(autoincrement())
+
+  stockInId Int
+
+  stockIn StockIn @relation(fields: [stockInId], references: [id], onDelete: Cascade)
+
+  productVariantId Int
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Restrict)
+
+  quantity Int
+
+  warehouseId Int
+
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+
+  zoneId Int
+
+  zone Zone @relation(fields: [zoneId], references: [id], onDelete: Restrict)
+
+  subZoneId Int
+
+  subZone SubZone @relation(fields: [subZoneId], references: [id], onDelete: Restrict)
+
+  rackId Int
+
+  rack Rack @relation(fields: [rackId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([stockInId, productVariantId, warehouseId, zoneId, subZoneId, rackId])
+  @@index([stockInId])
+  @@index([productVariantId])
+  @@index([warehouseId])
+  @@index([zoneId])
+  @@index([subZoneId])
+  @@index([rackId])
+}
+
+model Inventory {
+  id Int @id @default(autoincrement())
+
+  productVariantId Int
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Restrict)
+
+  warehouseId Int
+
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+
+  zoneId Int
+
+  zone Zone @relation(fields: [zoneId], references: [id], onDelete: Restrict)
+
+  subZoneId Int
+
+  subZone SubZone @relation(fields: [subZoneId], references: [id], onDelete: Restrict)
+
+  rackId Int
+
+  rack Rack @relation(fields: [rackId], references: [id], onDelete: Restrict)
+
+  quantity Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productVariantId, warehouseId, zoneId, subZoneId, rackId])
+  @@index([productVariantId])
+  @@index([warehouseId])
+  @@index([zoneId])
+  @@index([subZoneId])
+  @@index([rackId])
 }
 
 enum BuyerType {
