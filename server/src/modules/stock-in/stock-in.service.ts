@@ -7,6 +7,9 @@ import {
 import { DatabaseService } from '../../database/database.service.js';
 
 import { CreateStockInDto } from './dto/create-stock-in.dto.js';
+import { Prisma } from '../../generated/prisma/client.js';
+import { QueryStockInDto } from './dto/query-stock-in.dto.js';
+import { StockAdjustmentAction, UpdateStockInDto } from './dto/update-stock-in.dto.js';
 
 interface AuthenticatedUser {
     id: number;
@@ -19,6 +22,54 @@ export class StockInService {
     constructor(
         private readonly databaseService: DatabaseService,
     ) { }
+
+
+    /*
+    * --------------------------------------------------
+    * Batch ID Generator
+    * --------------------------------------------------
+    */
+
+    private async generateBatchId(): Promise<string> {
+        let batchId: string;
+        let exists = true;
+
+        do {
+            const date = new Date();
+
+            const datePart = [
+                date.getFullYear(),
+                String(date.getMonth() + 1).padStart(
+                    2,
+                    '0',
+                ),
+                String(date.getDate()).padStart(2, '0'),
+            ].join('');
+
+            const randomPart = Math.floor(
+                100000 + Math.random() * 900000,
+            );
+
+            batchId = `STI-${datePart}-${randomPart}`;
+
+            const existing =
+                await this.databaseService.stockIn.findUnique({
+                    where: {
+                        batchId,
+                    },
+                    select: {
+                        id: true,
+                    },
+                });
+
+            exists = Boolean(existing);
+        } while (exists);
+
+        return batchId!;
+    }
+
+
+
 
     async create(
         createStockInDto: CreateStockInDto,
@@ -135,46 +186,6 @@ export class StockInService {
          * + Size
          * --------------------------------------------------
          */
-
-        // const productVariants =
-        //     await this.databaseService.productVariant.findMany({
-        //         where: {
-        //             masterProductId,
-        //             colorId,
-        //             gender,
-        //             size: {
-        //                 in: sizes,
-        //             },
-        //             status: 'ACTIVE',
-        //         },
-        //         select: {
-        //             id: true,
-        //             size: true,
-        //             productsPerPacket: true,
-        //         },
-        //     });
-
-        // /*
-        //  * Every requested size must have an active variant.
-        //  */
-
-        // if (productVariants.length !== uniqueSizes.size) {
-        //     const foundSizes = new Set(
-        //         productVariants.map(
-        //             (variant) => variant.size,
-        //         ),
-        //     );
-
-        //     const missingSizes = sizes.filter(
-        //         (size) => !foundSizes.has(size),
-        //     );
-
-        //     throw new BadRequestException(
-        //         `Active product variants not found for size(s): ${[
-        //             ...new Set(missingSizes),
-        //         ].join(', ')}`,
-        //     );
-        // }
 
         const requestedSizes = [
             ...new Set(
@@ -549,47 +560,735 @@ export class StockInService {
         };
     }
 
-    /*
-     * --------------------------------------------------
-     * Batch ID Generator
-     * --------------------------------------------------
-     */
 
-    private async generateBatchId(): Promise<string> {
-        let batchId: string;
-        let exists = true;
 
-        do {
-            const date = new Date();
 
-            const datePart = [
-                date.getFullYear(),
-                String(date.getMonth() + 1).padStart(
-                    2,
-                    '0',
-                ),
-                String(date.getDate()).padStart(2, '0'),
-            ].join('');
+    async findAll(query: QueryStockInDto) {
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            masterProductId,
+            colorId,
+            gender,
+            startDate,
+            endDate,
+        } = query;
 
-            const randomPart = Math.floor(
-                100000 + Math.random() * 900000,
+        /*
+         * ---------------------------------------------
+         * Validate date range
+         * ---------------------------------------------
+         */
+
+        if (startDate && endDate) {
+            const startDateObject = new Date(startDate);
+            const endDateObject = new Date(endDate);
+
+            if (startDateObject > endDateObject) {
+                throw new BadRequestException(
+                    'Start date cannot be later than end date.',
+                );
+            }
+        }
+
+        /*
+         * ---------------------------------------------
+         * Pagination
+         * ---------------------------------------------
+         */
+
+        const skip = (page - 1) * limit;
+
+        /*
+         * ---------------------------------------------
+         * Dynamic filtering
+         * ---------------------------------------------
+         */
+
+        const where: Prisma.StockInWhereInput = {};
+
+        if (masterProductId) {
+            where.masterProductId = masterProductId;
+        }
+
+        if (colorId) {
+            where.colorId = colorId;
+        }
+
+        if (gender) {
+            where.gender = gender;
+        }
+
+        /*
+         * ---------------------------------------------
+         * Search
+         *
+         * Batch ID
+         * Master Product Name
+         * Master Product SKU
+         * ---------------------------------------------
+         */
+
+        if (search) {
+            where.OR = [
+                {
+                    batchId: {
+                        contains: search,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    masterProduct: {
+                        name: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                },
+                {
+                    masterProduct: {
+                        sku: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                },
+            ];
+        }
+
+        /*
+         * ---------------------------------------------
+         * Date range
+         *
+         * Filter using Stock In Date
+         * ---------------------------------------------
+         */
+
+        if (startDate || endDate) {
+            where.stockInDate = {};
+
+            if (startDate) {
+                where.stockInDate.gte = new Date(startDate);
+            }
+
+            if (endDate) {
+                /*
+                 * Include the complete end date.
+                 *
+                 * Example:
+                 * 2026-09-09
+                 * becomes
+                 * 2026-09-09T23:59:59.999
+                 */
+
+                const endDateObject = new Date(endDate);
+
+                endDateObject.setHours(
+                    23,
+                    59,
+                    59,
+                    999,
+                );
+
+                where.stockInDate.lte = endDateObject;
+            }
+        }
+
+        /*
+         * ---------------------------------------------
+         * Fetch records and count in parallel
+         * ---------------------------------------------
+         */
+
+        const [stockIns, total] =
+            await this.databaseService.$transaction([
+                this.databaseService.stockIn.findMany({
+                    where,
+                    skip,
+                    take: limit,
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                    include: {
+                        masterProduct: {
+                            select: {
+                                id: true,
+                                name: true,
+                                sku: true,
+                            },
+                        },
+
+                        color: {
+                            select: {
+                                id: true,
+                                name: true,
+                            },
+                        },
+
+                        createdBy: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true,
+                            },
+                        },
+
+                        _count: {
+                            select: {
+                                items: true,
+                            },
+                        },
+                    },
+                }),
+
+                this.databaseService.stockIn.count({
+                    where,
+                }),
+            ]);
+
+        /*
+         * ---------------------------------------------
+         * Return pagination response
+         * ---------------------------------------------
+         */
+
+        return {
+            data: stockIns.map((stockIn) => ({
+                ...stockIn,
+
+                itemCount: stockIn._count.items,
+
+                _count: undefined,
+            })),
+
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
+    }
+
+
+
+
+
+    async findOne(id: number) {
+        const stockIn =
+            await this.databaseService.stockIn.findUnique({
+                where: {
+                    id,
+                },
+
+                include: {
+                    masterProduct: {
+                        select: {
+                            id: true,
+                            name: true,
+                            sku: true,
+
+                            material: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+
+                    color: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+
+                    items: {
+                        orderBy: {
+                            id: 'asc',
+                        },
+
+                        include: {
+                            productVariant: {
+                                select: {
+                                    id: true,
+                                    size: true,
+                                    sku: true,
+                                    gender: true,
+                                    modelNumber: true,
+                                    uom: true,
+                                    productsPerPacket: true,
+                                    packagingType: true,
+                                },
+                            },
+
+                            warehouse: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    code: true,
+                                },
+                            },
+
+                            zone: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    code: true,
+                                },
+                            },
+
+                            subZone: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    code: true,
+                                },
+                            },
+
+                            rack: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    code: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+
+        if (!stockIn) {
+            throw new NotFoundException(
+                `Stock In record with ID ${id} not found.`,
+            );
+        }
+
+        return {
+            data: stockIn,
+        };
+    }
+
+
+
+
+    async update(
+        id: number,
+        updateStockInDto: UpdateStockInDto,
+    ) {
+        const { adjustments } = updateStockInDto;
+
+        /*
+         * ---------------------------------------------
+         * 1. Prevent duplicate variant adjustments
+         * ---------------------------------------------
+         */
+
+        const productVariantIds = adjustments.map(
+            (adjustment) => adjustment.productVariantId,
+        );
+
+        const uniqueProductVariantIds = new Set(
+            productVariantIds,
+        );
+
+        if (
+            productVariantIds.length !==
+            uniqueProductVariantIds.size
+        ) {
+            throw new BadRequestException(
+                'The same product variant cannot be adjusted more than once in a single request.',
+            );
+        }
+
+        /*
+         * ---------------------------------------------
+         * 2. Find Stock In
+         * ---------------------------------------------
+         */
+
+        const stockIn =
+            await this.databaseService.stockIn.findUnique({
+                where: {
+                    id,
+                },
+
+                include: {
+                    items: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            productVariantId: true,
+
+                            warehouseId: true,
+                            zoneId: true,
+                            subZoneId: true,
+                            rackId: true,
+
+                            productVariant: {
+                                select: {
+                                    id: true,
+                                    productsPerPacket: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+
+        if (!stockIn) {
+            throw new NotFoundException(
+                `Stock In record with ID ${id} not found.`,
+            );
+        }
+
+        /*
+         * ---------------------------------------------
+         * 3. Create Stock In Item lookup
+         * ---------------------------------------------
+         */
+
+        const stockInItemMap = new Map(
+            stockIn.items.map((item) => [
+                item.productVariantId,
+                item,
+            ]),
+        );
+
+        /*
+         * ---------------------------------------------
+         * 4. Validate requested variants
+         * ---------------------------------------------
+         */
+
+        for (const adjustment of adjustments) {
+            const stockInItem = stockInItemMap.get(
+                adjustment.productVariantId,
             );
 
-            batchId = `STI-${datePart}-${randomPart}`;
+            if (!stockInItem) {
+                throw new BadRequestException(
+                    `Product variant ID ${adjustment.productVariantId} does not belong to Stock In ID ${id}.`,
+                );
+            }
 
-            const existing =
-                await this.databaseService.stockIn.findUnique({
-                    where: {
-                        batchId,
-                    },
-                    select: {
-                        id: true,
-                    },
-                });
+            /*
+             * Prevent negative Stock In quantity
+             */
 
-            exists = Boolean(existing);
-        } while (exists);
+            if (
+                adjustment.action ===
+                StockAdjustmentAction.SUBTRACT &&
+                adjustment.adjustmentNumber >
+                stockInItem.quantity
+            ) {
+                throw new BadRequestException(
+                    `Cannot subtract ${adjustment.adjustmentNumber} units from product variant ID ${adjustment.productVariantId}. Current batch quantity is ${stockInItem.quantity}.`,
+                );
+            }
+        }
 
-        return batchId!;
+        /*
+         * ---------------------------------------------
+         * 5. Atomic Transaction
+         * ---------------------------------------------
+         */
+
+        const result =
+            await this.databaseService.$transaction(
+                async (tx) => {
+                    /*
+                     * Update every Stock In Item
+                     * and corresponding Inventory
+                     */
+
+                    for (const adjustment of adjustments) {
+                        const stockInItem =
+                            stockInItemMap.get(
+                                adjustment.productVariantId,
+                            );
+
+                        if (!stockInItem) {
+                            throw new BadRequestException(
+                                'Stock In item not found.',
+                            );
+                        }
+
+                        const isAdd =
+                            adjustment.action ===
+                            StockAdjustmentAction.ADD;
+
+                        const quantityChange =
+                            isAdd
+                                ? adjustment.adjustmentNumber
+                                : -adjustment.adjustmentNumber;
+
+                        /*
+                         * ---------------------------------
+                         * Update Stock In Item
+                         * ---------------------------------
+                         */
+
+                        await tx.stockInItem.update({
+                            where: {
+                                id: stockInItem.id,
+                            },
+
+                            data: {
+                                quantity: {
+                                    increment: quantityChange,
+                                },
+                            },
+                        });
+
+                        /*
+                         * ---------------------------------
+                         * Find Inventory
+                         * ---------------------------------
+                         */
+
+                        const inventory =
+                            await tx.inventory.findUnique({
+                                where: {
+                                    productVariantId_warehouseId_zoneId_subZoneId_rackId:
+                                    {
+                                        productVariantId:
+                                            stockInItem.productVariantId,
+
+                                        warehouseId:
+                                            stockInItem.warehouseId,
+
+                                        zoneId:
+                                            stockInItem.zoneId,
+
+                                        subZoneId:
+                                            stockInItem.subZoneId,
+
+                                        rackId:
+                                            stockInItem.rackId,
+                                    },
+                                },
+
+                                select: {
+                                    id: true,
+                                    quantity: true,
+                                },
+                            });
+
+                        if (!inventory) {
+                            throw new BadRequestException(
+                                `Inventory record not found for product variant ID ${stockInItem.productVariantId}.`,
+                            );
+                        }
+
+                        /*
+                         * ---------------------------------
+                         * Prevent negative Inventory
+                         * ---------------------------------
+                         */
+
+                        if (
+                            !isAdd &&
+                            adjustment.adjustmentNumber >
+                            inventory.quantity
+                        ) {
+                            throw new BadRequestException(
+                                `Cannot subtract ${adjustment.adjustmentNumber} units because current inventory is ${inventory.quantity}.`,
+                            );
+                        }
+
+                        /*
+                         * ---------------------------------
+                         * Update Inventory
+                         * ---------------------------------
+                         */
+
+                        await tx.inventory.update({
+                            where: {
+                                id: inventory.id,
+                            },
+
+                            data: {
+                                quantity: {
+                                    increment: quantityChange,
+                                },
+                            },
+                        });
+                    }
+
+                    /*
+                     * ---------------------------------
+                     * 6. Recalculate Stock In totals
+                     * ---------------------------------
+                     */
+
+                    const updatedItems =
+                        await tx.stockInItem.findMany({
+                            where: {
+                                stockInId: id,
+                            },
+
+                            include: {
+                                productVariant: {
+                                    select: {
+                                        productsPerPacket: true,
+                                    },
+                                },
+                            },
+                        });
+
+                    const totalQuantity =
+                        updatedItems.reduce(
+                            (total, item) =>
+                                total + item.quantity,
+                            0,
+                        );
+
+                    /*
+                     * All variants in a Stock In should
+                     * have the same productsPerPacket value.
+                     */
+
+                    const productsPerPacketSet = new Set(
+                        updatedItems.map(
+                            (item) =>
+                                item.productVariant.productsPerPacket,
+                        ),
+                    );
+
+                    if (productsPerPacketSet.size !== 1) {
+                        throw new BadRequestException(
+                            'Stock In contains variants with different products per packet values.',
+                        );
+                    }
+
+                    const productsPerPacket =
+                        updatedItems[0].productVariant
+                            .productsPerPacket;
+
+                    const totalPackages = Math.ceil(
+                        totalQuantity / productsPerPacket,
+                    );
+
+                    /*
+                     * ---------------------------------
+                     * 7. Update Stock In Header
+                     * ---------------------------------
+                     */
+
+                    await tx.stockIn.update({
+                        where: {
+                            id,
+                        },
+
+                        data: {
+                            totalQuantity,
+                            totalPackages,
+                        },
+                    });
+
+                    /*
+                     * ---------------------------------
+                     * Return updated record
+                     * ---------------------------------
+                     */
+
+                    return tx.stockIn.findUnique({
+                        where: {
+                            id,
+                        },
+
+                        include: {
+                            masterProduct: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    sku: true,
+                                },
+                            },
+
+                            color: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+
+                            createdBy: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    email: true,
+                                },
+                            },
+
+                            items: {
+                                include: {
+                                    productVariant: {
+                                        select: {
+                                            id: true,
+                                            size: true,
+                                            sku: true,
+                                            gender: true,
+                                        },
+                                    },
+
+                                    warehouse: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            code: true,
+                                        },
+                                    },
+
+                                    zone: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            code: true,
+                                        },
+                                    },
+
+                                    subZone: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            code: true,
+                                        },
+                                    },
+
+                                    rack: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            code: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+            );
+
+        return {
+            message: 'Stock In adjusted successfully.',
+            data: result,
+        };
     }
+
+
+
+
+
 }
