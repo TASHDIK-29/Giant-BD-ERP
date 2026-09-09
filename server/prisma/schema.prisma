@@ -34,6 +34,8 @@ model User {
 
   stockInsCreated StockIn[] @relation("StockInCreatedBy")
 
+  stockOutsCreated StockOut[] @relation("StockOutCreatedBy")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -183,6 +185,8 @@ model Color {
   productVariants ProductVariant[]
   stockIns        StockIn[]
 
+  stockOuts StockOut[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -211,6 +215,8 @@ model MasterProduct {
   variants ProductVariant[]
 
   stockIns StockIn[]
+
+  stockOuts StockOut[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -347,6 +353,8 @@ model Buyer {
 
   lettersOfCredit LetterOfCredit[]
 
+  stockOuts StockOut[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -365,6 +373,8 @@ model LetterOfCredit {
 
   purchaseOrders PurchaseOrder[]
 
+  stockOuts StockOut[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -382,6 +392,8 @@ model PurchaseOrder {
   letterOfCreditId Int
 
   letterOfCredit LetterOfCredit @relation(fields: [letterOfCreditId], references: [id], onDelete: Restrict)
+
+  stockOuts StockOut[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -460,6 +472,8 @@ model StockInItem {
 
   rack Rack @relation(fields: [rackId], references: [id], onDelete: Restrict)
 
+  inventoryBatches InventoryBatch[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -497,6 +511,8 @@ model Inventory {
 
   quantity Int @default(0)
 
+  inventoryBatches InventoryBatch[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -506,6 +522,139 @@ model Inventory {
   @@index([zoneId])
   @@index([subZoneId])
   @@index([rackId])
+}
+
+model InventoryBatch {
+  id Int @id @default(autoincrement())
+
+  /**
+   * Physical inventory location.
+   */
+  inventoryId Int
+
+  inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
+
+  /**
+   * Original Stock In source.
+   */
+  stockInItemId Int
+
+  stockInItem StockInItem @relation(fields: [stockInItemId], references: [id], onDelete: Restrict)
+
+  /**
+   * Remaining quantity from this particular
+   * Stock In item at this location.
+   */
+  quantity Int @default(0)
+
+  stockOutItems StockOutItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /**
+   * One StockInItem should create one batch record
+   * for one Inventory location.
+   */
+  @@unique([inventoryId, stockInItemId])
+  @@index([inventoryId])
+  @@index([stockInItemId])
+}
+
+model StockOut {
+  id Int @id @default(autoincrement())
+
+  /**
+   * Auto-generated transaction number.
+   */
+  stockOutNumber String @unique
+
+  /**
+   * Buyer → LC → PO
+   */
+  buyerId Int
+
+  buyer Buyer @relation(fields: [buyerId], references: [id], onDelete: Restrict)
+
+  letterOfCreditId Int
+
+  letterOfCredit LetterOfCredit @relation(fields: [letterOfCreditId], references: [id], onDelete: Restrict)
+
+  purchaseOrderId Int
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Restrict)
+
+  /**
+   * Product selection.
+   */
+  masterProductId Int
+
+  masterProduct MasterProduct @relation(fields: [masterProductId], references: [id], onDelete: Restrict)
+
+  colorId Int
+
+  color Color @relation(fields: [colorId], references: [id], onDelete: Restrict)
+
+  gender Gender
+
+  /**
+   * Transaction information.
+   */
+  requestDate DateTime
+
+  stockOutDate DateTime?
+
+  status StockOutStatus @default(ISSUED)
+
+  /**
+   * Audit information.
+   */
+  createdById Int
+
+  createdBy User @relation("StockOutCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  items StockOutItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([buyerId])
+  @@index([letterOfCreditId])
+  @@index([purchaseOrderId])
+  @@index([masterProductId])
+  @@index([colorId])
+  @@index([status])
+  @@index([createdById])
+  @@index([requestDate])
+}
+
+model StockOutItem {
+  id Int @id @default(autoincrement())
+
+  stockOutId Int
+
+  stockOut StockOut @relation(fields: [stockOutId], references: [id], onDelete: Cascade)
+
+  /**
+   * Exact batch and location from which
+   * the inventory is being issued.
+   */
+  inventoryBatchId Int
+
+  inventoryBatch InventoryBatch @relation(fields: [inventoryBatchId], references: [id], onDelete: Restrict)
+
+  quantity Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /**
+   * Prevent duplicate allocations from the same
+   * InventoryBatch within one Stock Out transaction.
+   */
+  @@unique([stockOutId, inventoryBatchId])
+  @@index([stockOutId])
+  @@index([inventoryBatchId])
 }
 
 enum BuyerType {
@@ -543,4 +692,10 @@ enum PackagingType {
   PACKET
   POLYBAG
   BUNDLE
+}
+
+enum StockOutStatus {
+  ISSUED
+  DELIVERED
+  RECEIVED
 }

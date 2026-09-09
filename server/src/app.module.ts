@@ -24,6 +24,7 @@ import { SubZonesModule } from './modules/sub-zones/sub-zones.module.js';
 import { RacksModule } from './modules/racks/racks.module.js';
 import { BuyersModule } from './modules/buyers/buyers.module.js';
 import { StockInModule } from './modules/stock-in/stock-in.module.js';
+import { StockOutModule } from './modules/stock-out/stock-out.module.js';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { StockInModule } from './modules/stock-in/stock-in.module.js';
     RacksModule,
     BuyersModule,
     StockInModule,
+    StockOutModule,
   ],
   controllers: [AppController],
   providers: [

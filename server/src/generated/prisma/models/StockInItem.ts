@@ -290,6 +290,7 @@ export type StockInItemWhereInput = {
   zone?: Prisma.XOR<Prisma.ZoneScalarRelationFilter, Prisma.ZoneWhereInput>
   subZone?: Prisma.XOR<Prisma.SubZoneScalarRelationFilter, Prisma.SubZoneWhereInput>
   rack?: Prisma.XOR<Prisma.RackScalarRelationFilter, Prisma.RackWhereInput>
+  inventoryBatches?: Prisma.InventoryBatchListRelationFilter
 }
 
 export type StockInItemOrderByWithRelationInput = {
@@ -309,6 +310,7 @@ export type StockInItemOrderByWithRelationInput = {
   zone?: Prisma.ZoneOrderByWithRelationInput
   subZone?: Prisma.SubZoneOrderByWithRelationInput
   rack?: Prisma.RackOrderByWithRelationInput
+  inventoryBatches?: Prisma.InventoryBatchOrderByRelationAggregateInput
 }
 
 export type StockInItemWhereUniqueInput = Prisma.AtLeast<{
@@ -332,6 +334,7 @@ export type StockInItemWhereUniqueInput = Prisma.AtLeast<{
   zone?: Prisma.XOR<Prisma.ZoneScalarRelationFilter, Prisma.ZoneWhereInput>
   subZone?: Prisma.XOR<Prisma.SubZoneScalarRelationFilter, Prisma.SubZoneWhereInput>
   rack?: Prisma.XOR<Prisma.RackScalarRelationFilter, Prisma.RackWhereInput>
+  inventoryBatches?: Prisma.InventoryBatchListRelationFilter
 }, "id" | "stockInId_productVariantId_warehouseId_zoneId_subZoneId_rackId">
 
 export type StockInItemOrderByWithAggregationInput = {
@@ -378,6 +381,7 @@ export type StockInItemCreateInput = {
   zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
   subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
   rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateInput = {
@@ -391,6 +395,7 @@ export type StockInItemUncheckedCreateInput = {
   rackId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUpdateInput = {
@@ -403,6 +408,7 @@ export type StockInItemUpdateInput = {
   zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateInput = {
@@ -416,6 +422,7 @@ export type StockInItemUncheckedUpdateInput = {
   rackId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemCreateManyInput = {
@@ -528,6 +535,11 @@ export type StockInItemSumOrderByAggregateInput = {
   zoneId?: Prisma.SortOrder
   subZoneId?: Prisma.SortOrder
   rackId?: Prisma.SortOrder
+}
+
+export type StockInItemScalarRelationFilter = {
+  is?: Prisma.StockInItemWhereInput
+  isNot?: Prisma.StockInItemWhereInput
 }
 
 export type StockInItemCreateNestedManyWithoutProductVariantInput = {
@@ -782,6 +794,20 @@ export type StockInItemUncheckedUpdateManyWithoutStockInNestedInput = {
   deleteMany?: Prisma.StockInItemScalarWhereInput | Prisma.StockInItemScalarWhereInput[]
 }
 
+export type StockInItemCreateNestedOneWithoutInventoryBatchesInput = {
+  create?: Prisma.XOR<Prisma.StockInItemCreateWithoutInventoryBatchesInput, Prisma.StockInItemUncheckedCreateWithoutInventoryBatchesInput>
+  connectOrCreate?: Prisma.StockInItemCreateOrConnectWithoutInventoryBatchesInput
+  connect?: Prisma.StockInItemWhereUniqueInput
+}
+
+export type StockInItemUpdateOneRequiredWithoutInventoryBatchesNestedInput = {
+  create?: Prisma.XOR<Prisma.StockInItemCreateWithoutInventoryBatchesInput, Prisma.StockInItemUncheckedCreateWithoutInventoryBatchesInput>
+  connectOrCreate?: Prisma.StockInItemCreateOrConnectWithoutInventoryBatchesInput
+  upsert?: Prisma.StockInItemUpsertWithoutInventoryBatchesInput
+  connect?: Prisma.StockInItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockInItemUpdateToOneWithWhereWithoutInventoryBatchesInput, Prisma.StockInItemUpdateWithoutInventoryBatchesInput>, Prisma.StockInItemUncheckedUpdateWithoutInventoryBatchesInput>
+}
+
 export type StockInItemCreateWithoutProductVariantInput = {
   quantity: number
   createdAt?: Date | string
@@ -791,6 +817,7 @@ export type StockInItemCreateWithoutProductVariantInput = {
   zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
   subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
   rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateWithoutProductVariantInput = {
@@ -803,6 +830,7 @@ export type StockInItemUncheckedCreateWithoutProductVariantInput = {
   rackId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemCreateOrConnectWithoutProductVariantInput = {
@@ -856,6 +884,7 @@ export type StockInItemCreateWithoutWarehouseInput = {
   zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
   subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
   rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateWithoutWarehouseInput = {
@@ -868,6 +897,7 @@ export type StockInItemUncheckedCreateWithoutWarehouseInput = {
   rackId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemCreateOrConnectWithoutWarehouseInput = {
@@ -905,6 +935,7 @@ export type StockInItemCreateWithoutZoneInput = {
   warehouse: Prisma.WarehouseCreateNestedOneWithoutStockInItemsInput
   subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
   rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateWithoutZoneInput = {
@@ -917,6 +948,7 @@ export type StockInItemUncheckedCreateWithoutZoneInput = {
   rackId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemCreateOrConnectWithoutZoneInput = {
@@ -954,6 +986,7 @@ export type StockInItemCreateWithoutSubZoneInput = {
   warehouse: Prisma.WarehouseCreateNestedOneWithoutStockInItemsInput
   zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
   rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateWithoutSubZoneInput = {
@@ -966,6 +999,7 @@ export type StockInItemUncheckedCreateWithoutSubZoneInput = {
   rackId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemCreateOrConnectWithoutSubZoneInput = {
@@ -1003,6 +1037,7 @@ export type StockInItemCreateWithoutRackInput = {
   warehouse: Prisma.WarehouseCreateNestedOneWithoutStockInItemsInput
   zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
   subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateWithoutRackInput = {
@@ -1015,6 +1050,7 @@ export type StockInItemUncheckedCreateWithoutRackInput = {
   subZoneId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemCreateOrConnectWithoutRackInput = {
@@ -1052,6 +1088,7 @@ export type StockInItemCreateWithoutStockInInput = {
   zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
   subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
   rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+  inventoryBatches?: Prisma.InventoryBatchCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemUncheckedCreateWithoutStockInInput = {
@@ -1064,6 +1101,7 @@ export type StockInItemUncheckedCreateWithoutStockInInput = {
   rackId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedCreateNestedManyWithoutStockInItemInput
 }
 
 export type StockInItemCreateOrConnectWithoutStockInInput = {
@@ -1092,6 +1130,72 @@ export type StockInItemUpdateManyWithWhereWithoutStockInInput = {
   data: Prisma.XOR<Prisma.StockInItemUpdateManyMutationInput, Prisma.StockInItemUncheckedUpdateManyWithoutStockInInput>
 }
 
+export type StockInItemCreateWithoutInventoryBatchesInput = {
+  quantity: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stockIn: Prisma.StockInCreateNestedOneWithoutItemsInput
+  productVariant: Prisma.ProductVariantCreateNestedOneWithoutStockInItemsInput
+  warehouse: Prisma.WarehouseCreateNestedOneWithoutStockInItemsInput
+  zone: Prisma.ZoneCreateNestedOneWithoutStockInItemsInput
+  subZone: Prisma.SubZoneCreateNestedOneWithoutStockInItemsInput
+  rack: Prisma.RackCreateNestedOneWithoutStockInItemsInput
+}
+
+export type StockInItemUncheckedCreateWithoutInventoryBatchesInput = {
+  id?: number
+  stockInId: number
+  productVariantId: number
+  quantity: number
+  warehouseId: number
+  zoneId: number
+  subZoneId: number
+  rackId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StockInItemCreateOrConnectWithoutInventoryBatchesInput = {
+  where: Prisma.StockInItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockInItemCreateWithoutInventoryBatchesInput, Prisma.StockInItemUncheckedCreateWithoutInventoryBatchesInput>
+}
+
+export type StockInItemUpsertWithoutInventoryBatchesInput = {
+  update: Prisma.XOR<Prisma.StockInItemUpdateWithoutInventoryBatchesInput, Prisma.StockInItemUncheckedUpdateWithoutInventoryBatchesInput>
+  create: Prisma.XOR<Prisma.StockInItemCreateWithoutInventoryBatchesInput, Prisma.StockInItemUncheckedCreateWithoutInventoryBatchesInput>
+  where?: Prisma.StockInItemWhereInput
+}
+
+export type StockInItemUpdateToOneWithWhereWithoutInventoryBatchesInput = {
+  where?: Prisma.StockInItemWhereInput
+  data: Prisma.XOR<Prisma.StockInItemUpdateWithoutInventoryBatchesInput, Prisma.StockInItemUncheckedUpdateWithoutInventoryBatchesInput>
+}
+
+export type StockInItemUpdateWithoutInventoryBatchesInput = {
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockIn?: Prisma.StockInUpdateOneRequiredWithoutItemsNestedInput
+  productVariant?: Prisma.ProductVariantUpdateOneRequiredWithoutStockInItemsNestedInput
+  warehouse?: Prisma.WarehouseUpdateOneRequiredWithoutStockInItemsNestedInput
+  zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
+  subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
+  rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+}
+
+export type StockInItemUncheckedUpdateWithoutInventoryBatchesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  stockInId?: Prisma.IntFieldUpdateOperationsInput | number
+  productVariantId?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  warehouseId?: Prisma.IntFieldUpdateOperationsInput | number
+  zoneId?: Prisma.IntFieldUpdateOperationsInput | number
+  subZoneId?: Prisma.IntFieldUpdateOperationsInput | number
+  rackId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type StockInItemCreateManyProductVariantInput = {
   id?: number
   stockInId: number
@@ -1113,6 +1217,7 @@ export type StockInItemUpdateWithoutProductVariantInput = {
   zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateWithoutProductVariantInput = {
@@ -1125,6 +1230,7 @@ export type StockInItemUncheckedUpdateWithoutProductVariantInput = {
   rackId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateManyWithoutProductVariantInput = {
@@ -1160,6 +1266,7 @@ export type StockInItemUpdateWithoutWarehouseInput = {
   zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateWithoutWarehouseInput = {
@@ -1172,6 +1279,7 @@ export type StockInItemUncheckedUpdateWithoutWarehouseInput = {
   rackId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateManyWithoutWarehouseInput = {
@@ -1207,6 +1315,7 @@ export type StockInItemUpdateWithoutZoneInput = {
   warehouse?: Prisma.WarehouseUpdateOneRequiredWithoutStockInItemsNestedInput
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateWithoutZoneInput = {
@@ -1219,6 +1328,7 @@ export type StockInItemUncheckedUpdateWithoutZoneInput = {
   rackId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateManyWithoutZoneInput = {
@@ -1254,6 +1364,7 @@ export type StockInItemUpdateWithoutSubZoneInput = {
   warehouse?: Prisma.WarehouseUpdateOneRequiredWithoutStockInItemsNestedInput
   zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateWithoutSubZoneInput = {
@@ -1266,6 +1377,7 @@ export type StockInItemUncheckedUpdateWithoutSubZoneInput = {
   rackId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateManyWithoutSubZoneInput = {
@@ -1301,6 +1413,7 @@ export type StockInItemUpdateWithoutRackInput = {
   warehouse?: Prisma.WarehouseUpdateOneRequiredWithoutStockInItemsNestedInput
   zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateWithoutRackInput = {
@@ -1313,6 +1426,7 @@ export type StockInItemUncheckedUpdateWithoutRackInput = {
   subZoneId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateManyWithoutRackInput = {
@@ -1348,6 +1462,7 @@ export type StockInItemUpdateWithoutStockInInput = {
   zone?: Prisma.ZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   subZone?: Prisma.SubZoneUpdateOneRequiredWithoutStockInItemsNestedInput
   rack?: Prisma.RackUpdateOneRequiredWithoutStockInItemsNestedInput
+  inventoryBatches?: Prisma.InventoryBatchUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateWithoutStockInInput = {
@@ -1360,6 +1475,7 @@ export type StockInItemUncheckedUpdateWithoutStockInInput = {
   rackId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryBatches?: Prisma.InventoryBatchUncheckedUpdateManyWithoutStockInItemNestedInput
 }
 
 export type StockInItemUncheckedUpdateManyWithoutStockInInput = {
@@ -1374,6 +1490,35 @@ export type StockInItemUncheckedUpdateManyWithoutStockInInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type StockInItemCountOutputType
+ */
+
+export type StockInItemCountOutputType = {
+  inventoryBatches: number
+}
+
+export type StockInItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  inventoryBatches?: boolean | StockInItemCountOutputTypeCountInventoryBatchesArgs
+}
+
+/**
+ * StockInItemCountOutputType without action
+ */
+export type StockInItemCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockInItemCountOutputType
+   */
+  select?: Prisma.StockInItemCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * StockInItemCountOutputType without action
+ */
+export type StockInItemCountOutputTypeCountInventoryBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InventoryBatchWhereInput
+}
 
 
 export type StockInItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1393,6 +1538,8 @@ export type StockInItemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   zone?: boolean | Prisma.ZoneDefaultArgs<ExtArgs>
   subZone?: boolean | Prisma.SubZoneDefaultArgs<ExtArgs>
   rack?: boolean | Prisma.RackDefaultArgs<ExtArgs>
+  inventoryBatches?: boolean | Prisma.StockInItem$inventoryBatchesArgs<ExtArgs>
+  _count?: boolean | Prisma.StockInItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockInItem"]>
 
 export type StockInItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1454,6 +1601,8 @@ export type StockInItemInclude<ExtArgs extends runtime.Types.Extensions.Internal
   zone?: boolean | Prisma.ZoneDefaultArgs<ExtArgs>
   subZone?: boolean | Prisma.SubZoneDefaultArgs<ExtArgs>
   rack?: boolean | Prisma.RackDefaultArgs<ExtArgs>
+  inventoryBatches?: boolean | Prisma.StockInItem$inventoryBatchesArgs<ExtArgs>
+  _count?: boolean | Prisma.StockInItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StockInItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stockIn?: boolean | Prisma.StockInDefaultArgs<ExtArgs>
@@ -1481,6 +1630,7 @@ export type $StockInItemPayload<ExtArgs extends runtime.Types.Extensions.Interna
     zone: Prisma.$ZonePayload<ExtArgs>
     subZone: Prisma.$SubZonePayload<ExtArgs>
     rack: Prisma.$RackPayload<ExtArgs>
+    inventoryBatches: Prisma.$InventoryBatchPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1893,6 +2043,7 @@ export interface Prisma__StockInItemClient<T, Null = never, ExtArgs extends runt
   zone<T extends Prisma.ZoneDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ZoneDefaultArgs<ExtArgs>>): Prisma.Prisma__ZoneClient<runtime.Types.Result.GetResult<Prisma.$ZonePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subZone<T extends Prisma.SubZoneDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubZoneDefaultArgs<ExtArgs>>): Prisma.Prisma__SubZoneClient<runtime.Types.Result.GetResult<Prisma.$SubZonePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   rack<T extends Prisma.RackDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RackDefaultArgs<ExtArgs>>): Prisma.Prisma__RackClient<runtime.Types.Result.GetResult<Prisma.$RackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  inventoryBatches<T extends Prisma.StockInItem$inventoryBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockInItem$inventoryBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2330,6 +2481,30 @@ export type StockInItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many StockInItems to delete.
    */
   limit?: number
+}
+
+/**
+ * StockInItem.inventoryBatches
+ */
+export type StockInItem$inventoryBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InventoryBatch
+   */
+  select?: Prisma.InventoryBatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InventoryBatch
+   */
+  omit?: Prisma.InventoryBatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InventoryBatchInclude<ExtArgs> | null
+  where?: Prisma.InventoryBatchWhereInput
+  orderBy?: Prisma.InventoryBatchOrderByWithRelationInput | Prisma.InventoryBatchOrderByWithRelationInput[]
+  cursor?: Prisma.InventoryBatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InventoryBatchScalarFieldEnum | Prisma.InventoryBatchScalarFieldEnum[]
 }
 
 /**

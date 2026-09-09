@@ -277,10 +277,15 @@ export class AuthService {
             },
         });
 
+
+        // console.log("Exe : 1")
+
         // 3. Check user exists and is active
         if (!user || user.status !== 'ACTIVE') {
             throw new UnauthorizedException('Invalid refresh token');
         }
+
+        // console.log("Exe : 2")
 
         // 4. Find active refresh tokens for this user
         const storedTokens =
@@ -305,14 +310,20 @@ export class AuthService {
 
             if (isMatch) {
                 matchedToken = storedToken;
+
+                // console.log("Exe : 3")
                 break;
             }
         }
+
+        // console.log("Exe : 4")
 
         // Token is not found in the database
         if (!matchedToken) {
             throw new UnauthorizedException('Invalid refresh token');
         }
+
+        // console.log("Exe : 5")
 
         /*
          * 6. Rotate the refresh token.
@@ -343,6 +354,8 @@ export class AuthService {
         // 9. Hash the new refresh token
         const refreshTokenHash =
             await bcrypt.hash(newRefreshToken, 10);
+
+        // console.log({ newRefreshToken })
 
         /*
          * Temporary:
@@ -464,3 +477,22 @@ export class AuthService {
     }
 
 }
+
+
+
+
+
+/**
+ * {
+  refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImlhdCI6MTc4ODk0NzA4NCwiZXhwIjoxNzg5NTUxODg0fQ.9ArSfrgR9BHnZ2ng-TN7D9e3tTpV-PBXsCuNEpMtfP4'
+}
+Exe : 1
+Exe : 2
+Exe : 3
+Exe : 4
+Exe : 5
+{
+  newRefreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImlhdCI6MTc4ODk0NzE0NiwiZXhwIjoxNzg5NTUxOTQ2fQ.bQndyS8NKm622HrIARJCMiDmFEPZh8pEn3NVc92kB3s'
+}
+ * 
+ */

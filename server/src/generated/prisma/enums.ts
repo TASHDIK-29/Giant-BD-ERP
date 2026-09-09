@@ -59,3 +59,12 @@ export const PackagingType = {
 } as const
 
 export type PackagingType = (typeof PackagingType)[keyof typeof PackagingType]
+
+
+export const StockOutStatus = {
+  ISSUED: 'ISSUED',
+  DELIVERED: 'DELIVERED',
+  RECEIVED: 'RECEIVED'
+} as const
+
+export type StockOutStatus = (typeof StockOutStatus)[keyof typeof StockOutStatus]

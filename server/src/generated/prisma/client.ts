@@ -151,3 +151,18 @@ export type StockInItem = Prisma.StockInItemModel
  * 
  */
 export type Inventory = Prisma.InventoryModel
+/**
+ * Model InventoryBatch
+ * 
+ */
+export type InventoryBatch = Prisma.InventoryBatchModel
+/**
+ * Model StockOut
+ * 
+ */
+export type StockOut = Prisma.StockOutModel
+/**
+ * Model StockOutItem
+ * 
+ */
+export type StockOutItem = Prisma.StockOutItemModel

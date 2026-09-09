@@ -222,6 +222,7 @@ export type LetterOfCreditWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"LetterOfCredit"> | Date | string
   buyer?: Prisma.XOR<Prisma.BuyerScalarRelationFilter, Prisma.BuyerWhereInput>
   purchaseOrders?: Prisma.PurchaseOrderListRelationFilter
+  stockOuts?: Prisma.StockOutListRelationFilter
 }
 
 export type LetterOfCreditOrderByWithRelationInput = {
@@ -232,6 +233,7 @@ export type LetterOfCreditOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   buyer?: Prisma.BuyerOrderByWithRelationInput
   purchaseOrders?: Prisma.PurchaseOrderOrderByRelationAggregateInput
+  stockOuts?: Prisma.StockOutOrderByRelationAggregateInput
 }
 
 export type LetterOfCreditWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +248,7 @@ export type LetterOfCreditWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"LetterOfCredit"> | Date | string
   buyer?: Prisma.XOR<Prisma.BuyerScalarRelationFilter, Prisma.BuyerWhereInput>
   purchaseOrders?: Prisma.PurchaseOrderListRelationFilter
+  stockOuts?: Prisma.StockOutListRelationFilter
 }, "id" | "lcNumber" | "buyerId_lcNumber">
 
 export type LetterOfCreditOrderByWithAggregationInput = {
@@ -278,6 +281,7 @@ export type LetterOfCreditCreateInput = {
   updatedAt?: Date | string
   buyer: Prisma.BuyerCreateNestedOneWithoutLettersOfCreditInput
   purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutLetterOfCreditInput
+  stockOuts?: Prisma.StockOutCreateNestedManyWithoutLetterOfCreditInput
 }
 
 export type LetterOfCreditUncheckedCreateInput = {
@@ -287,6 +291,7 @@ export type LetterOfCreditUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutLetterOfCreditInput
+  stockOuts?: Prisma.StockOutUncheckedCreateNestedManyWithoutLetterOfCreditInput
 }
 
 export type LetterOfCreditUpdateInput = {
@@ -295,6 +300,7 @@ export type LetterOfCreditUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyer?: Prisma.BuyerUpdateOneRequiredWithoutLettersOfCreditNestedInput
   purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutLetterOfCreditNestedInput
+  stockOuts?: Prisma.StockOutUpdateManyWithoutLetterOfCreditNestedInput
 }
 
 export type LetterOfCreditUncheckedUpdateInput = {
@@ -304,6 +310,7 @@ export type LetterOfCreditUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutLetterOfCreditNestedInput
+  stockOuts?: Prisma.StockOutUncheckedUpdateManyWithoutLetterOfCreditNestedInput
 }
 
 export type LetterOfCreditCreateManyInput = {
@@ -438,11 +445,26 @@ export type LetterOfCreditUpdateOneRequiredWithoutPurchaseOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LetterOfCreditUpdateToOneWithWhereWithoutPurchaseOrdersInput, Prisma.LetterOfCreditUpdateWithoutPurchaseOrdersInput>, Prisma.LetterOfCreditUncheckedUpdateWithoutPurchaseOrdersInput>
 }
 
+export type LetterOfCreditCreateNestedOneWithoutStockOutsInput = {
+  create?: Prisma.XOR<Prisma.LetterOfCreditCreateWithoutStockOutsInput, Prisma.LetterOfCreditUncheckedCreateWithoutStockOutsInput>
+  connectOrCreate?: Prisma.LetterOfCreditCreateOrConnectWithoutStockOutsInput
+  connect?: Prisma.LetterOfCreditWhereUniqueInput
+}
+
+export type LetterOfCreditUpdateOneRequiredWithoutStockOutsNestedInput = {
+  create?: Prisma.XOR<Prisma.LetterOfCreditCreateWithoutStockOutsInput, Prisma.LetterOfCreditUncheckedCreateWithoutStockOutsInput>
+  connectOrCreate?: Prisma.LetterOfCreditCreateOrConnectWithoutStockOutsInput
+  upsert?: Prisma.LetterOfCreditUpsertWithoutStockOutsInput
+  connect?: Prisma.LetterOfCreditWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LetterOfCreditUpdateToOneWithWhereWithoutStockOutsInput, Prisma.LetterOfCreditUpdateWithoutStockOutsInput>, Prisma.LetterOfCreditUncheckedUpdateWithoutStockOutsInput>
+}
+
 export type LetterOfCreditCreateWithoutBuyerInput = {
   lcNumber: string
   createdAt?: Date | string
   updatedAt?: Date | string
   purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutLetterOfCreditInput
+  stockOuts?: Prisma.StockOutCreateNestedManyWithoutLetterOfCreditInput
 }
 
 export type LetterOfCreditUncheckedCreateWithoutBuyerInput = {
@@ -451,6 +473,7 @@ export type LetterOfCreditUncheckedCreateWithoutBuyerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutLetterOfCreditInput
+  stockOuts?: Prisma.StockOutUncheckedCreateNestedManyWithoutLetterOfCreditInput
 }
 
 export type LetterOfCreditCreateOrConnectWithoutBuyerInput = {
@@ -495,6 +518,7 @@ export type LetterOfCreditCreateWithoutPurchaseOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   buyer: Prisma.BuyerCreateNestedOneWithoutLettersOfCreditInput
+  stockOuts?: Prisma.StockOutCreateNestedManyWithoutLetterOfCreditInput
 }
 
 export type LetterOfCreditUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -503,6 +527,7 @@ export type LetterOfCreditUncheckedCreateWithoutPurchaseOrdersInput = {
   buyerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  stockOuts?: Prisma.StockOutUncheckedCreateNestedManyWithoutLetterOfCreditInput
 }
 
 export type LetterOfCreditCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -526,6 +551,7 @@ export type LetterOfCreditUpdateWithoutPurchaseOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyer?: Prisma.BuyerUpdateOneRequiredWithoutLettersOfCreditNestedInput
+  stockOuts?: Prisma.StockOutUpdateManyWithoutLetterOfCreditNestedInput
 }
 
 export type LetterOfCreditUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -534,6 +560,57 @@ export type LetterOfCreditUncheckedUpdateWithoutPurchaseOrdersInput = {
   buyerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockOuts?: Prisma.StockOutUncheckedUpdateManyWithoutLetterOfCreditNestedInput
+}
+
+export type LetterOfCreditCreateWithoutStockOutsInput = {
+  lcNumber: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyer: Prisma.BuyerCreateNestedOneWithoutLettersOfCreditInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutLetterOfCreditInput
+}
+
+export type LetterOfCreditUncheckedCreateWithoutStockOutsInput = {
+  id?: number
+  lcNumber: string
+  buyerId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutLetterOfCreditInput
+}
+
+export type LetterOfCreditCreateOrConnectWithoutStockOutsInput = {
+  where: Prisma.LetterOfCreditWhereUniqueInput
+  create: Prisma.XOR<Prisma.LetterOfCreditCreateWithoutStockOutsInput, Prisma.LetterOfCreditUncheckedCreateWithoutStockOutsInput>
+}
+
+export type LetterOfCreditUpsertWithoutStockOutsInput = {
+  update: Prisma.XOR<Prisma.LetterOfCreditUpdateWithoutStockOutsInput, Prisma.LetterOfCreditUncheckedUpdateWithoutStockOutsInput>
+  create: Prisma.XOR<Prisma.LetterOfCreditCreateWithoutStockOutsInput, Prisma.LetterOfCreditUncheckedCreateWithoutStockOutsInput>
+  where?: Prisma.LetterOfCreditWhereInput
+}
+
+export type LetterOfCreditUpdateToOneWithWhereWithoutStockOutsInput = {
+  where?: Prisma.LetterOfCreditWhereInput
+  data: Prisma.XOR<Prisma.LetterOfCreditUpdateWithoutStockOutsInput, Prisma.LetterOfCreditUncheckedUpdateWithoutStockOutsInput>
+}
+
+export type LetterOfCreditUpdateWithoutStockOutsInput = {
+  lcNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyer?: Prisma.BuyerUpdateOneRequiredWithoutLettersOfCreditNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutLetterOfCreditNestedInput
+}
+
+export type LetterOfCreditUncheckedUpdateWithoutStockOutsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  lcNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  buyerId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutLetterOfCreditNestedInput
 }
 
 export type LetterOfCreditCreateManyBuyerInput = {
@@ -548,6 +625,7 @@ export type LetterOfCreditUpdateWithoutBuyerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutLetterOfCreditNestedInput
+  stockOuts?: Prisma.StockOutUpdateManyWithoutLetterOfCreditNestedInput
 }
 
 export type LetterOfCreditUncheckedUpdateWithoutBuyerInput = {
@@ -556,6 +634,7 @@ export type LetterOfCreditUncheckedUpdateWithoutBuyerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutLetterOfCreditNestedInput
+  stockOuts?: Prisma.StockOutUncheckedUpdateManyWithoutLetterOfCreditNestedInput
 }
 
 export type LetterOfCreditUncheckedUpdateManyWithoutBuyerInput = {
@@ -572,10 +651,12 @@ export type LetterOfCreditUncheckedUpdateManyWithoutBuyerInput = {
 
 export type LetterOfCreditCountOutputType = {
   purchaseOrders: number
+  stockOuts: number
 }
 
 export type LetterOfCreditCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   purchaseOrders?: boolean | LetterOfCreditCountOutputTypeCountPurchaseOrdersArgs
+  stockOuts?: boolean | LetterOfCreditCountOutputTypeCountStockOutsArgs
 }
 
 /**
@@ -595,6 +676,13 @@ export type LetterOfCreditCountOutputTypeCountPurchaseOrdersArgs<ExtArgs extends
   where?: Prisma.PurchaseOrderWhereInput
 }
 
+/**
+ * LetterOfCreditCountOutputType without action
+ */
+export type LetterOfCreditCountOutputTypeCountStockOutsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockOutWhereInput
+}
+
 
 export type LetterOfCreditSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -604,6 +692,7 @@ export type LetterOfCreditSelect<ExtArgs extends runtime.Types.Extensions.Intern
   updatedAt?: boolean
   buyer?: boolean | Prisma.BuyerDefaultArgs<ExtArgs>
   purchaseOrders?: boolean | Prisma.LetterOfCredit$purchaseOrdersArgs<ExtArgs>
+  stockOuts?: boolean | Prisma.LetterOfCredit$stockOutsArgs<ExtArgs>
   _count?: boolean | Prisma.LetterOfCreditCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["letterOfCredit"]>
 
@@ -637,6 +726,7 @@ export type LetterOfCreditOmit<ExtArgs extends runtime.Types.Extensions.Internal
 export type LetterOfCreditInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   buyer?: boolean | Prisma.BuyerDefaultArgs<ExtArgs>
   purchaseOrders?: boolean | Prisma.LetterOfCredit$purchaseOrdersArgs<ExtArgs>
+  stockOuts?: boolean | Prisma.LetterOfCredit$stockOutsArgs<ExtArgs>
   _count?: boolean | Prisma.LetterOfCreditCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LetterOfCreditIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -651,6 +741,7 @@ export type $LetterOfCreditPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     buyer: Prisma.$BuyerPayload<ExtArgs>
     purchaseOrders: Prisma.$PurchaseOrderPayload<ExtArgs>[]
+    stockOuts: Prisma.$StockOutPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1054,6 +1145,7 @@ export interface Prisma__LetterOfCreditClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   buyer<T extends Prisma.BuyerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BuyerDefaultArgs<ExtArgs>>): Prisma.Prisma__BuyerClient<runtime.Types.Result.GetResult<Prisma.$BuyerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   purchaseOrders<T extends Prisma.LetterOfCredit$purchaseOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LetterOfCredit$purchaseOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockOuts<T extends Prisma.LetterOfCredit$stockOutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LetterOfCredit$stockOutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockOutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1510,6 +1602,30 @@ export type LetterOfCredit$purchaseOrdersArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.PurchaseOrderScalarFieldEnum | Prisma.PurchaseOrderScalarFieldEnum[]
+}
+
+/**
+ * LetterOfCredit.stockOuts
+ */
+export type LetterOfCredit$stockOutsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockOut
+   */
+  select?: Prisma.StockOutSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockOut
+   */
+  omit?: Prisma.StockOutOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockOutInclude<ExtArgs> | null
+  where?: Prisma.StockOutWhereInput
+  orderBy?: Prisma.StockOutOrderByWithRelationInput | Prisma.StockOutOrderByWithRelationInput[]
+  cursor?: Prisma.StockOutWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockOutScalarFieldEnum | Prisma.StockOutScalarFieldEnum[]
 }
 
 /**

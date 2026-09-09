@@ -72,7 +72,10 @@ export const ModelName = {
   PurchaseOrder: 'PurchaseOrder',
   StockIn: 'StockIn',
   StockInItem: 'StockInItem',
-  Inventory: 'Inventory'
+  Inventory: 'Inventory',
+  InventoryBatch: 'InventoryBatch',
+  StockOut: 'StockOut',
+  StockOutItem: 'StockOutItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -388,6 +391,50 @@ export const InventoryScalarFieldEnum = {
 } as const
 
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
+
+
+export const InventoryBatchScalarFieldEnum = {
+  id: 'id',
+  inventoryId: 'inventoryId',
+  stockInItemId: 'stockInItemId',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventoryBatchScalarFieldEnum = (typeof InventoryBatchScalarFieldEnum)[keyof typeof InventoryBatchScalarFieldEnum]
+
+
+export const StockOutScalarFieldEnum = {
+  id: 'id',
+  stockOutNumber: 'stockOutNumber',
+  buyerId: 'buyerId',
+  letterOfCreditId: 'letterOfCreditId',
+  purchaseOrderId: 'purchaseOrderId',
+  masterProductId: 'masterProductId',
+  colorId: 'colorId',
+  gender: 'gender',
+  requestDate: 'requestDate',
+  stockOutDate: 'stockOutDate',
+  status: 'status',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockOutScalarFieldEnum = (typeof StockOutScalarFieldEnum)[keyof typeof StockOutScalarFieldEnum]
+
+
+export const StockOutItemScalarFieldEnum = {
+  id: 'id',
+  stockOutId: 'stockOutId',
+  inventoryBatchId: 'inventoryBatchId',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockOutItemScalarFieldEnum = (typeof StockOutItemScalarFieldEnum)[keyof typeof StockOutItemScalarFieldEnum]
 
 
 export const SortOrder = {

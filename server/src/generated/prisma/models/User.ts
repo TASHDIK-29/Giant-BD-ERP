@@ -280,6 +280,7 @@ export type UserWhereInput = {
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   loginOtps?: Prisma.LoginOtpListRelationFilter
   stockInsCreated?: Prisma.StockInListRelationFilter
+  stockOutsCreated?: Prisma.StockOutListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -299,6 +300,7 @@ export type UserOrderByWithRelationInput = {
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   loginOtps?: Prisma.LoginOtpOrderByRelationAggregateInput
   stockInsCreated?: Prisma.StockInOrderByRelationAggregateInput
+  stockOutsCreated?: Prisma.StockOutOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -321,6 +323,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   loginOtps?: Prisma.LoginOtpListRelationFilter
   stockInsCreated?: Prisma.StockInListRelationFilter
+  stockOutsCreated?: Prisma.StockOutListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -376,6 +379,7 @@ export type UserCreateInput = {
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   loginOtps?: Prisma.LoginOtpCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -394,6 +398,7 @@ export type UserUncheckedCreateInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   loginOtps?: Prisma.LoginOtpUncheckedCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInUncheckedCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -411,6 +416,7 @@ export type UserUpdateInput = {
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   loginOtps?: Prisma.LoginOtpUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -429,6 +435,7 @@ export type UserUncheckedUpdateInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   loginOtps?: Prisma.LoginOtpUncheckedUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -656,6 +663,20 @@ export type UserUpdateOneRequiredWithoutStockInsCreatedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStockInsCreatedInput, Prisma.UserUpdateWithoutStockInsCreatedInput>, Prisma.UserUncheckedUpdateWithoutStockInsCreatedInput>
 }
 
+export type UserCreateNestedOneWithoutStockOutsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStockOutsCreatedInput, Prisma.UserUncheckedCreateWithoutStockOutsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStockOutsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStockOutsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStockOutsCreatedInput, Prisma.UserUncheckedCreateWithoutStockOutsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStockOutsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutStockOutsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStockOutsCreatedInput, Prisma.UserUpdateWithoutStockOutsCreatedInput>, Prisma.UserUncheckedUpdateWithoutStockOutsCreatedInput>
+}
+
 export type UserCreateWithoutRoleInput = {
   email: string
   password: string
@@ -670,6 +691,7 @@ export type UserCreateWithoutRoleInput = {
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   loginOtps?: Prisma.LoginOtpCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutRoleInput = {
@@ -687,6 +709,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   loginOtps?: Prisma.LoginOtpUncheckedCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInUncheckedCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutRoleInput = {
@@ -747,6 +770,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
   loginOtps?: Prisma.LoginOtpCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -764,6 +788,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   updatedAt?: Date | string
   loginOtps?: Prisma.LoginOtpUncheckedCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInUncheckedCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -796,6 +821,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
   loginOtps?: Prisma.LoginOtpUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -813,6 +839,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   loginOtps?: Prisma.LoginOtpUncheckedUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutLoginOtpsInput = {
@@ -829,6 +856,7 @@ export type UserCreateWithoutLoginOtpsInput = {
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLoginOtpsInput = {
@@ -846,6 +874,7 @@ export type UserUncheckedCreateWithoutLoginOtpsInput = {
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   stockInsCreated?: Prisma.StockInUncheckedCreateNestedManyWithoutCreatedByInput
+  stockOutsCreated?: Prisma.StockOutUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLoginOtpsInput = {
@@ -878,6 +907,7 @@ export type UserUpdateWithoutLoginOtpsInput = {
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLoginOtpsInput = {
@@ -895,6 +925,7 @@ export type UserUncheckedUpdateWithoutLoginOtpsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutStockInsCreatedInput = {
@@ -911,6 +942,7 @@ export type UserCreateWithoutStockInsCreatedInput = {
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   loginOtps?: Prisma.LoginOtpCreateNestedManyWithoutUserInput
+  stockOutsCreated?: Prisma.StockOutCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutStockInsCreatedInput = {
@@ -928,6 +960,7 @@ export type UserUncheckedCreateWithoutStockInsCreatedInput = {
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   loginOtps?: Prisma.LoginOtpUncheckedCreateNestedManyWithoutUserInput
+  stockOutsCreated?: Prisma.StockOutUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutStockInsCreatedInput = {
@@ -960,6 +993,7 @@ export type UserUpdateWithoutStockInsCreatedInput = {
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   loginOtps?: Prisma.LoginOtpUpdateManyWithoutUserNestedInput
+  stockOutsCreated?: Prisma.StockOutUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStockInsCreatedInput = {
@@ -977,6 +1011,93 @@ export type UserUncheckedUpdateWithoutStockInsCreatedInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   loginOtps?: Prisma.LoginOtpUncheckedUpdateManyWithoutUserNestedInput
+  stockOutsCreated?: Prisma.StockOutUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutStockOutsCreatedInput = {
+  email: string
+  password: string
+  name: string
+  phone?: string | null
+  gender?: $Enums.Gender | null
+  avatar?: string | null
+  signature?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role: Prisma.RoleCreateNestedOneWithoutUsersInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  loginOtps?: Prisma.LoginOtpCreateNestedManyWithoutUserInput
+  stockInsCreated?: Prisma.StockInCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutStockOutsCreatedInput = {
+  id?: number
+  email: string
+  password: string
+  name: string
+  phone?: string | null
+  gender?: $Enums.Gender | null
+  avatar?: string | null
+  signature?: string | null
+  roleId: number
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  loginOtps?: Prisma.LoginOtpUncheckedCreateNestedManyWithoutUserInput
+  stockInsCreated?: Prisma.StockInUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutStockOutsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStockOutsCreatedInput, Prisma.UserUncheckedCreateWithoutStockOutsCreatedInput>
+}
+
+export type UserUpsertWithoutStockOutsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStockOutsCreatedInput, Prisma.UserUncheckedUpdateWithoutStockOutsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStockOutsCreatedInput, Prisma.UserUncheckedCreateWithoutStockOutsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStockOutsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStockOutsCreatedInput, Prisma.UserUncheckedUpdateWithoutStockOutsCreatedInput>
+}
+
+export type UserUpdateWithoutStockOutsCreatedInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signature?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  loginOtps?: Prisma.LoginOtpUpdateManyWithoutUserNestedInput
+  stockInsCreated?: Prisma.StockInUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStockOutsCreatedInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signature?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  loginOtps?: Prisma.LoginOtpUncheckedUpdateManyWithoutUserNestedInput
+  stockInsCreated?: Prisma.StockInUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyRoleInput = {
@@ -1007,6 +1128,7 @@ export type UserUpdateWithoutRoleInput = {
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   loginOtps?: Prisma.LoginOtpUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoleInput = {
@@ -1024,6 +1146,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   loginOtps?: Prisma.LoginOtpUncheckedUpdateManyWithoutUserNestedInput
   stockInsCreated?: Prisma.StockInUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockOutsCreated?: Prisma.StockOutUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -1049,12 +1172,14 @@ export type UserCountOutputType = {
   refreshTokens: number
   loginOtps: number
   stockInsCreated: number
+  stockOutsCreated: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   loginOtps?: boolean | UserCountOutputTypeCountLoginOtpsArgs
   stockInsCreated?: boolean | UserCountOutputTypeCountStockInsCreatedArgs
+  stockOutsCreated?: boolean | UserCountOutputTypeCountStockOutsCreatedArgs
 }
 
 /**
@@ -1088,6 +1213,13 @@ export type UserCountOutputTypeCountStockInsCreatedArgs<ExtArgs extends runtime.
   where?: Prisma.StockInWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStockOutsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockOutWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1106,6 +1238,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   loginOtps?: boolean | Prisma.User$loginOtpsArgs<ExtArgs>
   stockInsCreated?: boolean | Prisma.User$stockInsCreatedArgs<ExtArgs>
+  stockOutsCreated?: boolean | Prisma.User$stockOutsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1162,6 +1295,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   loginOtps?: boolean | Prisma.User$loginOtpsArgs<ExtArgs>
   stockInsCreated?: boolean | Prisma.User$stockInsCreatedArgs<ExtArgs>
+  stockOutsCreated?: boolean | Prisma.User$stockOutsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1178,6 +1312,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     loginOtps: Prisma.$LoginOtpPayload<ExtArgs>[]
     stockInsCreated: Prisma.$StockInPayload<ExtArgs>[]
+    stockOutsCreated: Prisma.$StockOutPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1590,6 +1725,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   loginOtps<T extends Prisma.User$loginOtpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loginOtpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockInsCreated<T extends Prisma.User$stockInsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockInsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockOutsCreated<T extends Prisma.User$stockOutsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockOutsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockOutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2101,6 +2237,30 @@ export type User$stockInsCreatedArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.StockInScalarFieldEnum | Prisma.StockInScalarFieldEnum[]
+}
+
+/**
+ * User.stockOutsCreated
+ */
+export type User$stockOutsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockOut
+   */
+  select?: Prisma.StockOutSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockOut
+   */
+  omit?: Prisma.StockOutOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockOutInclude<ExtArgs> | null
+  where?: Prisma.StockOutWhereInput
+  orderBy?: Prisma.StockOutOrderByWithRelationInput | Prisma.StockOutOrderByWithRelationInput[]
+  cursor?: Prisma.StockOutWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockOutScalarFieldEnum | Prisma.StockOutScalarFieldEnum[]
 }
 
 /**
