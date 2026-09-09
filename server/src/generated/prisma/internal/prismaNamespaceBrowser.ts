@@ -415,6 +415,8 @@ export type StockOutScalarFieldEnum = (typeof StockOutScalarFieldEnum)[keyof typ
 export const StockOutItemScalarFieldEnum = {
   id: 'id',
   stockOutId: 'stockOutId',
+  batchId: 'batchId',
+  productVariantId: 'productVariantId',
   quantity: 'quantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

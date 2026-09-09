@@ -256,8 +256,9 @@ model ProductVariant {
   stockInItems StockInItem[]
   inventories  Inventory[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  stockOutItems StockOutItem[]
 
   @@unique([masterProductId, colorId, gender, size])
   @@index([masterProductId])
@@ -524,43 +525,6 @@ model Inventory {
   @@index([rackId])
 }
 
-// model InventoryBatch {
-//   id Int @id @default(autoincrement())
-
-//   /**
-//    * Physical inventory location.
-//    */
-//   inventoryId Int
-
-//   inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
-
-//   /**
-//    * Original Stock In source.
-//    */
-//   stockInItemId Int
-
-//   stockInItem StockInItem @relation(fields: [stockInItemId], references: [id], onDelete: Restrict)
-
-//   /**
-//    * Remaining quantity from this particular
-//    * Stock In item at this location.
-//    */
-//   quantity Int @default(0)
-
-//   stockOutItems StockOutItem[]
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   /**
-//    * One StockInItem should create one batch record
-//    * for one Inventory location.
-//    */
-//   @@unique([inventoryId, stockInItemId])
-//   @@index([inventoryId])
-//   @@index([stockInItemId])
-// }
-
 model StockOut {
   id Int @id @default(autoincrement())
 
@@ -635,27 +599,20 @@ model StockOutItem {
 
   stockOut StockOut @relation(fields: [stockOutId], references: [id], onDelete: Cascade)
 
-  /**
-   * Exact batch and location from which
-   * the inventory is being issued.
-   */
-  // inventoryBatchId Int
+  batchId String
 
-  // inventoryBatch InventoryBatch @relation(fields: [inventoryBatchId], references: [id], onDelete: Restrict)
+  productVariantId Int
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Restrict)
 
   quantity Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  /**
-   * Prevent duplicate allocations from the same
-   * InventoryBatch within one Stock Out transaction.
-   */
-  // @@unique([stockOutId, inventoryBatchId])
-  @@unique([stockOutId])
+  @@unique([stockOutId, batchId, productVariantId])
   @@index([stockOutId])
-  // @@index([inventoryBatchId])
+  @@index([batchId])
+  @@index([productVariantId])
 }
 
 enum BuyerType {

@@ -296,6 +296,7 @@ export type ProductVariantWhereInput = {
   color?: Prisma.XOR<Prisma.ColorScalarRelationFilter, Prisma.ColorWhereInput>
   stockInItems?: Prisma.StockInItemListRelationFilter
   inventories?: Prisma.InventoryListRelationFilter
+  stockOutItems?: Prisma.StockOutItemListRelationFilter
 }
 
 export type ProductVariantOrderByWithRelationInput = {
@@ -316,6 +317,7 @@ export type ProductVariantOrderByWithRelationInput = {
   color?: Prisma.ColorOrderByWithRelationInput
   stockInItems?: Prisma.StockInItemOrderByRelationAggregateInput
   inventories?: Prisma.InventoryOrderByRelationAggregateInput
+  stockOutItems?: Prisma.StockOutItemOrderByRelationAggregateInput
 }
 
 export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
@@ -340,6 +342,7 @@ export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
   color?: Prisma.XOR<Prisma.ColorScalarRelationFilter, Prisma.ColorWhereInput>
   stockInItems?: Prisma.StockInItemListRelationFilter
   inventories?: Prisma.InventoryListRelationFilter
+  stockOutItems?: Prisma.StockOutItemListRelationFilter
 }, "id" | "sku" | "masterProductId_colorId_gender_size">
 
 export type ProductVariantOrderByWithAggregationInput = {
@@ -397,6 +400,7 @@ export type ProductVariantCreateInput = {
   color: Prisma.ColorCreateNestedOneWithoutProductVariantsInput
   stockInItems?: Prisma.StockInItemCreateNestedManyWithoutProductVariantInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantUncheckedCreateInput = {
@@ -415,6 +419,7 @@ export type ProductVariantUncheckedCreateInput = {
   updatedAt?: Date | string
   stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutProductVariantInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemUncheckedCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantUpdateInput = {
@@ -432,6 +437,7 @@ export type ProductVariantUpdateInput = {
   color?: Prisma.ColorUpdateOneRequiredWithoutProductVariantsNestedInput
   stockInItems?: Prisma.StockInItemUpdateManyWithoutProductVariantNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateInput = {
@@ -450,6 +456,7 @@ export type ProductVariantUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutProductVariantNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUncheckedUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantCreateManyInput = {
@@ -705,6 +712,20 @@ export type ProductVariantUpdateOneRequiredWithoutInventoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductVariantUpdateToOneWithWhereWithoutInventoriesInput, Prisma.ProductVariantUpdateWithoutInventoriesInput>, Prisma.ProductVariantUncheckedUpdateWithoutInventoriesInput>
 }
 
+export type ProductVariantCreateNestedOneWithoutStockOutItemsInput = {
+  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutStockOutItemsInput, Prisma.ProductVariantUncheckedCreateWithoutStockOutItemsInput>
+  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutStockOutItemsInput
+  connect?: Prisma.ProductVariantWhereUniqueInput
+}
+
+export type ProductVariantUpdateOneRequiredWithoutStockOutItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutStockOutItemsInput, Prisma.ProductVariantUncheckedCreateWithoutStockOutItemsInput>
+  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutStockOutItemsInput
+  upsert?: Prisma.ProductVariantUpsertWithoutStockOutItemsInput
+  connect?: Prisma.ProductVariantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductVariantUpdateToOneWithWhereWithoutStockOutItemsInput, Prisma.ProductVariantUpdateWithoutStockOutItemsInput>, Prisma.ProductVariantUncheckedUpdateWithoutStockOutItemsInput>
+}
+
 export type ProductVariantCreateWithoutColorInput = {
   gender: $Enums.Gender
   size: string
@@ -719,6 +740,7 @@ export type ProductVariantCreateWithoutColorInput = {
   masterProduct: Prisma.MasterProductCreateNestedOneWithoutVariantsInput
   stockInItems?: Prisma.StockInItemCreateNestedManyWithoutProductVariantInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantUncheckedCreateWithoutColorInput = {
@@ -736,6 +758,7 @@ export type ProductVariantUncheckedCreateWithoutColorInput = {
   updatedAt?: Date | string
   stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutProductVariantInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemUncheckedCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantCreateOrConnectWithoutColorInput = {
@@ -797,6 +820,7 @@ export type ProductVariantCreateWithoutMasterProductInput = {
   color: Prisma.ColorCreateNestedOneWithoutProductVariantsInput
   stockInItems?: Prisma.StockInItemCreateNestedManyWithoutProductVariantInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantUncheckedCreateWithoutMasterProductInput = {
@@ -814,6 +838,7 @@ export type ProductVariantUncheckedCreateWithoutMasterProductInput = {
   updatedAt?: Date | string
   stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutProductVariantInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemUncheckedCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantCreateOrConnectWithoutMasterProductInput = {
@@ -856,6 +881,7 @@ export type ProductVariantCreateWithoutStockInItemsInput = {
   masterProduct: Prisma.MasterProductCreateNestedOneWithoutVariantsInput
   color: Prisma.ColorCreateNestedOneWithoutProductVariantsInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantUncheckedCreateWithoutStockInItemsInput = {
@@ -873,6 +899,7 @@ export type ProductVariantUncheckedCreateWithoutStockInItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemUncheckedCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantCreateOrConnectWithoutStockInItemsInput = {
@@ -905,6 +932,7 @@ export type ProductVariantUpdateWithoutStockInItemsInput = {
   masterProduct?: Prisma.MasterProductUpdateOneRequiredWithoutVariantsNestedInput
   color?: Prisma.ColorUpdateOneRequiredWithoutProductVariantsNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateWithoutStockInItemsInput = {
@@ -922,6 +950,7 @@ export type ProductVariantUncheckedUpdateWithoutStockInItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUncheckedUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantCreateWithoutInventoriesInput = {
@@ -938,6 +967,7 @@ export type ProductVariantCreateWithoutInventoriesInput = {
   masterProduct: Prisma.MasterProductCreateNestedOneWithoutVariantsInput
   color: Prisma.ColorCreateNestedOneWithoutProductVariantsInput
   stockInItems?: Prisma.StockInItemCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantUncheckedCreateWithoutInventoriesInput = {
@@ -955,6 +985,7 @@ export type ProductVariantUncheckedCreateWithoutInventoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutProductVariantInput
+  stockOutItems?: Prisma.StockOutItemUncheckedCreateNestedManyWithoutProductVariantInput
 }
 
 export type ProductVariantCreateOrConnectWithoutInventoriesInput = {
@@ -987,6 +1018,7 @@ export type ProductVariantUpdateWithoutInventoriesInput = {
   masterProduct?: Prisma.MasterProductUpdateOneRequiredWithoutVariantsNestedInput
   color?: Prisma.ColorUpdateOneRequiredWithoutProductVariantsNestedInput
   stockInItems?: Prisma.StockInItemUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateWithoutInventoriesInput = {
@@ -1004,6 +1036,93 @@ export type ProductVariantUncheckedUpdateWithoutInventoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUncheckedUpdateManyWithoutProductVariantNestedInput
+}
+
+export type ProductVariantCreateWithoutStockOutItemsInput = {
+  gender: $Enums.Gender
+  size: string
+  sku: string
+  modelNumber?: string | null
+  uom: $Enums.Uom
+  productsPerPacket: number
+  packagingType: $Enums.PackagingType
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  masterProduct: Prisma.MasterProductCreateNestedOneWithoutVariantsInput
+  color: Prisma.ColorCreateNestedOneWithoutProductVariantsInput
+  stockInItems?: Prisma.StockInItemCreateNestedManyWithoutProductVariantInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutProductVariantInput
+}
+
+export type ProductVariantUncheckedCreateWithoutStockOutItemsInput = {
+  id?: number
+  masterProductId: number
+  colorId: number
+  gender: $Enums.Gender
+  size: string
+  sku: string
+  modelNumber?: string | null
+  uom: $Enums.Uom
+  productsPerPacket: number
+  packagingType: $Enums.PackagingType
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stockInItems?: Prisma.StockInItemUncheckedCreateNestedManyWithoutProductVariantInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutProductVariantInput
+}
+
+export type ProductVariantCreateOrConnectWithoutStockOutItemsInput = {
+  where: Prisma.ProductVariantWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductVariantCreateWithoutStockOutItemsInput, Prisma.ProductVariantUncheckedCreateWithoutStockOutItemsInput>
+}
+
+export type ProductVariantUpsertWithoutStockOutItemsInput = {
+  update: Prisma.XOR<Prisma.ProductVariantUpdateWithoutStockOutItemsInput, Prisma.ProductVariantUncheckedUpdateWithoutStockOutItemsInput>
+  create: Prisma.XOR<Prisma.ProductVariantCreateWithoutStockOutItemsInput, Prisma.ProductVariantUncheckedCreateWithoutStockOutItemsInput>
+  where?: Prisma.ProductVariantWhereInput
+}
+
+export type ProductVariantUpdateToOneWithWhereWithoutStockOutItemsInput = {
+  where?: Prisma.ProductVariantWhereInput
+  data: Prisma.XOR<Prisma.ProductVariantUpdateWithoutStockOutItemsInput, Prisma.ProductVariantUncheckedUpdateWithoutStockOutItemsInput>
+}
+
+export type ProductVariantUpdateWithoutStockOutItemsInput = {
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  size?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  modelNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uom?: Prisma.EnumUomFieldUpdateOperationsInput | $Enums.Uom
+  productsPerPacket?: Prisma.IntFieldUpdateOperationsInput | number
+  packagingType?: Prisma.EnumPackagingTypeFieldUpdateOperationsInput | $Enums.PackagingType
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  masterProduct?: Prisma.MasterProductUpdateOneRequiredWithoutVariantsNestedInput
+  color?: Prisma.ColorUpdateOneRequiredWithoutProductVariantsNestedInput
+  stockInItems?: Prisma.StockInItemUpdateManyWithoutProductVariantNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutProductVariantNestedInput
+}
+
+export type ProductVariantUncheckedUpdateWithoutStockOutItemsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  masterProductId?: Prisma.IntFieldUpdateOperationsInput | number
+  colorId?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  size?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  modelNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uom?: Prisma.EnumUomFieldUpdateOperationsInput | $Enums.Uom
+  productsPerPacket?: Prisma.IntFieldUpdateOperationsInput | number
+  packagingType?: Prisma.EnumPackagingTypeFieldUpdateOperationsInput | $Enums.PackagingType
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutProductVariantNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantCreateManyColorInput = {
@@ -1035,6 +1154,7 @@ export type ProductVariantUpdateWithoutColorInput = {
   masterProduct?: Prisma.MasterProductUpdateOneRequiredWithoutVariantsNestedInput
   stockInItems?: Prisma.StockInItemUpdateManyWithoutProductVariantNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateWithoutColorInput = {
@@ -1052,6 +1172,7 @@ export type ProductVariantUncheckedUpdateWithoutColorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutProductVariantNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUncheckedUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateManyWithoutColorInput = {
@@ -1098,6 +1219,7 @@ export type ProductVariantUpdateWithoutMasterProductInput = {
   color?: Prisma.ColorUpdateOneRequiredWithoutProductVariantsNestedInput
   stockInItems?: Prisma.StockInItemUpdateManyWithoutProductVariantNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateWithoutMasterProductInput = {
@@ -1115,6 +1237,7 @@ export type ProductVariantUncheckedUpdateWithoutMasterProductInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stockInItems?: Prisma.StockInItemUncheckedUpdateManyWithoutProductVariantNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutProductVariantNestedInput
+  stockOutItems?: Prisma.StockOutItemUncheckedUpdateManyWithoutProductVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateManyWithoutMasterProductInput = {
@@ -1140,11 +1263,13 @@ export type ProductVariantUncheckedUpdateManyWithoutMasterProductInput = {
 export type ProductVariantCountOutputType = {
   stockInItems: number
   inventories: number
+  stockOutItems: number
 }
 
 export type ProductVariantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stockInItems?: boolean | ProductVariantCountOutputTypeCountStockInItemsArgs
   inventories?: boolean | ProductVariantCountOutputTypeCountInventoriesArgs
+  stockOutItems?: boolean | ProductVariantCountOutputTypeCountStockOutItemsArgs
 }
 
 /**
@@ -1171,6 +1296,13 @@ export type ProductVariantCountOutputTypeCountInventoriesArgs<ExtArgs extends ru
   where?: Prisma.InventoryWhereInput
 }
 
+/**
+ * ProductVariantCountOutputType without action
+ */
+export type ProductVariantCountOutputTypeCountStockOutItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockOutItemWhereInput
+}
+
 
 export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1190,6 +1322,7 @@ export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.Intern
   color?: boolean | Prisma.ColorDefaultArgs<ExtArgs>
   stockInItems?: boolean | Prisma.ProductVariant$stockInItemsArgs<ExtArgs>
   inventories?: boolean | Prisma.ProductVariant$inventoriesArgs<ExtArgs>
+  stockOutItems?: boolean | Prisma.ProductVariant$stockOutItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productVariant"]>
 
@@ -1251,6 +1384,7 @@ export type ProductVariantInclude<ExtArgs extends runtime.Types.Extensions.Inter
   color?: boolean | Prisma.ColorDefaultArgs<ExtArgs>
   stockInItems?: boolean | Prisma.ProductVariant$stockInItemsArgs<ExtArgs>
   inventories?: boolean | Prisma.ProductVariant$inventoriesArgs<ExtArgs>
+  stockOutItems?: boolean | Prisma.ProductVariant$stockOutItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductVariantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1269,6 +1403,7 @@ export type $ProductVariantPayload<ExtArgs extends runtime.Types.Extensions.Inte
     color: Prisma.$ColorPayload<ExtArgs>
     stockInItems: Prisma.$StockInItemPayload<ExtArgs>[]
     inventories: Prisma.$InventoryPayload<ExtArgs>[]
+    stockOutItems: Prisma.$StockOutItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1682,6 +1817,7 @@ export interface Prisma__ProductVariantClient<T, Null = never, ExtArgs extends r
   color<T extends Prisma.ColorDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ColorDefaultArgs<ExtArgs>>): Prisma.Prisma__ColorClient<runtime.Types.Result.GetResult<Prisma.$ColorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stockInItems<T extends Prisma.ProductVariant$stockInItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductVariant$stockInItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockInItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inventories<T extends Prisma.ProductVariant$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductVariant$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockOutItems<T extends Prisma.ProductVariant$stockOutItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductVariant$stockOutItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockOutItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2170,6 +2306,30 @@ export type ProductVariant$inventoriesArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.InventoryScalarFieldEnum | Prisma.InventoryScalarFieldEnum[]
+}
+
+/**
+ * ProductVariant.stockOutItems
+ */
+export type ProductVariant$stockOutItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockOutItem
+   */
+  select?: Prisma.StockOutItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockOutItem
+   */
+  omit?: Prisma.StockOutItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockOutItemInclude<ExtArgs> | null
+  where?: Prisma.StockOutItemWhereInput
+  orderBy?: Prisma.StockOutItemOrderByWithRelationInput | Prisma.StockOutItemOrderByWithRelationInput[]
+  cursor?: Prisma.StockOutItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockOutItemScalarFieldEnum | Prisma.StockOutItemScalarFieldEnum[]
 }
 
 /**
