@@ -29,21 +29,18 @@ export type AggregateStockOutItem = {
 export type StockOutItemAvgAggregateOutputType = {
   id: number | null
   stockOutId: number | null
-  inventoryBatchId: number | null
   quantity: number | null
 }
 
 export type StockOutItemSumAggregateOutputType = {
   id: number | null
   stockOutId: number | null
-  inventoryBatchId: number | null
   quantity: number | null
 }
 
 export type StockOutItemMinAggregateOutputType = {
   id: number | null
   stockOutId: number | null
-  inventoryBatchId: number | null
   quantity: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,7 +49,6 @@ export type StockOutItemMinAggregateOutputType = {
 export type StockOutItemMaxAggregateOutputType = {
   id: number | null
   stockOutId: number | null
-  inventoryBatchId: number | null
   quantity: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,7 +57,6 @@ export type StockOutItemMaxAggregateOutputType = {
 export type StockOutItemCountAggregateOutputType = {
   id: number
   stockOutId: number
-  inventoryBatchId: number
   quantity: number
   createdAt: number
   updatedAt: number
@@ -72,21 +67,18 @@ export type StockOutItemCountAggregateOutputType = {
 export type StockOutItemAvgAggregateInputType = {
   id?: true
   stockOutId?: true
-  inventoryBatchId?: true
   quantity?: true
 }
 
 export type StockOutItemSumAggregateInputType = {
   id?: true
   stockOutId?: true
-  inventoryBatchId?: true
   quantity?: true
 }
 
 export type StockOutItemMinAggregateInputType = {
   id?: true
   stockOutId?: true
-  inventoryBatchId?: true
   quantity?: true
   createdAt?: true
   updatedAt?: true
@@ -95,7 +87,6 @@ export type StockOutItemMinAggregateInputType = {
 export type StockOutItemMaxAggregateInputType = {
   id?: true
   stockOutId?: true
-  inventoryBatchId?: true
   quantity?: true
   createdAt?: true
   updatedAt?: true
@@ -104,7 +95,6 @@ export type StockOutItemMaxAggregateInputType = {
 export type StockOutItemCountAggregateInputType = {
   id?: true
   stockOutId?: true
-  inventoryBatchId?: true
   quantity?: true
   createdAt?: true
   updatedAt?: true
@@ -200,7 +190,6 @@ export type StockOutItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type StockOutItemGroupByOutputType = {
   id: number
   stockOutId: number
-  inventoryBatchId: number
   quantity: number
   createdAt: Date
   updatedAt: Date
@@ -232,44 +221,36 @@ export type StockOutItemWhereInput = {
   NOT?: Prisma.StockOutItemWhereInput | Prisma.StockOutItemWhereInput[]
   id?: Prisma.IntFilter<"StockOutItem"> | number
   stockOutId?: Prisma.IntFilter<"StockOutItem"> | number
-  inventoryBatchId?: Prisma.IntFilter<"StockOutItem"> | number
   quantity?: Prisma.IntFilter<"StockOutItem"> | number
   createdAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
   stockOut?: Prisma.XOR<Prisma.StockOutScalarRelationFilter, Prisma.StockOutWhereInput>
-  inventoryBatch?: Prisma.XOR<Prisma.InventoryBatchScalarRelationFilter, Prisma.InventoryBatchWhereInput>
 }
 
 export type StockOutItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   stockOut?: Prisma.StockOutOrderByWithRelationInput
-  inventoryBatch?: Prisma.InventoryBatchOrderByWithRelationInput
 }
 
 export type StockOutItemWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  stockOutId_inventoryBatchId?: Prisma.StockOutItemStockOutIdInventoryBatchIdCompoundUniqueInput
+  stockOutId?: number
   AND?: Prisma.StockOutItemWhereInput | Prisma.StockOutItemWhereInput[]
   OR?: Prisma.StockOutItemWhereInput[]
   NOT?: Prisma.StockOutItemWhereInput | Prisma.StockOutItemWhereInput[]
-  stockOutId?: Prisma.IntFilter<"StockOutItem"> | number
-  inventoryBatchId?: Prisma.IntFilter<"StockOutItem"> | number
   quantity?: Prisma.IntFilter<"StockOutItem"> | number
   createdAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
   stockOut?: Prisma.XOR<Prisma.StockOutScalarRelationFilter, Prisma.StockOutWhereInput>
-  inventoryBatch?: Prisma.XOR<Prisma.InventoryBatchScalarRelationFilter, Prisma.InventoryBatchWhereInput>
-}, "id" | "stockOutId_inventoryBatchId">
+}, "id" | "stockOutId">
 
 export type StockOutItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -286,7 +267,6 @@ export type StockOutItemScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StockOutItemScalarWhereWithAggregatesInput | Prisma.StockOutItemScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"StockOutItem"> | number
   stockOutId?: Prisma.IntWithAggregatesFilter<"StockOutItem"> | number
-  inventoryBatchId?: Prisma.IntWithAggregatesFilter<"StockOutItem"> | number
   quantity?: Prisma.IntWithAggregatesFilter<"StockOutItem"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StockOutItem"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"StockOutItem"> | Date | string
@@ -297,13 +277,11 @@ export type StockOutItemCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   stockOut: Prisma.StockOutCreateNestedOneWithoutItemsInput
-  inventoryBatch: Prisma.InventoryBatchCreateNestedOneWithoutStockOutItemsInput
 }
 
 export type StockOutItemUncheckedCreateInput = {
   id?: number
   stockOutId: number
-  inventoryBatchId: number
   quantity: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -314,13 +292,11 @@ export type StockOutItemUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stockOut?: Prisma.StockOutUpdateOneRequiredWithoutItemsNestedInput
-  inventoryBatch?: Prisma.InventoryBatchUpdateOneRequiredWithoutStockOutItemsNestedInput
 }
 
 export type StockOutItemUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   stockOutId?: Prisma.IntFieldUpdateOperationsInput | number
-  inventoryBatchId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -329,7 +305,6 @@ export type StockOutItemUncheckedUpdateInput = {
 export type StockOutItemCreateManyInput = {
   id?: number
   stockOutId: number
-  inventoryBatchId: number
   quantity: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -344,7 +319,6 @@ export type StockOutItemUpdateManyMutationInput = {
 export type StockOutItemUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   stockOutId?: Prisma.IntFieldUpdateOperationsInput | number
-  inventoryBatchId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -360,15 +334,9 @@ export type StockOutItemOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StockOutItemStockOutIdInventoryBatchIdCompoundUniqueInput = {
-  stockOutId: number
-  inventoryBatchId: number
-}
-
 export type StockOutItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -377,14 +345,12 @@ export type StockOutItemCountOrderByAggregateInput = {
 export type StockOutItemAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
 }
 
 export type StockOutItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -393,7 +359,6 @@ export type StockOutItemMaxOrderByAggregateInput = {
 export type StockOutItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -402,50 +367,7 @@ export type StockOutItemMinOrderByAggregateInput = {
 export type StockOutItemSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   stockOutId?: Prisma.SortOrder
-  inventoryBatchId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
-}
-
-export type StockOutItemCreateNestedManyWithoutInventoryBatchInput = {
-  create?: Prisma.XOR<Prisma.StockOutItemCreateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput> | Prisma.StockOutItemCreateWithoutInventoryBatchInput[] | Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput[]
-  connectOrCreate?: Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput | Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput[]
-  createMany?: Prisma.StockOutItemCreateManyInventoryBatchInputEnvelope
-  connect?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-}
-
-export type StockOutItemUncheckedCreateNestedManyWithoutInventoryBatchInput = {
-  create?: Prisma.XOR<Prisma.StockOutItemCreateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput> | Prisma.StockOutItemCreateWithoutInventoryBatchInput[] | Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput[]
-  connectOrCreate?: Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput | Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput[]
-  createMany?: Prisma.StockOutItemCreateManyInventoryBatchInputEnvelope
-  connect?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-}
-
-export type StockOutItemUpdateManyWithoutInventoryBatchNestedInput = {
-  create?: Prisma.XOR<Prisma.StockOutItemCreateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput> | Prisma.StockOutItemCreateWithoutInventoryBatchInput[] | Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput[]
-  connectOrCreate?: Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput | Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput[]
-  upsert?: Prisma.StockOutItemUpsertWithWhereUniqueWithoutInventoryBatchInput | Prisma.StockOutItemUpsertWithWhereUniqueWithoutInventoryBatchInput[]
-  createMany?: Prisma.StockOutItemCreateManyInventoryBatchInputEnvelope
-  set?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  disconnect?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  delete?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  connect?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  update?: Prisma.StockOutItemUpdateWithWhereUniqueWithoutInventoryBatchInput | Prisma.StockOutItemUpdateWithWhereUniqueWithoutInventoryBatchInput[]
-  updateMany?: Prisma.StockOutItemUpdateManyWithWhereWithoutInventoryBatchInput | Prisma.StockOutItemUpdateManyWithWhereWithoutInventoryBatchInput[]
-  deleteMany?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
-}
-
-export type StockOutItemUncheckedUpdateManyWithoutInventoryBatchNestedInput = {
-  create?: Prisma.XOR<Prisma.StockOutItemCreateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput> | Prisma.StockOutItemCreateWithoutInventoryBatchInput[] | Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput[]
-  connectOrCreate?: Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput | Prisma.StockOutItemCreateOrConnectWithoutInventoryBatchInput[]
-  upsert?: Prisma.StockOutItemUpsertWithWhereUniqueWithoutInventoryBatchInput | Prisma.StockOutItemUpsertWithWhereUniqueWithoutInventoryBatchInput[]
-  createMany?: Prisma.StockOutItemCreateManyInventoryBatchInputEnvelope
-  set?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  disconnect?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  delete?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  connect?: Prisma.StockOutItemWhereUniqueInput | Prisma.StockOutItemWhereUniqueInput[]
-  update?: Prisma.StockOutItemUpdateWithWhereUniqueWithoutInventoryBatchInput | Prisma.StockOutItemUpdateWithWhereUniqueWithoutInventoryBatchInput[]
-  updateMany?: Prisma.StockOutItemUpdateManyWithWhereWithoutInventoryBatchInput | Prisma.StockOutItemUpdateManyWithWhereWithoutInventoryBatchInput[]
-  deleteMany?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
 }
 
 export type StockOutItemCreateNestedManyWithoutStockOutInput = {
@@ -490,69 +412,14 @@ export type StockOutItemUncheckedUpdateManyWithoutStockOutNestedInput = {
   deleteMany?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
 }
 
-export type StockOutItemCreateWithoutInventoryBatchInput = {
-  quantity: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  stockOut: Prisma.StockOutCreateNestedOneWithoutItemsInput
-}
-
-export type StockOutItemUncheckedCreateWithoutInventoryBatchInput = {
-  id?: number
-  stockOutId: number
-  quantity: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type StockOutItemCreateOrConnectWithoutInventoryBatchInput = {
-  where: Prisma.StockOutItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.StockOutItemCreateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput>
-}
-
-export type StockOutItemCreateManyInventoryBatchInputEnvelope = {
-  data: Prisma.StockOutItemCreateManyInventoryBatchInput | Prisma.StockOutItemCreateManyInventoryBatchInput[]
-  skipDuplicates?: boolean
-}
-
-export type StockOutItemUpsertWithWhereUniqueWithoutInventoryBatchInput = {
-  where: Prisma.StockOutItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.StockOutItemUpdateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedUpdateWithoutInventoryBatchInput>
-  create: Prisma.XOR<Prisma.StockOutItemCreateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedCreateWithoutInventoryBatchInput>
-}
-
-export type StockOutItemUpdateWithWhereUniqueWithoutInventoryBatchInput = {
-  where: Prisma.StockOutItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.StockOutItemUpdateWithoutInventoryBatchInput, Prisma.StockOutItemUncheckedUpdateWithoutInventoryBatchInput>
-}
-
-export type StockOutItemUpdateManyWithWhereWithoutInventoryBatchInput = {
-  where: Prisma.StockOutItemScalarWhereInput
-  data: Prisma.XOR<Prisma.StockOutItemUpdateManyMutationInput, Prisma.StockOutItemUncheckedUpdateManyWithoutInventoryBatchInput>
-}
-
-export type StockOutItemScalarWhereInput = {
-  AND?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
-  OR?: Prisma.StockOutItemScalarWhereInput[]
-  NOT?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
-  id?: Prisma.IntFilter<"StockOutItem"> | number
-  stockOutId?: Prisma.IntFilter<"StockOutItem"> | number
-  inventoryBatchId?: Prisma.IntFilter<"StockOutItem"> | number
-  quantity?: Prisma.IntFilter<"StockOutItem"> | number
-  createdAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
-}
-
 export type StockOutItemCreateWithoutStockOutInput = {
   quantity: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  inventoryBatch: Prisma.InventoryBatchCreateNestedOneWithoutStockOutItemsInput
 }
 
 export type StockOutItemUncheckedCreateWithoutStockOutInput = {
   id?: number
-  inventoryBatchId: number
   quantity: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -584,40 +451,19 @@ export type StockOutItemUpdateManyWithWhereWithoutStockOutInput = {
   data: Prisma.XOR<Prisma.StockOutItemUpdateManyMutationInput, Prisma.StockOutItemUncheckedUpdateManyWithoutStockOutInput>
 }
 
-export type StockOutItemCreateManyInventoryBatchInput = {
-  id?: number
-  stockOutId: number
-  quantity: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type StockOutItemUpdateWithoutInventoryBatchInput = {
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  stockOut?: Prisma.StockOutUpdateOneRequiredWithoutItemsNestedInput
-}
-
-export type StockOutItemUncheckedUpdateWithoutInventoryBatchInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  stockOutId?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type StockOutItemUncheckedUpdateManyWithoutInventoryBatchInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  stockOutId?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type StockOutItemScalarWhereInput = {
+  AND?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
+  OR?: Prisma.StockOutItemScalarWhereInput[]
+  NOT?: Prisma.StockOutItemScalarWhereInput | Prisma.StockOutItemScalarWhereInput[]
+  id?: Prisma.IntFilter<"StockOutItem"> | number
+  stockOutId?: Prisma.IntFilter<"StockOutItem"> | number
+  quantity?: Prisma.IntFilter<"StockOutItem"> | number
+  createdAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StockOutItem"> | Date | string
 }
 
 export type StockOutItemCreateManyStockOutInput = {
   id?: number
-  inventoryBatchId: number
   quantity: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -627,12 +473,10 @@ export type StockOutItemUpdateWithoutStockOutInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  inventoryBatch?: Prisma.InventoryBatchUpdateOneRequiredWithoutStockOutItemsNestedInput
 }
 
 export type StockOutItemUncheckedUpdateWithoutStockOutInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  inventoryBatchId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -640,7 +484,6 @@ export type StockOutItemUncheckedUpdateWithoutStockOutInput = {
 
 export type StockOutItemUncheckedUpdateManyWithoutStockOutInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  inventoryBatchId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -651,74 +494,57 @@ export type StockOutItemUncheckedUpdateManyWithoutStockOutInput = {
 export type StockOutItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   stockOutId?: boolean
-  inventoryBatchId?: boolean
   quantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stockOut?: boolean | Prisma.StockOutDefaultArgs<ExtArgs>
-  inventoryBatch?: boolean | Prisma.InventoryBatchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockOutItem"]>
 
 export type StockOutItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   stockOutId?: boolean
-  inventoryBatchId?: boolean
   quantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stockOut?: boolean | Prisma.StockOutDefaultArgs<ExtArgs>
-  inventoryBatch?: boolean | Prisma.InventoryBatchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockOutItem"]>
 
 export type StockOutItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   stockOutId?: boolean
-  inventoryBatchId?: boolean
   quantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stockOut?: boolean | Prisma.StockOutDefaultArgs<ExtArgs>
-  inventoryBatch?: boolean | Prisma.InventoryBatchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockOutItem"]>
 
 export type StockOutItemSelectScalar = {
   id?: boolean
   stockOutId?: boolean
-  inventoryBatchId?: boolean
   quantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StockOutItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stockOutId" | "inventoryBatchId" | "quantity" | "createdAt" | "updatedAt", ExtArgs["result"]["stockOutItem"]>
+export type StockOutItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stockOutId" | "quantity" | "createdAt" | "updatedAt", ExtArgs["result"]["stockOutItem"]>
 export type StockOutItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stockOut?: boolean | Prisma.StockOutDefaultArgs<ExtArgs>
-  inventoryBatch?: boolean | Prisma.InventoryBatchDefaultArgs<ExtArgs>
 }
 export type StockOutItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stockOut?: boolean | Prisma.StockOutDefaultArgs<ExtArgs>
-  inventoryBatch?: boolean | Prisma.InventoryBatchDefaultArgs<ExtArgs>
 }
 export type StockOutItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stockOut?: boolean | Prisma.StockOutDefaultArgs<ExtArgs>
-  inventoryBatch?: boolean | Prisma.InventoryBatchDefaultArgs<ExtArgs>
 }
 
 export type $StockOutItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "StockOutItem"
   objects: {
     stockOut: Prisma.$StockOutPayload<ExtArgs>
-    inventoryBatch: Prisma.$InventoryBatchPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     stockOutId: number
-    /**
-     * *
-     *    * Exact batch and location from which
-     *    * the inventory is being issued.
-     */
-    inventoryBatchId: number
     quantity: number
     createdAt: Date
     updatedAt: Date
@@ -1117,7 +943,6 @@ readonly fields: StockOutItemFieldRefs;
 export interface Prisma__StockOutItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stockOut<T extends Prisma.StockOutDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockOutDefaultArgs<ExtArgs>>): Prisma.Prisma__StockOutClient<runtime.Types.Result.GetResult<Prisma.$StockOutPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  inventoryBatch<T extends Prisma.InventoryBatchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryBatchDefaultArgs<ExtArgs>>): Prisma.Prisma__InventoryBatchClient<runtime.Types.Result.GetResult<Prisma.$InventoryBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1149,7 +974,6 @@ export interface Prisma__StockOutItemClient<T, Null = never, ExtArgs extends run
 export interface StockOutItemFieldRefs {
   readonly id: Prisma.FieldRef<"StockOutItem", 'Int'>
   readonly stockOutId: Prisma.FieldRef<"StockOutItem", 'Int'>
-  readonly inventoryBatchId: Prisma.FieldRef<"StockOutItem", 'Int'>
   readonly quantity: Prisma.FieldRef<"StockOutItem", 'Int'>
   readonly createdAt: Prisma.FieldRef<"StockOutItem", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"StockOutItem", 'DateTime'>

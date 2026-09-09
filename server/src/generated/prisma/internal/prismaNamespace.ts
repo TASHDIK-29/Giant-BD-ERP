@@ -419,7 +419,6 @@ export const ModelName = {
   StockIn: 'StockIn',
   StockInItem: 'StockInItem',
   Inventory: 'Inventory',
-  InventoryBatch: 'InventoryBatch',
   StockOut: 'StockOut',
   StockOutItem: 'StockOutItem'
 } as const
@@ -437,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material" | "color" | "masterProduct" | "productVariant" | "warehouse" | "zone" | "subZone" | "rack" | "buyer" | "letterOfCredit" | "purchaseOrder" | "stockIn" | "stockInItem" | "inventory" | "inventoryBatch" | "stockOut" | "stockOutItem"
+    modelProps: "user" | "role" | "permissionGroup" | "permission" | "rolePermission" | "refreshToken" | "loginOtp" | "category" | "material" | "color" | "masterProduct" | "productVariant" | "warehouse" | "zone" | "subZone" | "rack" | "buyer" | "letterOfCredit" | "purchaseOrder" | "stockIn" | "stockInItem" | "inventory" | "stockOut" | "stockOutItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2069,80 +2068,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    InventoryBatch: {
-      payload: Prisma.$InventoryBatchPayload<ExtArgs>
-      fields: Prisma.InventoryBatchFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.InventoryBatchFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.InventoryBatchFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>
-        }
-        findFirst: {
-          args: Prisma.InventoryBatchFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.InventoryBatchFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>
-        }
-        findMany: {
-          args: Prisma.InventoryBatchFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>[]
-        }
-        create: {
-          args: Prisma.InventoryBatchCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>
-        }
-        createMany: {
-          args: Prisma.InventoryBatchCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.InventoryBatchCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>[]
-        }
-        delete: {
-          args: Prisma.InventoryBatchDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>
-        }
-        update: {
-          args: Prisma.InventoryBatchUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>
-        }
-        deleteMany: {
-          args: Prisma.InventoryBatchDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.InventoryBatchUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.InventoryBatchUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>[]
-        }
-        upsert: {
-          args: Prisma.InventoryBatchUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventoryBatchPayload>
-        }
-        aggregate: {
-          args: Prisma.InventoryBatchAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateInventoryBatch>
-        }
-        groupBy: {
-          args: Prisma.InventoryBatchGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.InventoryBatchGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.InventoryBatchCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.InventoryBatchCountAggregateOutputType> | number
-        }
-      }
-    }
     StockOut: {
       payload: Prisma.$StockOutPayload<ExtArgs>
       fields: Prisma.StockOutFieldRefs
@@ -2629,18 +2554,6 @@ export const InventoryScalarFieldEnum = {
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
 
 
-export const InventoryBatchScalarFieldEnum = {
-  id: 'id',
-  inventoryId: 'inventoryId',
-  stockInItemId: 'stockInItemId',
-  quantity: 'quantity',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type InventoryBatchScalarFieldEnum = (typeof InventoryBatchScalarFieldEnum)[keyof typeof InventoryBatchScalarFieldEnum]
-
-
 export const StockOutScalarFieldEnum = {
   id: 'id',
   stockOutNumber: 'stockOutNumber',
@@ -2664,7 +2577,6 @@ export type StockOutScalarFieldEnum = (typeof StockOutScalarFieldEnum)[keyof typ
 export const StockOutItemScalarFieldEnum = {
   id: 'id',
   stockOutId: 'stockOutId',
-  inventoryBatchId: 'inventoryBatchId',
   quantity: 'quantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -3022,7 +2934,6 @@ export type GlobalOmitConfig = {
   stockIn?: Prisma.StockInOmit
   stockInItem?: Prisma.StockInItemOmit
   inventory?: Prisma.InventoryOmit
-  inventoryBatch?: Prisma.InventoryBatchOmit
   stockOut?: Prisma.StockOutOmit
   stockOutItem?: Prisma.StockOutItemOmit
 }

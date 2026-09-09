@@ -472,7 +472,7 @@ model StockInItem {
 
   rack Rack @relation(fields: [rackId], references: [id], onDelete: Restrict)
 
-  inventoryBatches InventoryBatch[]
+  // inventoryBatches InventoryBatch[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -511,7 +511,7 @@ model Inventory {
 
   quantity Int @default(0)
 
-  inventoryBatches InventoryBatch[]
+  // inventoryBatches InventoryBatch[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -524,42 +524,42 @@ model Inventory {
   @@index([rackId])
 }
 
-model InventoryBatch {
-  id Int @id @default(autoincrement())
+// model InventoryBatch {
+//   id Int @id @default(autoincrement())
 
-  /**
-   * Physical inventory location.
-   */
-  inventoryId Int
+//   /**
+//    * Physical inventory location.
+//    */
+//   inventoryId Int
 
-  inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
+//   inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
 
-  /**
-   * Original Stock In source.
-   */
-  stockInItemId Int
+//   /**
+//    * Original Stock In source.
+//    */
+//   stockInItemId Int
 
-  stockInItem StockInItem @relation(fields: [stockInItemId], references: [id], onDelete: Restrict)
+//   stockInItem StockInItem @relation(fields: [stockInItemId], references: [id], onDelete: Restrict)
 
-  /**
-   * Remaining quantity from this particular
-   * Stock In item at this location.
-   */
-  quantity Int @default(0)
+//   /**
+//    * Remaining quantity from this particular
+//    * Stock In item at this location.
+//    */
+//   quantity Int @default(0)
 
-  stockOutItems StockOutItem[]
+//   stockOutItems StockOutItem[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
 
-  /**
-   * One StockInItem should create one batch record
-   * for one Inventory location.
-   */
-  @@unique([inventoryId, stockInItemId])
-  @@index([inventoryId])
-  @@index([stockInItemId])
-}
+//   /**
+//    * One StockInItem should create one batch record
+//    * for one Inventory location.
+//    */
+//   @@unique([inventoryId, stockInItemId])
+//   @@index([inventoryId])
+//   @@index([stockInItemId])
+// }
 
 model StockOut {
   id Int @id @default(autoincrement())
@@ -639,9 +639,9 @@ model StockOutItem {
    * Exact batch and location from which
    * the inventory is being issued.
    */
-  inventoryBatchId Int
+  // inventoryBatchId Int
 
-  inventoryBatch InventoryBatch @relation(fields: [inventoryBatchId], references: [id], onDelete: Restrict)
+  // inventoryBatch InventoryBatch @relation(fields: [inventoryBatchId], references: [id], onDelete: Restrict)
 
   quantity Int
 
@@ -652,9 +652,10 @@ model StockOutItem {
    * Prevent duplicate allocations from the same
    * InventoryBatch within one Stock Out transaction.
    */
-  @@unique([stockOutId, inventoryBatchId])
+  // @@unique([stockOutId, inventoryBatchId])
+  @@unique([stockOutId])
   @@index([stockOutId])
-  @@index([inventoryBatchId])
+  // @@index([inventoryBatchId])
 }
 
 enum BuyerType {

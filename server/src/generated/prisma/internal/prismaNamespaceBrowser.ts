@@ -73,7 +73,6 @@ export const ModelName = {
   StockIn: 'StockIn',
   StockInItem: 'StockInItem',
   Inventory: 'Inventory',
-  InventoryBatch: 'InventoryBatch',
   StockOut: 'StockOut',
   StockOutItem: 'StockOutItem'
 } as const
@@ -393,18 +392,6 @@ export const InventoryScalarFieldEnum = {
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
 
 
-export const InventoryBatchScalarFieldEnum = {
-  id: 'id',
-  inventoryId: 'inventoryId',
-  stockInItemId: 'stockInItemId',
-  quantity: 'quantity',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type InventoryBatchScalarFieldEnum = (typeof InventoryBatchScalarFieldEnum)[keyof typeof InventoryBatchScalarFieldEnum]
-
-
 export const StockOutScalarFieldEnum = {
   id: 'id',
   stockOutNumber: 'stockOutNumber',
@@ -428,7 +415,6 @@ export type StockOutScalarFieldEnum = (typeof StockOutScalarFieldEnum)[keyof typ
 export const StockOutItemScalarFieldEnum = {
   id: 'id',
   stockOutId: 'stockOutId',
-  inventoryBatchId: 'inventoryBatchId',
   quantity: 'quantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

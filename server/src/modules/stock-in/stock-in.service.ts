@@ -563,6 +563,9 @@ export class StockInService {
 
 
 
+
+
+
     async findAll(query: QueryStockInDto) {
         const {
             page = 1,
