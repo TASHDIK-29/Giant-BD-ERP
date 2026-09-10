@@ -25,6 +25,7 @@ import { RacksModule } from './modules/racks/racks.module.js';
 import { BuyersModule } from './modules/buyers/buyers.module.js';
 import { StockInModule } from './modules/stock-in/stock-in.module.js';
 import { StockOutModule } from './modules/stock-out/stock-out.module.js';
+import { DashboardModule } from './modules/dashboard/dashboard.module.js';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { StockOutModule } from './modules/stock-out/stock-out.module.js';
     BuyersModule,
     StockInModule,
     StockOutModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [
