@@ -19,6 +19,7 @@ import { CreateStockOutDto } from './dto/create-stock-out.dto.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { QueryStockOutDto } from './dto/query-stock-out.dto.js';
 import { UpdateStockOutDto } from './dto/update-stock-out-status.dto.js';
+import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 
 @Controller('stock-outs')
 @UseGuards(JwtAuthGuard)
@@ -28,6 +29,7 @@ export class StockOutController {
   ) { }
 
   @Post()
+  @RequirePermission('stock-out:create')
   async create(
     @Body() createStockOutDto: CreateStockOutDto,
     // @Req() req: Request,
@@ -47,6 +49,7 @@ export class StockOutController {
 
 
   @Get()
+  @RequirePermission('stock-out:read')
   async findAll(
     @Query() query: QueryStockOutDto,
   ) {
@@ -57,6 +60,7 @@ export class StockOutController {
 
 
   @Get(':id')
+  @RequirePermission('stock-out:read')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
   ) {
@@ -66,6 +70,7 @@ export class StockOutController {
 
 
   @Patch(':id')
+  @RequirePermission('stock-out:status')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateStockOutDto: UpdateStockOutDto,
