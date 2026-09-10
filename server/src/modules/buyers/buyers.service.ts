@@ -89,78 +89,78 @@ export class BuyersService {
     /*
      * List Buyers
      */
-    async findAll(
-        query: BuyerQueryDto,
-    ) {
-        const {
-            page = 1,
-            limit = 10,
-            search,
-            type,
-            status,
-        } = query;
+    // async findAll(
+    //     query: BuyerQueryDto,
+    // ) {
+    //     const {
+    //         page = 1,
+    //         limit = 10,
+    //         search,
+    //         type,
+    //         status,
+    //     } = query;
 
 
-        const skip =
-            (page - 1) * limit;
+    //     const skip =
+    //         (page - 1) * limit;
 
 
-        const where:
-            Prisma.BuyerWhereInput = {
-            ...(type !== undefined && {
-                type,
-            }),
+    //     const where:
+    //         Prisma.BuyerWhereInput = {
+    //         ...(type !== undefined && {
+    //             type,
+    //         }),
 
-            ...(status !== undefined && {
-                status,
-            }),
+    //         ...(status !== undefined && {
+    //             status,
+    //         }),
 
-            ...(search?.trim() && {
-                name: {
-                    contains:
-                        search.trim(),
-                    mode:
-                        'insensitive',
-                },
-            }),
-        };
-
-
-        const [
-            buyers,
-            total,
-        ] =
-            await this.databaseService.$transaction([
-                this.databaseService.buyer.findMany({
-                    where,
-
-                    skip,
-                    take: limit,
-
-                    orderBy: {
-                        createdAt: 'desc',
-                    },
-                }),
-
-                this.databaseService.buyer.count({
-                    where,
-                }),
-            ]);
+    //         ...(search?.trim() && {
+    //             name: {
+    //                 contains:
+    //                     search.trim(),
+    //                 mode:
+    //                     'insensitive',
+    //             },
+    //         }),
+    //     };
 
 
-        return {
-            data: buyers,
+    //     const [
+    //         buyers,
+    //         total,
+    //     ] =
+    //         await this.databaseService.$transaction([
+    //             this.databaseService.buyer.findMany({
+    //                 where,
 
-            meta: {
-                total,
-                page,
-                limit,
+    //                 skip,
+    //                 take: limit,
 
-                totalPages:
-                    Math.ceil(total / limit),
-            },
-        };
-    }
+    //                 orderBy: {
+    //                     createdAt: 'desc',
+    //                 },
+    //             }),
+
+    //             this.databaseService.buyer.count({
+    //                 where,
+    //             }),
+    //         ]);
+
+
+    //     return {
+    //         data: buyers,
+
+    //         meta: {
+    //             total,
+    //             page,
+    //             limit,
+
+    //             totalPages:
+    //                 Math.ceil(total / limit),
+    //         },
+    //     };
+    // }
 
 
     /*
@@ -536,6 +536,42 @@ export class BuyersService {
             message: 'PO created successfully.',
             data: po,
         };
+    }
+
+
+
+    async findAll() {
+        return this.databaseService.buyer.findMany({
+            orderBy: {
+                name: 'asc',
+            },
+            select: {
+                id: true,
+                name: true,
+                type: true,
+                status: true,
+
+                lettersOfCredit: {
+                    orderBy: {
+                        lcNumber: 'asc',
+                    },
+                    select: {
+                        id: true,
+                        lcNumber: true,
+
+                        purchaseOrders: {
+                            orderBy: {
+                                poNumber: 'asc',
+                            },
+                            select: {
+                                id: true,
+                                poNumber: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
     }
 
 

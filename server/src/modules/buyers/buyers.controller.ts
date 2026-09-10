@@ -67,10 +67,18 @@ export class BuyersController {
         @Query()
         query: BuyerQueryDto,
     ) {
-        return this.buyersService.findAll(
-            query,
-        );
+        return this.buyersService.findAll();
     }
+    // @Get()
+    // @RequirePermission('buyer:read')
+    // async findAll(
+    //     @Query()
+    //     query: BuyerQueryDto,
+    // ) {
+    //     return this.buyersService.findAll(
+    //         query,
+    //     );
+    // }
 
 
     @Get(':id')
