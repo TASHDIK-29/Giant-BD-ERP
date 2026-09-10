@@ -10,11 +10,13 @@ import {
   Gender,
   Prisma,
   Status,
+  StockOutStatus,
 } from '../../generated/prisma/client.js';
 
 import { DatabaseService } from '../../database/database.service.js';
 
 import { CreateStockOutDto } from './dto/create-stock-out.dto.js';
+import { QueryStockOutDto } from './dto/query-stock-out.dto.js';
 
 @Injectable()
 export class StockOutService {
@@ -653,4 +655,497 @@ export class StockOutService {
       },
     );
   }
+
+
+
+
+
+  async findAll(query: QueryStockOutDto) {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      buyerId,
+      letterOfCreditId,
+      purchaseOrderId,
+      masterProductId,
+      colorId,
+      gender,
+      status,
+      requestDateFrom,
+      requestDateTo,
+    } = query;
+
+
+    if (
+      requestDateFrom &&
+      requestDateTo &&
+      new Date(requestDateFrom) >
+      new Date(requestDateTo)
+    ) {
+      throw new BadRequestException(
+        'requestDateFrom cannot be later than requestDateTo.',
+      );
+    }
+
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.StockOutWhereInput = {};
+
+    /**
+     * -----------------------------------------------
+     * Search
+     * -----------------------------------------------
+     *
+     * Currently search is against Stock Out Number.
+     */
+    if (search?.trim()) {
+      where.stockOutNumber = {
+        contains: search.trim(),
+        mode: 'insensitive',
+      };
+    }
+
+    /**
+     * -----------------------------------------------
+     * Direct filters
+     * -----------------------------------------------
+     */
+    if (buyerId !== undefined) {
+      where.buyerId = buyerId;
+    }
+
+    if (letterOfCreditId !== undefined) {
+      where.letterOfCreditId = letterOfCreditId;
+    }
+
+    if (purchaseOrderId !== undefined) {
+      where.purchaseOrderId = purchaseOrderId;
+    }
+
+    if (masterProductId !== undefined) {
+      where.masterProductId = masterProductId;
+    }
+
+    if (colorId !== undefined) {
+      where.colorId = colorId;
+    }
+
+    if (gender !== undefined) {
+      where.gender = gender;
+    }
+
+    if (status !== undefined) {
+      where.status = status;
+    }
+
+    /**
+     * -----------------------------------------------
+     * Request date range
+     * -----------------------------------------------
+     */
+    if (requestDateFrom || requestDateTo) {
+      where.requestDate = {};
+
+      if (requestDateFrom) {
+        where.requestDate.gte = new Date(
+          requestDateFrom,
+        );
+      }
+
+      if (requestDateTo) {
+        where.requestDate.lte = new Date(
+          requestDateTo,
+        );
+      }
+    }
+
+    /**
+     * -----------------------------------------------
+     * Query database
+     * -----------------------------------------------
+     */
+    const [stockOuts, total] =
+      await Promise.all([
+        this.databaseService.stockOut.findMany({
+          where,
+          skip,
+          take: limit,
+
+          orderBy: {
+            createdAt: 'desc',
+          },
+
+          include: {
+            buyer: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+                status: true,
+              },
+            },
+
+            letterOfCredit: {
+              select: {
+                id: true,
+                lcNumber: true,
+                buyerId: true,
+              },
+            },
+
+            purchaseOrder: {
+              select: {
+                id: true,
+                poNumber: true,
+                letterOfCreditId: true,
+              },
+            },
+
+            masterProduct: {
+              select: {
+                id: true,
+                name: true,
+                sku: true,
+                status: true,
+              },
+            },
+
+            color: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+
+            createdBy: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+
+            items: {
+              select: {
+                id: true,
+                batchId: true,
+                productVariantId: true,
+                quantity: true,
+
+                productVariant: {
+                  select: {
+                    id: true,
+                    size: true,
+                    sku: true,
+                    modelNumber: true,
+                    gender: true,
+                    uom: true,
+                    productsPerPacket: true,
+                    packagingType: true,
+                  },
+                },
+              },
+            },
+
+            _count: {
+              select: {
+                items: true,
+              },
+            },
+          },
+        }),
+
+        this.databaseService.stockOut.count({
+          where,
+        }),
+      ]);
+
+    return {
+      data: stockOuts,
+
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPreviousPage: page > 1,
+      },
+    };
+  }
+
+
+
+  async findOne(id: number) {
+    const stockOut =
+      await this.databaseService.stockOut.findUnique({
+        where: {
+          id,
+        },
+
+        include: {
+          buyer: {
+            select: {
+              id: true,
+              name: true,
+              type: true,
+              status: true,
+            },
+          },
+
+          letterOfCredit: {
+            select: {
+              id: true,
+              lcNumber: true,
+              buyerId: true,
+            },
+          },
+
+          purchaseOrder: {
+            select: {
+              id: true,
+              poNumber: true,
+              letterOfCreditId: true,
+            },
+          },
+
+          masterProduct: {
+            select: {
+              id: true,
+              name: true,
+              sku: true,
+              status: true,
+
+              category: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+
+              subCategory: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+
+              material: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+
+          color: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+            },
+          },
+
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+
+          items: {
+            orderBy: {
+              id: 'asc',
+            },
+
+            select: {
+              id: true,
+              batchId: true,
+              productVariantId: true,
+              quantity: true,
+              createdAt: true,
+              updatedAt: true,
+
+              productVariant: {
+                select: {
+                  id: true,
+                  size: true,
+                  sku: true,
+                  modelNumber: true,
+                  gender: true,
+                  uom: true,
+                  productsPerPacket: true,
+                  packagingType: true,
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+    if (!stockOut) {
+      throw new NotFoundException(
+        `Stock Out with ID ${id} not found.`,
+      );
+    }
+
+    return stockOut;
+  }
+
+
+
+  async updateStatus(
+    id: number,
+    status: StockOutStatus,
+  ) {
+    const stockOut =
+      await this.databaseService.stockOut.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          stockOutNumber: true,
+          status: true,
+        },
+      });
+
+    if (!stockOut) {
+      throw new NotFoundException(
+        `Stock Out with ID ${id} not found.`,
+      );
+    }
+
+    /**
+     * -----------------------------------------------
+     * RECEIVED is the final state.
+     * -----------------------------------------------
+     */
+    if (stockOut.status === StockOutStatus.RECEIVED) {
+      throw new BadRequestException(
+        'A received Stock Out cannot be updated.',
+      );
+    }
+
+    /**
+     * -----------------------------------------------
+     * ISSUED → DELIVERED
+     * -----------------------------------------------
+     */
+    if (
+      stockOut.status === StockOutStatus.ISSUED &&
+      status !== StockOutStatus.DELIVERED
+    ) {
+      throw new BadRequestException(
+        'An ISSUED Stock Out can only be changed to DELIVERED.',
+      );
+    }
+
+    /**
+     * -----------------------------------------------
+     * DELIVERED → RECEIVED
+     * -----------------------------------------------
+     */
+    if (
+      stockOut.status === StockOutStatus.DELIVERED &&
+      status !== StockOutStatus.RECEIVED
+    ) {
+      throw new BadRequestException(
+        'A DELIVERED Stock Out can only be changed to RECEIVED.',
+      );
+    }
+
+    return this.databaseService.stockOut.update({
+      where: {
+        id,
+      },
+
+      data: {
+        status,
+      },
+
+      include: {
+        buyer: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            status: true,
+          },
+        },
+
+        letterOfCredit: {
+          select: {
+            id: true,
+            lcNumber: true,
+            buyerId: true,
+          },
+        },
+
+        purchaseOrder: {
+          select: {
+            id: true,
+            poNumber: true,
+            letterOfCreditId: true,
+          },
+        },
+
+        masterProduct: {
+          select: {
+            id: true,
+            name: true,
+            sku: true,
+            status: true,
+          },
+        },
+
+        color: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+
+        items: {
+          select: {
+            id: true,
+            batchId: true,
+            productVariantId: true,
+            quantity: true,
+
+            productVariant: {
+              select: {
+                id: true,
+                size: true,
+                sku: true,
+                modelNumber: true,
+                gender: true,
+                uom: true,
+                productsPerPacket: true,
+                packagingType: true,
+                status: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+
+
+
+
 }

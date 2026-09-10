@@ -1,16 +1,8 @@
-import {
-  IsDateString,
-  IsEnum,
-  IsOptional,
-} from 'class-validator';
+import { IsEnum } from 'class-validator';
 
 import { StockOutStatus } from '../../../generated/prisma/client.js';
 
-export class UpdateStockOutStatusDto {
+export class UpdateStockOutDto {
   @IsEnum(StockOutStatus)
   status: StockOutStatus;
-
-  @IsOptional()
-  @IsDateString()
-  stockOutDate?: string;
 }
