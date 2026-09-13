@@ -26,7 +26,7 @@ export function AuthShell({
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f7f9fc] p-4 sm:p-6">
-      <div className="relative h-[550px] w-full max-w-[980px] overflow-hidden rounded-[38px] bg-white shadow-[0_25px_60px_rgba(0,0,0,0.15)]">
+      <div className="relative h-137.5 w-full max-w-245 overflow-hidden rounded-[38px] bg-white shadow-[0_25px_60px_rgba(0,0,0,0.15)]">
 
         {/* ------------------------------------------------
             BLUE WELCOME PANEL
@@ -119,7 +119,7 @@ export function AuthShell({
             MOBILE WELCOME HEADER
         ------------------------------------------------ */}
         <div className="block md:hidden">
-          <div className="absolute left-0 top-0 h-[170px] w-full rounded-b-[70px] bg-[#4B6FBE]">
+          <div className="absolute left-0 top-0 h-42.5 w-full rounded-b-[70px] bg-[#4B6FBE]">
             <div className="flex h-full items-center justify-center text-center">
               <h1 className="text-3xl font-extrabold leading-tight text-white">
                 Welcome to
@@ -129,7 +129,7 @@ export function AuthShell({
             </div>
           </div>
 
-          <div className="absolute left-0 top-[190px] w-full px-8">
+          <div className="absolute left-0 top-47.5 w-full px-8">
             <AnimatePresence mode="wait">
               {step === 'login' ? (
                 <motion.div

@@ -147,7 +147,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         <img
           src="/logo.webp"
           alt="Giant BD"
-          className="h-auto w-[170px]"
+          className="h-auto w-42.5"
         />
       </div>
 
@@ -163,7 +163,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           autoComplete="email"
           required
           disabled={loginMutation.isPending}
-          className="h-[50px] rounded-[13px] border-none bg-[#edf3ff] px-4 text-sm shadow-sm focus-visible:ring-1 focus-visible:ring-[#4B6FBE]"
+          className="h-12.5 rounded-[13px] border-none bg-[#edf3ff] px-4 text-sm shadow-sm focus-visible:ring-1 focus-visible:ring-[#4B6FBE]"
         />
 
         {/* Password */}
@@ -177,7 +177,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             autoComplete="current-password"
             required
             disabled={loginMutation.isPending}
-            className="h-[50px] rounded-[13px] border-none bg-[#edf3ff] px-4 pr-12 text-sm shadow-sm focus-visible:ring-1 focus-visible:ring-[#4B6FBE]"
+            className="h-12.5 rounded-[13px] border-none bg-[#edf3ff] px-4 pr-12 text-sm shadow-sm focus-visible:ring-1 focus-visible:ring-[#4B6FBE]"
           />
 
           <button
@@ -219,7 +219,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         <Button
           type="submit"
           disabled={loginMutation.isPending}
-          className="h-[50px] w-full rounded-[13px] bg-[#4B6FBE] text-base font-semibold text-white hover:bg-[#4163ab]"
+          className="h-12.5 w-full rounded-[13px] bg-[#4B6FBE] text-base font-semibold text-white hover:bg-[#4163ab]"
         >
           {loginMutation.isPending
             ? 'Signing in...'
