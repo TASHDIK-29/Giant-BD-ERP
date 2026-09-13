@@ -70,12 +70,12 @@ export const navigationGroups: NavigationGroup[] = [
     items: [
       {
         title: 'Master FG Product',
-        href: '/master-fg-products',
+        href: '/master-fg-product',
         icon: Factory,
       },
       {
         title: 'Variant FG Product',
-        href: '/variant-fg-products',
+        href: '/variant-fg-product',
         icon: Tags,
       },
     ],
@@ -87,7 +87,7 @@ export const navigationGroups: NavigationGroup[] = [
     items: [
       {
         title: 'Buyer',
-        href: '/buyers',
+        href: '/buyer',
         icon: UserRound,
       },
     ],
@@ -99,42 +99,42 @@ export const navigationGroups: NavigationGroup[] = [
     items: [
       {
         title: 'Category',
-        href: '/categories',
+        href: '/categorie',
         icon: Tags,
       },
       {
         title: 'Sub Category',
-        href: '/sub-categories',
+        href: '/sub-categorie',
         icon: Tags,
       },
       {
         title: 'Material',
-        href: '/materials',
+        href: '/material',
         icon: Boxes,
       },
       {
         title: 'Color',
-        href: '/colors',
+        href: '/color',
         icon: Palette,
       },
       {
         title: 'Warehouse',
-        href: '/warehouses',
+        href: '/warehouse',
         icon: Warehouse,
       },
       {
         title: 'Zone',
-        href: '/zones',
+        href: '/zone',
         icon: Building2,
       },
       {
         title: 'Sub Zone',
-        href: '/sub-zones',
+        href: '/sub-zone',
         icon: Building2,
       },
       {
         title: 'Rack',
-        href: '/racks',
+        href: '/rack',
         icon: Building2,
       },
     ],
@@ -144,17 +144,17 @@ export const navigationGroups: NavigationGroup[] = [
 export const standaloneNavigationItems: NavigationItem[] = [
   {
     title: 'Role',
-    href: '/roles',
+    href: '/role',
     icon: ShieldCheck,
   },
   {
     title: 'Permission',
-    href: '/permissions',
+    href: '/permission',
     icon: KeyRound,
   },
   {
     title: 'User',
-    href: '/users',
+    href: '/user',
     icon: UserRound,
   },
 ];
