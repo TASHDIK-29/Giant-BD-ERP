@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DashboardSidebar } from './dashboard-sidebar';
 import { DashboardTopbar } from './dashboard-topbar';
 import { DashboardPageHeader } from './dashboard-page-header';
+
+const SIDEBAR_STATE_KEY = 'sidebar-state';
 
 interface DashboardShellProps {
     children: React.ReactNode;
@@ -13,8 +15,45 @@ interface DashboardShellProps {
 export function DashboardShell({
     children,
 }: DashboardShellProps) {
-    const [sidebarCollapsed, setSidebarCollapsed] =
-        useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+
+
+    const [sidebarReady, setSidebarReady] = useState(false);
+
+    // Load sidebar state from localStorage
+    useEffect(() => {
+        const savedState =
+            localStorage.getItem(
+                SIDEBAR_STATE_KEY,
+            );
+
+        if (savedState !== null) {
+            setSidebarCollapsed(
+                savedState === 'true',
+            );
+        }
+
+        setSidebarReady(true);
+    }, []);
+
+    // Save sidebar state whenever it changes
+    useEffect(() => {
+        if (!sidebarReady) {
+            return;
+        }
+
+        localStorage.setItem(
+            SIDEBAR_STATE_KEY,
+            String(sidebarCollapsed),
+        );
+    }, [sidebarCollapsed, sidebarReady]);
+
+    const toggleSidebar = () => {
+        setSidebarCollapsed(
+            (current) => !current,
+        );
+    };
 
     return (
         <div className="min-h-screen bg-muted/30">
@@ -23,11 +62,10 @@ export function DashboardShell({
             />
 
             <div
-                className={`transition-all duration-300 ${
-                    sidebarCollapsed
-                        ? 'ml-20'
-                        : 'ml-72'
-                }`}
+                className={`transition-all duration-300 ${sidebarCollapsed
+                    ? 'ml-20'
+                    : 'ml-72'
+                    }`}
             >
                 <DashboardTopbar
                     sidebarCollapsed={

@@ -275,7 +275,7 @@ export function DashboardPageHeader() {
                         <div className="relative">
                             <Input
                                 placeholder="Search..."
-                                className="h-9 w-[250px] border-primary pr-9"
+                                className="h-9 w-62.5 border-primary pr-9"
                             />
 
                             <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

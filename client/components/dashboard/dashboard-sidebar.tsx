@@ -42,9 +42,24 @@ export function DashboardSidebar({
 
     const toggleGroup = (groupName: string) => {
         setOpenGroups((current) => ({
-            ...current,
+            ...Object.keys(current).reduce(
+                (acc, key) => {
+                    acc[key] = false;
+                    return acc;
+                },
+                {} as Record<string, boolean>,
+            ),
             [groupName]: !current[groupName],
         }));
+    };
+
+    const closeAllGroups = () => {
+        setOpenGroups({
+            Warehouse: false,
+            Product: false,
+            CRM: false,
+            Attribute: false,
+        });
     };
 
     const handleLogout = async () => {
@@ -77,27 +92,24 @@ export function DashboardSidebar({
 
     return (
         <aside
-            className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden border-r bg-background transition-all duration-300 ${
-                collapsed
-                    ? 'w-20'
-                    : 'w-72'
-            }`}
+            className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden border-r bg-background transition-all duration-300 ${collapsed
+                ? 'w-20'
+                : 'w-72'
+                }`}
         >
             <div
-                className={`flex h-full flex-col ${
-                    collapsed ? 'w-20' : 'w-72'
-                }`}
+                className={`flex h-full flex-col ${collapsed ? 'w-20' : 'w-72'
+                    }`}
             >
                 {/* ================================================== */}
                 {/* Logo */}
                 {/* ================================================== */}
 
                 <div
-                    className={`flex h-20 shrink-0 items-center ${
-                        collapsed
-                            ? 'justify-center px-2'
-                            : 'justify-center px-6'
-                    }`}
+                    className={`flex h-20 shrink-0 items-center ${collapsed
+                        ? 'justify-center px-2'
+                        : 'justify-center px-6'
+                        }`}
                 >
                     <Link
                         href="/dashboard"
@@ -163,22 +175,19 @@ export function DashboardSidebar({
                                                 ? group.title
                                                 : undefined
                                         }
-                                        className={`flex w-full items-center rounded-lg text-sm font-medium transition-colors ${
-                                            collapsed
-                                                ? 'justify-center px-2 py-2'
-                                                : 'justify-between px-3 py-2.5'
-                                        } ${
-                                            groupActive
+                                        className={`flex w-full items-center rounded-lg text-sm font-medium transition-colors ${collapsed
+                                            ? 'justify-center px-2 py-2'
+                                            : 'justify-between px-3 py-2.5'
+                                            } ${groupActive
                                                 ? 'bg-[#476AB8] text-white'
                                                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                        }`}
+                                            }`}
                                     >
                                         <span
-                                            className={`flex items-center ${
-                                                collapsed
-                                                    ? 'justify-center'
-                                                    : 'gap-3'
-                                            }`}
+                                            className={`flex items-center ${collapsed
+                                                ? 'justify-center'
+                                                : 'gap-3'
+                                                }`}
                                         >
                                             <span className="rounded-xl border border-slate-300 bg-white p-2">
                                                 <GroupIcon className="size-5 text-[#476AB8]" />
@@ -197,11 +206,10 @@ export function DashboardSidebar({
                                         {/* Hide chevron when collapsed */}
                                         {!collapsed && (
                                             <ChevronDown
-                                                className={`size-4 transition-transform ${
-                                                    isOpen
-                                                        ? 'rotate-180'
-                                                        : ''
-                                                }`}
+                                                className={`size-4 transition-transform ${isOpen
+                                                    ? 'rotate-180'
+                                                    : ''
+                                                    }`}
                                             />
                                         )}
                                     </button>
@@ -212,11 +220,10 @@ export function DashboardSidebar({
 
                                     {isOpen && (
                                         <div
-                                            className={`mt-1 space-y-1 ${
-                                                collapsed
-                                                    ? 'pl-0'
-                                                    : 'pl-3'
-                                            }`}
+                                            className={`mt-1 space-y-1 ${collapsed
+                                                ? 'pl-0'
+                                                : 'pl-3'
+                                                }`}
                                         >
                                             {group.items.map(
                                                 (item) => {
@@ -241,24 +248,22 @@ export function DashboardSidebar({
                                                                     ? item.title
                                                                     : undefined
                                                             }
-                                                            className={`flex items-center rounded-lg text-sm transition-colors ${
-                                                                collapsed
-                                                                    ? 'justify-center px-2 py-2.5'
-                                                                    : 'gap-3 px-3 py-2.5'
-                                                            } ${
-                                                                active
+                                                            className={`flex items-center rounded-lg text-sm transition-colors ${collapsed
+                                                                ? 'justify-center px-2 py-2.5'
+                                                                : 'gap-3 px-3 py-2.5'
+                                                                } ${active
                                                                     ? 'bg-[#476AB8] text-primary-foreground'
                                                                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                                            }`}
+                                                                }`}
                                                         >
                                                             {/* Show icon */}
-                                                            {/* <ItemIcon
+                                                            <ItemIcon
                                                                 className={`size-5 shrink-0 ${
                                                                     active
                                                                         ? 'text-white'
                                                                         : 'text-blue-600'
                                                                 }`}
-                                                            /> */}
+                                                            />
 
                                                             {/* Hide title */}
                                                             {!collapsed && (
@@ -297,28 +302,26 @@ export function DashboardSidebar({
                                         <Link
                                             key={item.href}
                                             href={item.href}
+                                            onClick={closeAllGroups}
                                             title={
                                                 collapsed
                                                     ? item.title
                                                     : undefined
                                             }
-                                            className={`flex items-center rounded-lg text-sm transition-colors ${
-                                                collapsed
-                                                    ? 'justify-center px-2 py-2'
-                                                    : 'gap-3 px-3 py-2.5'
-                                            } ${
-                                                active
+                                            className={`flex items-center rounded-lg text-sm transition-colors ${collapsed
+                                                ? 'justify-center px-2 py-2'
+                                                : 'gap-3 px-3 py-2.5'
+                                                } ${active
                                                     ? 'bg-[#476AB8] text-primary-foreground'
                                                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                            }`}
+                                                }`}
                                         >
                                             <span className="rounded-xl border border-slate-300 bg-white p-2">
                                                 <ItemIcon
-                                                    className={`size-5 shrink-0 ${
-                                                        active
-                                                            ? 'text-[#476AB8]'
-                                                            : 'text-blue-600'
-                                                    }`}
+                                                    className={`size-5 shrink-0 ${active
+                                                        ? 'text-[#476AB8]'
+                                                        : 'text-blue-600'
+                                                        }`}
                                                 />
                                             </span>
 
@@ -344,19 +347,17 @@ export function DashboardSidebar({
 
                 <div className="shrink-0 border-t p-3">
                     <div
-                        className={`rounded-lg bg-[#476AB8] text-white ${
-                            collapsed
-                                ? 'flex justify-center px-2 py-2'
-                                : 'flex items-center gap-4 px-4 py-2'
-                        }`}
+                        className={`rounded-lg bg-[#476AB8] text-white ${collapsed
+                            ? 'flex justify-center px-2 py-2'
+                            : 'flex items-center gap-4 px-4 py-2'
+                            }`}
                     >
                         {/* User */}
                         <div
-                            className={`min-w-0 ${
-                                collapsed
-                                    ? 'flex justify-center'
-                                    : 'flex flex-1 items-center gap-2'
-                            }`}
+                            className={`min-w-0 ${collapsed
+                                ? 'flex justify-center'
+                                : 'flex flex-1 items-center gap-2'
+                                }`}
                         >
                             {/* Avatar */}
                             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#99b0e2] text-sm font-medium uppercase">
