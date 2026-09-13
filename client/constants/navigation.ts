@@ -99,12 +99,12 @@ export const navigationGroups: NavigationGroup[] = [
     items: [
       {
         title: 'Category',
-        href: '/categorie',
+        href: '/category',
         icon: Tags,
       },
       {
         title: 'Sub Category',
-        href: '/sub-categorie',
+        href: '/sub-category',
         icon: Tags,
       },
       {

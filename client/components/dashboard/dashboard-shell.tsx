@@ -40,7 +40,7 @@ export function DashboardShell({
                     }
                 />
 
-                <main className="min-h-screen pt-16">
+                <main className="min-h-screen">
                     <div className="p-4 md:p-6">
                         <DashboardPageHeader />
 
