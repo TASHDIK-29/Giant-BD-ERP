@@ -6,6 +6,10 @@ import { DashboardSidebar } from './dashboard-sidebar';
 import { DashboardTopbar } from './dashboard-topbar';
 import { DashboardPageHeader } from './dashboard-page-header';
 
+import {
+    DashboardHeaderProvider,
+} from './dashboard-header-context';
+
 const SIDEBAR_STATE_KEY = 'sidebar-state';
 
 interface DashboardShellProps {
@@ -56,38 +60,41 @@ export function DashboardShell({
     };
 
     return (
-        <div className="min-h-screen bg-muted/30">
-            <DashboardSidebar
-                collapsed={sidebarCollapsed}
-            />
+        <DashboardHeaderProvider>
 
-            <div
-                className={`transition-all duration-300 ${sidebarCollapsed
-                    ? 'ml-20'
-                    : 'ml-72'
-                    }`}
-            >
-                <DashboardTopbar
-                    sidebarCollapsed={
-                        sidebarCollapsed
-                    }
-                    onToggleSidebar={() =>
-                        setSidebarCollapsed(
-                            (current) => !current,
-                        )
-                    }
+            <div className="min-h-screen bg-muted/30">
+                <DashboardSidebar
+                    collapsed={sidebarCollapsed}
                 />
 
-                <main className="min-h-screen">
-                    <div className="p-4 md:p-6">
-                        <DashboardPageHeader />
+                <div
+                    className={`transition-all duration-300 ${sidebarCollapsed
+                        ? 'ml-20'
+                        : 'ml-72'
+                        }`}
+                >
+                    <DashboardTopbar
+                        sidebarCollapsed={
+                            sidebarCollapsed
+                        }
+                        onToggleSidebar={() =>
+                            setSidebarCollapsed(
+                                (current) => !current,
+                            )
+                        }
+                    />
 
-                        <div className="mt-5">
-                            {children}
+                    <main className="min-h-screen">
+                        <div className="p-4 md:p-6">
+                            <DashboardPageHeader />
+
+                            <div className="mt-5">
+                                {children}
+                            </div>
                         </div>
-                    </div>
-                </main>
+                    </main>
+                </div>
             </div>
-        </div>
+        </DashboardHeaderProvider>
     );
 }

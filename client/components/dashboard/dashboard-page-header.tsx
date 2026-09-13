@@ -12,6 +12,16 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import {
+    useDashboardHeader,
+} from './dashboard-header-context';
+
+interface DashboardPageHeaderProps {
+    searchValue?: string;
+    onSearchChange?: (value: string) => void;
+    onRefresh?: () => void;
+}
+
 interface PageConfig {
     title: string;
     breadcrumb: string[];
@@ -237,6 +247,12 @@ const pageConfigs: Record<string, PageConfig> = {
 export function DashboardPageHeader() {
     const pathname = usePathname();
 
+    const {
+        searchValue,
+        setSearchValue,
+        triggerRefresh,
+    } = useDashboardHeader();
+
     const config =
         pageConfigs[pathname] ?? {
             title: 'Dashboard',
@@ -246,6 +262,7 @@ export function DashboardPageHeader() {
     return (
         <div className="rounded-2xl border bg-background px-5 py-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
                 {/* Dynamic left side */}
                 <div>
                     <h1 className="text-lg font-semibold">
@@ -271,10 +288,17 @@ export function DashboardPageHeader() {
 
                 {/* Fixed right side */}
                 <div className="flex flex-wrap items-center gap-2">
+
                     {config.showSearch && (
                         <div className="relative">
                             <Input
-                                placeholder="Search..."
+                                value={searchValue}
+                                onChange={(event) =>
+                                    setSearchValue(
+                                        event.target.value,
+                                    )
+                                }
+                                placeholder={`Search ${config.title.toLowerCase()}...`}
                                 className="h-9 w-62.5 border-primary pr-9"
                             />
 
@@ -297,6 +321,7 @@ export function DashboardPageHeader() {
                             variant="outline"
                             size="icon"
                             className="h-9 w-9"
+                            onClick={triggerRefresh}
                         >
                             <RefreshCw className="h-4 w-4" />
                         </Button>
@@ -317,10 +342,18 @@ export function DashboardPageHeader() {
                             defaultValue="20"
                             className="h-9 rounded-md border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                         >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
+                            <option value="10">
+                                10
+                            </option>
+                            <option value="20">
+                                20
+                            </option>
+                            <option value="50">
+                                50
+                            </option>
+                            <option value="100">
+                                100
+                            </option>
                         </select>
                     )}
 
