@@ -5,8 +5,6 @@ import { useState } from 'react';
 import { DashboardSidebar } from './dashboard-sidebar';
 import { DashboardTopbar } from './dashboard-topbar';
 import { DashboardPageHeader } from './dashboard-page-header';
-// import { DashboardTopbar } from './dashboard-topbar';
-// import { DashboardPageHeader } from './dashboard-page-header';
 
 interface DashboardShellProps {
     children: React.ReactNode;
@@ -20,29 +18,29 @@ export function DashboardShell({
 
     return (
         <div className="min-h-screen bg-muted/30">
-            {/* Sidebar */}
             <DashboardSidebar
                 collapsed={sidebarCollapsed}
             />
 
-            {/* Main area */}
             <div
-                className={
+                className={`transition-all duration-300 ${
                     sidebarCollapsed
-                        ? 'ml-0 transition-all duration-300'
-                        : 'ml-72 transition-all duration-300'
-                }
+                        ? 'ml-20'
+                        : 'ml-72'
+                }`}
             >
-                {/* Fixed top navbar */}
                 <DashboardTopbar
-                    sidebarCollapsed={sidebarCollapsed}
+                    sidebarCollapsed={
+                        sidebarCollapsed
+                    }
                     onToggleSidebar={() =>
-                        setSidebarCollapsed((previous) => !previous)
+                        setSidebarCollapsed(
+                            (current) => !current,
+                        )
                     }
                 />
 
-                {/* Page area */}
-                <main className="min-h-screen">
+                <main className="min-h-screen pt-16">
                     <div className="p-4 md:p-6">
                         <DashboardPageHeader />
 
