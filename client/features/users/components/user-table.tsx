@@ -85,7 +85,7 @@ export function UserTable({
                             users.map((user) => (
                                 <tr
                                     key={user.id}
-                                    className="border-b last:border-b-0 hover:bg-muted/20"
+                                    className="border-b last:border-b-0 hover:bg-[#476A8B] hover:text-white"
                                 >
                                     {/* ID */}
                                     <td className="px-5 py-4 font-medium">
@@ -95,26 +95,6 @@ export function UserTable({
                                     {/* Name */}
                                     <td className="px-5 py-4">
                                         <div className="flex items-center gap-3">
-                                            {user.avatar ? (
-                                                <img
-                                                    src={
-                                                        user.avatar
-                                                    }
-                                                    alt={
-                                                        user.name
-                                                    }
-                                                    className="size-9 rounded-full object-cover"
-                                                />
-                                            ) : (
-                                                <div className="flex size-9 items-center justify-center rounded-full bg-[#99b0e2] text-sm font-medium text-[#476AB8]">
-                                                    {user.name
-                                                        .trim()
-                                                        .charAt(
-                                                            0,
-                                                        )
-                                                        .toUpperCase()}
-                                                </div>
-                                            )}
 
                                             <span className="font-medium">
                                                 {user.name}
@@ -148,7 +128,7 @@ export function UserTable({
                                     {/* Status */}
                                     <td className="px-5 py-4">
                                         <span
-                                            className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${user.status ===
+                                            className={`inline-flex rounded-sm px-3 py-1 text-xs font-medium ${user.status ===
                                                     'ACTIVE'
                                                     ? 'bg-green-100 text-green-700'
                                                     : 'bg-red-100 text-red-700'
@@ -170,7 +150,7 @@ export function UserTable({
                                                     )
                                                 }
                                                 title="View"
-                                                className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                                className="rounded-md bg-[#F3F8FE] p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                                             >
                                                 <Eye className="size-4" />
                                             </button>
@@ -184,7 +164,7 @@ export function UserTable({
                                                     )
                                                 }
                                                 title="Edit"
-                                                className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                                className="rounded-md bg-[#F3F8FE] p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                                             >
                                                 <Pencil className="size-4" />
                                             </button>
@@ -193,7 +173,7 @@ export function UserTable({
                                             <button
                                                 type="button"
                                                 title="Delete"
-                                                className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600"
+                                                className="rounded-md bg-[#F3F8FE] p-2 text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600"
                                             >
                                                 <Trash2 className="size-4" />
                                             </button>

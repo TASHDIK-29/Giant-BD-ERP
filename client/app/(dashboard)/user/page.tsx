@@ -50,8 +50,8 @@ export default function UserPage() {
     refreshKey,
   );
 
-  console.log('searchValue:', searchValue);
-  console.log('search:', search);
+  // console.log('searchValue:', searchValue);
+  // console.log('search:', search);
 
   const users = data?.data ?? [];
   const meta = data?.meta;
@@ -93,38 +93,6 @@ export default function UserPage() {
 
   return (
     <div className="space-y-4">
-      {/* Table toolbar */}
-      {/* <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-base font-semibold">
-            Users
-          </h2>
-
-          <p className="text-sm text-muted-foreground">
-            Manage system users.
-          </p>
-        </div>
-
-        {isFetching && !isLoading && (
-          <span className="text-xs text-muted-foreground">
-            Updating...
-          </span>
-        )}
-      </div> */}
-
-      {/* Search */}
-      {/* <div className="rounded-xl border bg-background p-4">
-        <input
-          value={searchInput}
-          onChange={(event) =>
-            setSearchInput(
-              event.target.value,
-            )
-          }
-          placeholder="Search by name or email..."
-          className="h-10 w-full max-w-sm rounded-md border bg-background px-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
-        />
-      </div> */}
 
       {/* Table */}
       <UserTable
@@ -133,7 +101,7 @@ export default function UserPage() {
       />
 
       {/* Pagination */}
-      {meta && (
+      {meta && users.length > 10 && (
         <UserPagination
           page={meta.page}
           limit={meta.limit}
