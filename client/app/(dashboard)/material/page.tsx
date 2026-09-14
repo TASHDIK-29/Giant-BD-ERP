@@ -12,17 +12,6 @@ import { useMaterials } from '@/features/materials/hooks';
 import { MaterialTable } from '@/features/materials/components/material-table';
 import { MaterialPagination } from '@/features/materials/components/material-pagination';
 
-// import {
-//     CategoryTable,
-// } from '@/features/categories/components/category-table';
-
-// import {
-//     CategoryPagination,
-// } from '@/features/categories/components/category-pagination';
-
-// import {
-//     useCategories,
-// } from '@/features/categories/hooks';
 
 export default function CategoryPage() {
     const {
