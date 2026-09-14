@@ -7,20 +7,20 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { SubZoneRecord } from '../type';
+import { RacksRecord } from '../type';
 
 
 
-interface SubZonesTableProps {
-    subZones: SubZoneRecord[];
+interface RacksTableProps {
+    racks: RacksRecord[];
     isFetching?: boolean;
     emptyMessage?: string;
 }
 
-export function SubZonesTable({
-    subZones,
+export function RacksTable({
+    racks,
     emptyMessage = 'No categories found.',
-}: SubZonesTableProps) {
+}: RacksTableProps) {
     return (
         <div className="overflow-x-auto">
             <table className="w-full min-w-225 border-collapse">
@@ -52,7 +52,7 @@ export function SubZonesTable({
 
                         {/* Warehouse */}
                         <th className="whitespace-nowrap px-4 py-3 text-left text-sm font-semibold">
-                            Zone
+                            Sub Zone
                         </th>
 
                         {/* Description */}
@@ -73,7 +73,7 @@ export function SubZonesTable({
                 </thead>
 
                 <tbody>
-                    {subZones.length === 0 ? (
+                    {racks.length === 0 ? (
                         <tr>
                             <td
                                 colSpan={6}
@@ -83,11 +83,11 @@ export function SubZonesTable({
                             </td>
                         </tr>
                     ) : (
-                        subZones.map(
-                            (subZone) => (
+                        racks.map(
+                            (rack) => (
                                 <tr
                                     key={
-                                        subZone.id
+                                        rack.id
                                     }
                                     className="border-b last:border-0 hover:bg-[#476A8B] hover:text-white"
                                 >
@@ -95,7 +95,7 @@ export function SubZonesTable({
                                     <td className="px-4 py-3 text-center">
                                         <input
                                             type="checkbox"
-                                            aria-label={`Select ${subZone.name}`}
+                                            aria-label={`Select ${rack.name}`}
                                             className="h-4 w-4 rounded border"
                                         />
                                     </td>
@@ -103,7 +103,7 @@ export function SubZonesTable({
                                     {/* ID */}
                                     <td className="whitespace-nowrap px-4 py-3 text-sm">
                                         {
-                                            subZone.id
+                                            rack.id
                                         }
                                     </td>
 
@@ -111,7 +111,7 @@ export function SubZonesTable({
                                     <td className="px-4 py-3">
                                         <span className="whitespace-nowrap text-sm font-medium">
                                             {
-                                                subZone.name
+                                                rack.name
                                             }
                                         </span>
                                     </td>
@@ -119,21 +119,21 @@ export function SubZonesTable({
                                     {/* Code */}
                                     <td className="max-w-100 px-4 py-3">
                                         <span className="line-clamp-2 text-sm">
-                                            {subZone.code}
+                                            {rack.code}
                                         </span>
                                     </td>
 
-                                    {/* Zone */}
+                                    {/* Warehouse */}
                                     <td className="max-w-100 px-4 py-3">
                                         <span className="line-clamp-2 text-sm">
-                                            {subZone?.zone?.name}
+                                            {rack?.subZone?.name}
                                         </span>
                                     </td>
 
                                     {/* Description */}
                                     <td className="max-w-100 px-4 py-3">
                                         <span className="line-clamp-2 text-sm">
-                                            {subZone.description ||
+                                            {rack.description ||
                                                 '-'}
                                         </span>
                                     </td>
@@ -142,14 +142,14 @@ export function SubZonesTable({
                                     <td className="px-4 py-3 text-center">
                                         <span
                                             className={`inline-flex rounded-sm px-2.5 py-1 text-xs font-medium ${
-                                                subZone.status ===
+                                                rack.status ===
                                                 'ACTIVE'
                                                     ? 'bg-green-100 text-green-700'
                                                     : 'bg-red-100 text-red-700'
                                             }`}
                                         >
                                             {
-                                                subZone.status
+                                                rack.status
                                             }
                                             {/* ACTIVE */}
                                         </span>
