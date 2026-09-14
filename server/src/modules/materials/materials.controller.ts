@@ -47,7 +47,7 @@ export class MaterialsController {
      * List Materials
      */
     @Get()
-    @RequirePermission('material:read')
+    // @RequirePermission('material:read')
     async findAll(
         @Query()
         query: MaterialQueryDto,
