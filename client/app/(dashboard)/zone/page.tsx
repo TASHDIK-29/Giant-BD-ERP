@@ -11,12 +11,6 @@ import {
 import { useZone } from '@/features/zones/hooks';
 import { ZonePagination } from '@/features/zones/components/zone-pagination';
 import { ZonesTable } from '@/features/zones/components/zone-table';
-// import { useWarehouse } from '@/features/warehouse/hooks';
-// import { WarehouseTable } from '@/features/warehouse/components/warehouse-table';
-// import { WarehousePagination } from '@/features/warehouse/components/warehouse-pagination';
-// import { useColors } from '@/features/colors/hooks';
-// import { ColorTable } from '@/features/colors/components/color-table';
-// import { ColorPagination } from '@/features/colors/components/color-pagination';
 
 
 export default function ZonePage() {
@@ -68,7 +62,7 @@ export default function ZonePage() {
     if (isLoading) {
         return (
             <div className="rounded-xl border bg-background p-6">
-                Loading warehouse...
+                Loading zones...
             </div>
         );
     }

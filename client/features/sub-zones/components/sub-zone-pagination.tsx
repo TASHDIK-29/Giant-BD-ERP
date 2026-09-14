@@ -7,7 +7,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 
-interface ZonePaginationProps {
+interface SubZonePaginationProps {
     page: number;
     totalPages: number;
     total: number;
@@ -16,14 +16,14 @@ interface ZonePaginationProps {
     onLimitChange: (limit: number) => void;
 }
 
-export function ZonePagination({
+export function SubZonePagination({
     page,
     totalPages,
     total,
     limit,
     onPageChange,
     onLimitChange,
-}: ZonePaginationProps) {
+}: SubZonePaginationProps) {
     const start =
         total === 0
             ? 0
@@ -38,7 +38,7 @@ export function ZonePagination({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
                 Showing {start} to {end} of{' '}
-                {total} Zone
+                {total} Sub Zone
             </p>
 
             <div className="flex items-center gap-2">
