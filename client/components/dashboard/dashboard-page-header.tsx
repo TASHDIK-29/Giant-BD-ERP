@@ -35,8 +35,8 @@ interface PageConfig {
 
 const pageConfigs: Record<string, PageConfig> = {
     '/dashboard': {
-        title: 'Dashboard',
-        breadcrumb: ['Dashboard'],
+        title: 'Warehouse FG',
+        breadcrumb: ['Warehouse', 'Dashboard'],
         showSearch: false,
         showDownload: false,
         showRefresh: true,
@@ -46,7 +46,7 @@ const pageConfigs: Record<string, PageConfig> = {
     },
 
     '/stock-in': {
-        title: 'Stock In',
+        title: 'Warehouse FG',
         breadcrumb: ['Warehouse', 'Stock In'],
         showSearch: true,
         showDownload: true,
@@ -57,7 +57,7 @@ const pageConfigs: Record<string, PageConfig> = {
     },
 
     '/stock-out': {
-        title: 'Stock Out',
+        title: 'Warehouse FG',
         breadcrumb: ['Warehouse', 'Stock Out'],
         showSearch: true,
         showDownload: true,
@@ -68,7 +68,7 @@ const pageConfigs: Record<string, PageConfig> = {
     },
 
     '/batch-list': {
-        title: 'Batch List',
+        title: 'Warehouse FG',
         breadcrumb: ['Warehouse', 'Batch List'],
         showSearch: true,
         showDownload: true,
@@ -79,7 +79,7 @@ const pageConfigs: Record<string, PageConfig> = {
     },
 
     '/stock-out-list': {
-        title: 'Stock Out List',
+        title: 'Warehouse FG',
         breadcrumb: ['Warehouse', 'Stock Out List'],
         showSearch: true,
         showDownload: true,
@@ -90,7 +90,7 @@ const pageConfigs: Record<string, PageConfig> = {
     },
 
     '/master-fg-product': {
-        title: 'Master FG Product',
+        title: 'Product',
         breadcrumb: ['Product', 'Master FG Product'],
         showSearch: true,
         showDownload: true,
@@ -101,7 +101,7 @@ const pageConfigs: Record<string, PageConfig> = {
     },
 
     '/variant-fg-product': {
-        title: 'Variant FG Product',
+        title: 'Product',
         breadcrumb: ['Product', 'Variant FG Product'],
         showSearch: true,
         showDownload: true,
