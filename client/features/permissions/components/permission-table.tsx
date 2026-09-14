@@ -74,7 +74,7 @@ export function PermissionTable({
         <div className="overflow-x-auto">
             <table className="w-full min-w-max border-collapse rounded-t-2xl">
                 <thead>
-                    <tr className="border-b bg-blue-100 rounded-t-2xl">
+                    <tr className="border-b bg-muted/40">
                         <th className="whitespace-nowrap px-4 py-3 text-left text-sm font-semibold">
                             ID
                         </th>
@@ -178,19 +178,19 @@ export function PermissionTable({
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-8 w-8"
+                                                className="h-8 w-8 bg-[#F3F8FE]"
                                                 title="Edit"
                                             >
-                                                <Pencil className="h-4 w-4" />
+                                                <Pencil className="h-4 w-4 text-black" />
                                             </Button>
 
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-8 w-8 text-destructive hover:text-destructive"
+                                                className="h-8 w-8 text-destructive hover:text-destructive bg-[#F3F8FE]"
                                                 title="Delete"
                                             >
-                                                <Trash2 className="h-4 w-4" />
+                                                <Trash2 className="h-4 w-4 text-black" />
                                             </Button>
                                         </div>
                                     </td>
