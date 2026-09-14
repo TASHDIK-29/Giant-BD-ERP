@@ -65,7 +65,7 @@ export default function CategoryPage() {
     if (isLoading) {
         return (
             <div className="rounded-xl border bg-background p-6">
-                Loading materials...
+                Loading colors...
             </div>
         );
     }
