@@ -1,10 +1,6 @@
 import { api } from '@/lib/axios';
 import { QueryWarehouseParams, WarehouseResponse } from './type';
 
-// import type {
-//     MaterialsResponse,
-//     QueryMaterialsParams,
-// } from './types';
 
 export async function getWarehouse(
     params: QueryWarehouseParams = {},

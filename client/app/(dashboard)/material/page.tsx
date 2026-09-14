@@ -13,7 +13,7 @@ import { MaterialTable } from '@/features/materials/components/material-table';
 import { MaterialPagination } from '@/features/materials/components/material-pagination';
 
 
-export default function CategoryPage() {
+export default function MaterialPage() {
     const {
         searchValue,
         refreshKey,

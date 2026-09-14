@@ -16,7 +16,7 @@ import { ColorPagination } from '@/features/colors/components/color-pagination';
 // import { MaterialPagination } from '@/features/materials/components/material-pagination';
 
 
-export default function CategoryPage() {
+export default function ColorPage() {
     const {
         searchValue,
         refreshKey,

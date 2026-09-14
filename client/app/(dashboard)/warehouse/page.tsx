@@ -16,7 +16,7 @@ import { WarehousePagination } from '@/features/warehouse/components/warehouse-p
 // import { ColorPagination } from '@/features/colors/components/color-pagination';
 
 
-export default function CategoryPage() {
+export default function WarehousePage() {
     const {
         searchValue,
         refreshKey,

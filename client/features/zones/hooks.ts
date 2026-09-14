@@ -1,24 +1,25 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getWarehouse } from './api';
-import { QueryWarehouseParams } from './type';
+import { getZones } from './api';
+import { QueryZoneParams } from './type';
+// import { QueryWarehouseParams } from './type';
 
 
 
-export function useWarehouse(
-    params: QueryWarehouseParams,
+export function useZone(
+    params: QueryZoneParams,
     refreshKey = 0,
 ) {
     return useQuery({
         queryKey: [
-            'warehouse',
+            'zones',
             params,
             refreshKey,
         ],
 
         queryFn: () =>
-            getWarehouse(params),
+            getZones(params),
 
         placeholderData: (
             previousData,
