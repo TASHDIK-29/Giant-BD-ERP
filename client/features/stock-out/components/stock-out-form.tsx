@@ -104,15 +104,9 @@ export function StockOutForm() {
     const [basicOpen, setBasicOpen] =
         useState(true);
 
-    const [
-        createLcOpen,
-        setCreateLcOpen,
-    ] = useState(false);
-
-    const [
-        createPoOpen,
-        setCreatePoOpen,
-    ] = useState(false);
+    /* Dedicated states for Create LC / PO Section */
+    const [createLcBuyerId, setCreateLcBuyerId] = useState('');
+    const [createPoLcId, setCreatePoLcId] = useState('');
 
     const [buyerId, setBuyerId] =
         useState('');
@@ -195,54 +189,47 @@ export function StockOutForm() {
         stockInResponse?.data ?? [];
 
     /*
-     * Selected buyer.
+     * Flattened list of ALL available LCs across all active buyers
      */
-    const selectedBuyer =
-        useMemo(
-            () =>
-                buyers.find(
-                    (buyer) =>
-                        buyer.id ===
-                        Number(buyerId),
-                ),
-            [
-                buyers,
-                buyerId,
-            ],
+    const allAvailableLcs = useMemo(() => {
+        return buyers
+            .filter((buyer) => buyer.status === 'ACTIVE')
+            .flatMap((buyer) => buyer.lettersOfCredit ?? []);
+    }, [buyers]);
+
+    /*
+     * Selected LC found from all available LCs
+     */
+    const selectedLc = useMemo(() => {
+        if (!lcId) return undefined;
+        return allAvailableLcs.find((lc) => lc.id === Number(lcId));
+    }, [allAvailableLcs, lcId]);
+
+    /*
+     * Selected Buyer found directly based on selected LC
+     */
+    const selectedBuyer = useMemo(() => {
+        if (!lcId) return undefined;
+        return buyers.find((buyer) =>
+            buyer.lettersOfCredit?.some((lc) => lc.id === Number(lcId)),
         );
+    }, [buyers, lcId]);
 
     /*
-     * LC options belonging
-     * to selected buyer.
+     * Available POs belonging strictly to the selected LC
      */
-    const availableLcs =
-        selectedBuyer?.lettersOfCredit ??
-        [];
+    const availablePos = selectedLc?.purchaseOrders ?? [];
 
     /*
-     * Selected LC.
+     * Available LCs for Create PO section dropdown based on selected Create LC Buyer
      */
-    const selectedLc =
-        useMemo(
-            () =>
-                availableLcs.find(
-                    (lc) =>
-                        lc.id ===
-                        Number(lcId),
-                ),
-            [
-                availableLcs,
-                lcId,
-            ],
+    const createPoAvailableLcs = useMemo(() => {
+        if (!createLcBuyerId) return [];
+        return (
+            buyers.find((buyer) => buyer.id === Number(createLcBuyerId))
+                ?.lettersOfCredit ?? []
         );
-
-    /*
-     * PO options belonging
-     * to selected LC.
-     */
-    const availablePos =
-        selectedLc?.purchaseOrders ??
-        [];
+    }, [buyers, createLcBuyerId]);
 
     /*
      * Master product variants.
@@ -406,12 +393,7 @@ export function StockOutForm() {
         );
 
     /*
-     * Load detailed batch
-     * information.
-     *
-     * Only batches belonging
-     * to selected master/color/
-     * gender are requested.
+     * Relevant Batch IDs.
      */
     const relevantBatchIds =
         useMemo(() => {
@@ -446,61 +428,6 @@ export function StockOutForm() {
             gender,
         ]);
 
-    /*
-     * Fetch batch details.
-     *
-     * This hook is used once
-     * for each batch.
-     *
-     * React cannot call hooks
-     * inside map, so the actual
-     * details are loaded below
-     * through a small child
-     * component.
-     */
-    // const [stockDetails, setStockDetails] =
-    //     useState<
-    //         Record<
-    //             number,
-    //             StockInItem[]
-    //         >
-    //     >({});
-
-    /*
-     * Reset details whenever
-     * product selection changes.
-     */
-    // useEffect(() => {
-    //     setStockDetails({});
-    //     setIssueQuantities({});
-    // }, [
-    //     masterProductId,
-    //     colorId,
-    //     gender,
-    // ]);
-
-    /*
-     * We render detail loaders
-     * through child components.
-     */
-    // const addStockDetails = (
-    //     batchId: number,
-    //     items: StockInItem[],
-    // ) => {
-    //     setStockDetails(
-    //         (current) => ({
-    //             ...current,
-    //             [batchId]: items,
-    //         }),
-    //     );
-    // };
-
-    /*
-     * Stock records matching
-     * selected variants.
-     */
-
-
     const {
         data: stockDetails = {},
         isLoading: stockDetailsLoading,
@@ -508,7 +435,6 @@ export function StockOutForm() {
         useAvailableStockDetails(
             relevantBatchIds,
         );
-
 
     const stockRows =
         useMemo(() => {
@@ -566,6 +492,7 @@ export function StockOutForm() {
             stockDetails,
             relevantBatchIds,
         ]);
+
     /*
      * Reset.
      */
@@ -574,6 +501,8 @@ export function StockOutForm() {
         setLcId('');
         setPoId('');
 
+        setCreateLcBuyerId('');
+        setCreatePoLcId('');
         setNewLcNumber('');
         setNewPoNumber('');
 
@@ -591,26 +520,26 @@ export function StockOutForm() {
     };
 
     /*
-     * Buyer changed.
+     * LC changed in Basic Information.
+     * Automatically syncs and fills Buyer ID.
      */
-    const handleBuyerChange = (
-        value: string,
-    ) => {
-        setBuyerId(value);
-        setLcId('');
-        setPoId('');
-        setError('');
-    };
-
-    /*
-     * LC changed.
-     */
-    const handleLcChange = (
-        value: string,
-    ) => {
+    const handleLcChange = (value: string) => {
         setLcId(value);
         setPoId('');
         setError('');
+
+        if (value) {
+            const foundBuyer = buyers.find((buyer) =>
+                buyer.lettersOfCredit?.some((lc) => lc.id === Number(value)),
+            );
+            if (foundBuyer) {
+                setBuyerId(String(foundBuyer.id));
+            } else {
+                setBuyerId('');
+            }
+        } else {
+            setBuyerId('');
+        }
     };
 
     /*
@@ -665,7 +594,7 @@ export function StockOutForm() {
         async () => {
             setError('');
 
-            if (!buyerId) {
+            if (!createLcBuyerId) {
                 setError(
                     'Please select a Buyer before creating an LC.',
                 );
@@ -684,7 +613,7 @@ export function StockOutForm() {
                     {
                         buyerId:
                             Number(
-                                buyerId,
+                                createLcBuyerId,
                             ),
                         lcNumber:
                             newLcNumber.trim(),
@@ -692,7 +621,6 @@ export function StockOutForm() {
                 );
 
                 setNewLcNumber('');
-                setCreateLcOpen(false);
             } catch (error: any) {
                 setError(
                     error?.response
@@ -710,7 +638,7 @@ export function StockOutForm() {
         async () => {
             setError('');
 
-            if (!lcId) {
+            if (!createPoLcId) {
                 setError(
                     'Please select an LC before creating a PO.',
                 );
@@ -729,7 +657,7 @@ export function StockOutForm() {
                     {
                         letterOfCreditId:
                             Number(
-                                lcId,
+                                createPoLcId,
                             ),
                         poNumber:
                             newPoNumber.trim(),
@@ -737,7 +665,6 @@ export function StockOutForm() {
                 );
 
                 setNewPoNumber('');
-                setCreatePoOpen(false);
             } catch (error: any) {
                 setError(
                     error?.response
@@ -912,16 +839,16 @@ export function StockOutForm() {
      * Validation.
      */
     const validate = () => {
-        if (!buyerId) {
-            return 'Please select a Buyer.';
-        }
-
         if (!lcId) {
             return 'Please select an LC.';
         }
 
         if (!poId) {
             return 'Please select a PO.';
+        }
+
+        if (!buyerId || !selectedBuyer) {
+            return 'Please select a valid LC to resolve Buyer.';
         }
 
         if (!masterProductId) {
@@ -969,21 +896,6 @@ export function StockOutForm() {
         return '';
     };
 
-
-    const stockOutBuyer =
-        useMemo(() => {
-            if (!lcId) {
-                return undefined;
-            }
-
-            return buyers.find((buyer) =>
-                buyer.lettersOfCredit.some(
-                    (lc) =>
-                        lc.id === Number(lcId),
-                ),
-            );
-        }, [buyers, lcId]);
-
     /*
      * Create Stock Out.
      */
@@ -1004,8 +916,7 @@ export function StockOutForm() {
             return;
         }
 
-
-        if (!stockOutBuyer) {
+        if (!selectedBuyer) {
             setError(
                 'Unable to determine the Buyer from the selected LC.',
             );
@@ -1013,7 +924,7 @@ export function StockOutForm() {
         }
 
         const payload = {
-            buyerId: stockOutBuyer.id,
+            buyerId: selectedBuyer.id,
 
             letterOfCreditId:
                 Number(lcId),
@@ -1131,12 +1042,11 @@ export function StockOutForm() {
 
                             <div className="relative">
                                 <select
-                                    value={buyerId}
-                                    onChange={(event) =>
-                                        handleBuyerChange(
-                                            event.target.value,
-                                        )
-                                    }
+                                    value={createLcBuyerId}
+                                    onChange={(event) => {
+                                        setCreateLcBuyerId(event.target.value);
+                                        setCreatePoLcId('');
+                                    }}
                                     className="h-10 w-full appearance-none rounded-md border border-slate-300 bg-slate-50 px-3 py-2 pr-10 text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
                                 >
                                     <option value="">
@@ -1225,22 +1135,20 @@ export function StockOutForm() {
 
                             <div className="relative">
                                 <select
-                                    value={lcId}
+                                    value={createPoLcId}
                                     onChange={(event) =>
-                                        handleLcChange(
-                                            event.target.value,
-                                        )
+                                        setCreatePoLcId(event.target.value)
                                     }
-                                    disabled={!buyerId}
+                                    disabled={!createLcBuyerId}
                                     className="h-10 w-full appearance-none rounded-md border border-slate-300 bg-slate-50 px-3 py-2 pr-10 text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
                                 >
                                     <option value="">
-                                        {!buyerId
+                                        {!createLcBuyerId
                                             ? 'Select Buyer First'
                                             : 'Select LC'}
                                     </option>
 
-                                    {availableLcs.map((lc) => (
+                                    {createPoAvailableLcs.map((lc) => (
                                         <option
                                             key={lc.id}
                                             value={lc.id}
@@ -1264,7 +1172,7 @@ export function StockOutForm() {
                             onClick={handleCreatePo}
                             disabled={
                                 createPoMutation.isPending ||
-                                !lcId
+                                !createPoLcId
                             }
                             className="h-10 whitespace-nowrap rounded-md bg-[#3c5168] px-6 text-sm font-bold text-white transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
                         >
@@ -1346,16 +1254,13 @@ export function StockOutForm() {
                                                     event.target.value,
                                                 )
                                             }
-                                            disabled={!buyerId}
                                             className={`${inputClass} appearance-none pr-10`}
                                         >
                                             <option value="">
-                                                {!buyerId
-                                                    ? 'Select Buyer First'
-                                                    : 'Select LC'}
+                                                Select LC
                                             </option>
 
-                                            {availableLcs.map(
+                                            {allAvailableLcs.map(
                                                 (lc) => (
                                                     <option
                                                         key={lc.id}
@@ -1782,19 +1687,16 @@ export function StockOutForm() {
                                 )}
                             </div>
 
-                            {/* No matching batches */}
                             {relevantBatchIds.length === 0 ? (
                                 <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-400">
                                     No warehouse stock found for the selected
                                     product, color and gender.
                                 </div>
                             ) : stockDetailsLoading ? (
-                                /* Loading batch details */
                                 <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-400">
                                     Loading warehouse stock...
                                 </div>
                             ) : stockRows.length === 0 ? (
-                                /* Details loaded but no matching variants */
                                 <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-400">
                                     No warehouse stock found for the selected
                                     product variants.
@@ -2468,59 +2370,6 @@ export function StockOutForm() {
             </div>
         </div>
     );
-}
-
-/* =====================================================
-   STOCK BATCH LOADER
-===================================================== */
-
-function StockBatchLoader({
-    batchId,
-    onLoaded,
-}: {
-    batchId: number;
-    onLoaded: (
-        batchId: number,
-        items: StockInItem[],
-    ) => void;
-}) {
-    const {
-        data,
-        isLoading,
-    } = useStockInDetail(
-        batchId,
-        true,
-    );
-
-    useEffect(() => {
-        if (data) {
-            onLoaded(
-                batchId,
-                data.items,
-            );
-        }
-    }, [
-        data,
-        batchId,
-        onLoaded,
-    ]);
-
-    if (isLoading) {
-        return (
-            <div className="rounded-xl border border-slate-200 bg-white px-4 py-5">
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                    <Loader2
-                        size={16}
-                        className="animate-spin"
-                    />
-
-                    Loading batch stock...
-                </div>
-            </div>
-        );
-    }
-
-    return null;
 }
 
 /* =====================================================
