@@ -1,7 +1,5 @@
-export default function UserPage() {
-  return (
-    <div className="rounded-xl border bg-background p-6">
-      Stock Out management content will go here.
-    </div>
-  );
+import { StockOutForm } from '@/features/stock-out/components/stock-out-form';
+
+export default function StockOutPage() {
+    return <StockOutForm />;
 }
