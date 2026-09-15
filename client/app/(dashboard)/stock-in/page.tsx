@@ -1,7 +1,5 @@
-export default function UserPage() {
-  return (
-    <div className="rounded-xl border bg-background p-6">
-      Stock In management content will go here.
-    </div>
-  );
+import { StockInForm } from '@/features/stock-in/components/stock-in-form';
+
+export default function StockInPage() {
+    return <StockInForm />;
 }
