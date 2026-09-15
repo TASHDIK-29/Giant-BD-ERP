@@ -5,8 +5,10 @@ import {
     Printer,
     RefreshCw,
     Search,
+    Plus,
 } from 'lucide-react';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -15,12 +17,6 @@ import { Input } from '@/components/ui/input';
 import {
     useDashboardHeader,
 } from './dashboard-header-context';
-
-interface DashboardPageHeaderProps {
-    searchValue?: string;
-    onSearchChange?: (value: string) => void;
-    onRefresh?: () => void;
-}
 
 interface PageConfig {
     title: string;
@@ -31,6 +27,7 @@ interface PageConfig {
     showPrint?: boolean;
     showPageSize?: boolean;
     showNew?: boolean;
+    newHref?: string; // Optional custom route for + New
 }
 
 const pageConfigs: Record<string, PageConfig> = {
@@ -259,6 +256,9 @@ export function DashboardPageHeader() {
             breadcrumb: ['Dashboard'],
         };
 
+    // Computes target URL dynamically (e.g. /user -> /user/new, or custom newHref)
+    const newTargetHref = config.newHref ?? `${pathname}/new`;
+
     return (
         <div className="rounded-2xl border bg-background px-5 py-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -358,9 +358,11 @@ export function DashboardPageHeader() {
                     )}
 
                     {config.showNew && (
-                        <Button className="h-9 bg-[#476AB8]">
-                            + New
-                        </Button>
+                        <Link href={newTargetHref}>
+                            <Button className="h-9 bg-[#476AB8]">
+                                <Plus className="mr-1 h-4 w-4" /> New
+                            </Button>
+                        </Link>
                     )}
                 </div>
             </div>
