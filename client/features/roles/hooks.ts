@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { getRoles } from './api';
+import { createRole, getRoles } from './api';
 
 import type {
     QueryRolesParams,
@@ -25,5 +25,13 @@ export function useRoles(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+export function useCreateRole() {
+    return useMutation({
+        mutationFn: createRole,
     });
 }

@@ -34,3 +34,16 @@ export interface QueryRolesParams {
     search?: string;
     status?: RoleStatus;
 }
+
+
+
+export interface CreateRolePayload {
+    name: string;
+    description?: string;
+    permissionIds?: number[];
+    grantAll?: boolean;
+}
+
+export interface CreateRoleResponse {
+    message: string;
+}

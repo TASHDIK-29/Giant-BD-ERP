@@ -3,6 +3,7 @@ export interface Permission {
     name: string;
     key: string;
     description: string | null;
+    action?: string;
     createdAt: string;
     updatedAt: string;
 }
