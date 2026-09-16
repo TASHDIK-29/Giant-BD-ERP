@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QuerySubZoneParams } from './type';
-import { getSubZones } from './api';
+import { createSubZone, getSubZones } from './api';
 
 
 
@@ -23,5 +23,15 @@ export function useSubZone(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+
+export function useCreateSubZone() {
+    return useMutation({
+        mutationFn:
+            createSubZone,
     });
 }

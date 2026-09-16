@@ -43,3 +43,19 @@ export interface QuerySubZoneParams {
     search?: string;
     status?: SubZoneStatus;
 }
+
+
+
+
+/** create sub zone */
+
+export interface CreateSubZoneRequest {
+    name: string;
+    code: string;
+    zoneId: string;
+    description?: string;
+}
+
+export interface CreateSubZoneResponse {
+    message: string;
+}
