@@ -1,9 +1,22 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryMasterProductParams } from './type';
 import { getMasterProduct } from './api';
 
+
+
+
+import {
+    createMasterProduct,
+} from './api';
+
+export function useCreateMasterProduct() {
+    return useMutation({
+        mutationFn:
+            createMasterProduct,
+    });
+}
 
 
 export function useMasterProduct(

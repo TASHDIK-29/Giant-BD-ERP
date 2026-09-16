@@ -55,61 +55,13 @@ export interface QueryMasterProductParams {
     status?: MasterProductStatus;
 }
 
+export interface CreateMasterProductRequest {
+    name: string;
+    categoryId: number;
+    subCategoryId?: number;
+    materialId: number;
+}
 
-/**
-        {
-            "id": 6,
-            "name": "Test Master Product 2",
-            "sku": "TEST-MASTER-PRODUCT-2-ELECTRONIC-DEVICES",
-            "categoryId": 1,
-            "subCategoryId": null,
-            "materialId": 6,
-            "status": "ACTIVE",
-            "createdAt": "2026-09-10T13:15:12.708Z",
-            "updatedAt": "2026-09-10T13:15:12.708Z",
-            "category": {
-                "id": 1,
-                "name": "Electronic Devices",
-                "slug": "electronic-devices"
-            },
-            "subCategory": null,
-            "material": {
-                "id": 6,
-                "name": "Iron"
-            },
-            "_count": {
-                "variants": 6
-            }
-        },
-
-
-        {
-            "id": 4,
-            "name": "Mens Shirt",
-            "sku": "MENS-SHIRT-CLOTH",
-            "categoryId": 5,
-            "subCategoryId": 8,
-            "materialId": 1,
-            "status": "ACTIVE",
-            "createdAt": "2026-09-09T12:48:23.327Z",
-            "updatedAt": "2026-09-09T12:48:23.327Z",
-            "category": {
-                "id": 5,
-                "name": "Cloth",
-                "slug": "cloth"
-            },
-            "subCategory": {
-                "id": 8,
-                "name": "Polyester",
-                "slug": "polyester"
-            },
-            "material": {
-                "id": 1,
-                "name": "Cotton"
-            },
-            "_count": {
-                "variants": 4
-            }
-        },
-  
- */
+export interface CreateMasterProductResponse {
+    message: string;
+}
