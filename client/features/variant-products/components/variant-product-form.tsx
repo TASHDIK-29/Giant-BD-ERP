@@ -363,7 +363,7 @@ export function VariantProductForm() {
                 {/* Header */}
                 <div className="flex items-center justify-between border-b px-6 py-4">
                     <div className="flex items-center gap-3">
-                        <span className="h-10 w-1 rounded-full bg-primary" />
+                        <span className="h-10 w-1 rounded-full bg-[#476AB8]" />
 
                         <h2 className="text-sm font-semibold">
                             Finished Good Variant Information

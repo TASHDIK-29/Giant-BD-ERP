@@ -47,3 +47,17 @@ export interface QueryCategoriesParams {
     status?: CategoryStatus;
     type?: CategoryType;
 }
+
+
+
+
+/* Create Category */
+
+export interface CreateCategoryRequest {
+    name: string;
+    description: string;
+}
+
+export interface CreateCategoryResponse {
+    message: string;
+}

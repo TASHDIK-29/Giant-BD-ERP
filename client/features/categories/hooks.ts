@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { getCategories } from './api';
+import { createCategory, getCategories } from './api';
 
 import type {
     QueryCategoriesParams,
@@ -25,5 +25,14 @@ export function useCategories(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+export function useCreateCategory() {
+    return useMutation({
+        mutationFn:
+            createCategory,
     });
 }

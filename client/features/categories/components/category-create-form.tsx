@@ -9,18 +9,18 @@ import {
 import {
     useRouter,
 } from 'next/navigation';
+import { useCreateCategory } from '../hooks';
+import { Status } from '@/features/stock-out-list/type';
 
 
 
 
-import { useCreateBuyer } from '../hook';
-import { VariantType } from '../type';
 
-export function CreateBuyerForm() {
+export function CreateCategoryForm() {
 
     const router = useRouter();
 
-    const createMutation = useCreateBuyer();
+    const createMutation = useCreateCategory();
 
     const [error, setError] =
         useState('');
@@ -28,7 +28,11 @@ export function CreateBuyerForm() {
     const [name, setName] =
         useState('');
 
-    const [type, setType] = useState<VariantType>('LOCAL');
+
+    const [des, setDes] =
+        useState('');
+
+    const [status, setStatus] = useState<Status>('ACTIVE');
 
 
     const handleSubmit = async (
@@ -50,12 +54,12 @@ export function CreateBuyerForm() {
             await createMutation.mutateAsync(
                 {
                     name: name,
-                    type: type
+                    description: des
                 },
             );
 
             router.push(
-                '/buyer',
+                '/category',
             );
 
             router.refresh();
@@ -63,14 +67,15 @@ export function CreateBuyerForm() {
             setError(
                 error?.response?.data
                     ?.message ||
-                'Failed to create buyer',
+                'Failed to create category',
             );
         }
     };
 
     const handleReset = () => {
         setName('');
-        setType('LOCAL');;
+        setDes('');
+        setStatus('ACTIVE');;
         setError('');
     };
 
@@ -87,27 +92,27 @@ export function CreateBuyerForm() {
                         <span className="h-10 w-1 rounded-full bg-[#476AB8]" />
 
                         <h2 className="text-sm font-semibold">
-                            Buyer Information
+                            Category Information
                         </h2>
                     </div>
                 </div>
 
                 {/* Fields */}
                 <div className="grid grid-cols-1 gap-5 p-6 lg:grid-cols-2">
-                    {/* Buyer Name */}
+                    {/* Category Name */}
                     <div>
                         <label
-                            htmlFor="Buyer-name"
+                            htmlFor="category-name"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Buyer Name{' '}
+                            Category Name{' '}
                             <span className="text-destructive">
                                 *
                             </span>
                         </label>
 
                         <input
-                            id="Buyer-name"
+                            id="category-name"
                             type="text"
                             value={name}
                             onChange={(
@@ -124,39 +129,71 @@ export function CreateBuyerForm() {
                         />
                     </div>
 
-                    {/* Gender */}
+                    {/* Status */}
                     <div>
                         <label
-                            htmlFor="type"
+                            htmlFor="status"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Location{' '}
+                            Status{' '}
                             <span className="text-destructive">
                                 *
                             </span>
                         </label>
 
                         <select
-                            id="type"
-                            value={type}
+                            id="status"
+                            value={status}
                             onChange={(
                                 event,
                             ) =>
-                                setType(
+                                setStatus(
                                     event.target
-                                        .value as VariantType,
+                                        .value as Status,
                                 )
                             }
                             className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
                         >
                             <option value="LOCAL">
-                                Local
+                                Active
                             </option>
 
                             <option value="INTERNATIONAL">
-                                International
+                                Inactive
                             </option>
                         </select>
+                    </div>
+
+
+
+                    {/* Des */}
+                    <div>
+                        <label
+                            htmlFor="category-des"
+                            className="mb-2 block text-sm font-medium"
+                        >
+                            Description{' '}
+                            <span className="text-destructive">
+                                *
+                            </span>
+                        </label>
+
+                        <input
+                            id="category-des"
+                            type="text"
+                            value={des}
+                            onChange={(
+                                event,
+                            ) =>
+                                setDes(
+                                    event
+                                        .target
+                                        .value,
+                                )
+                            }
+                            placeholder="Enter product name"
+                            className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+                        />
                     </div>
                 </div>
             </div>
