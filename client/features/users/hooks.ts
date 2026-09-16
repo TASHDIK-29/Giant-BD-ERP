@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { getUsers } from './api';
+import { createUser, getUsers } from './api';
 
 import type {
     QueryUsersParams,
@@ -22,5 +22,15 @@ export function useUsers(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+
+export function useCreateUser() {
+    return useMutation({
+        mutationFn:
+            createUser,
     });
 }

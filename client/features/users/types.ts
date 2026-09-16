@@ -50,3 +50,21 @@ export interface QueryUsersParams {
     roleId?: number;
     status?: UserStatus;
 }
+
+
+
+
+/** create user */
+
+export interface CreateUserRequest {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    gender: string;
+    roleId: number;
+}
+
+export interface CreateUserResponse {
+    message: string;
+}
