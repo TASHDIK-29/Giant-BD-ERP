@@ -31,3 +31,16 @@ export interface QueryMaterialsParams {
     search?: string;
     status?: MaterialsStatus;
 }
+
+
+
+/** create material */
+
+export interface CreateMaterialRequest {
+    name: string;
+    description?: string;
+}
+
+export interface CreateMaterialResponse {
+    message: string;
+}

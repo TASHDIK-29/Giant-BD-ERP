@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryMaterialsParams } from './types';
-import { getMaterials } from './api';
+import { createMaterial, getMaterials } from './api';
 
 
 
@@ -23,5 +23,14 @@ export function useMaterials(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+export function useCreateMaterial() {
+    return useMutation({
+        mutationFn:
+            createMaterial,
     });
 }
