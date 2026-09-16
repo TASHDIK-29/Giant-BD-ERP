@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryRacksParams } from './type';
-import { getRacks } from './api';
+import { createRack, getRacks } from './api';
 
 
 
@@ -23,5 +23,17 @@ export function useRacks(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+
+
+
+export function useCreateRack() {
+    return useMutation({
+        mutationFn:
+            createRack,
     });
 }

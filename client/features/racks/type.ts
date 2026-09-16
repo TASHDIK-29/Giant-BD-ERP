@@ -43,3 +43,19 @@ export interface QueryRacksParams {
     search?: string;
     status?: RacksStatus;
 }
+
+
+
+
+/** create sub zone */
+
+export interface CreateRackRequest {
+    name: string;
+    code: string;
+    subZoneId: string;
+    description?: string;
+}
+
+export interface CreateRackResponse {
+    message: string;
+}

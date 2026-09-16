@@ -9,17 +9,17 @@ import {
 import {
     useRouter,
 } from 'next/navigation';
-import { useCreateSubZone } from '../hooks';
-import { useZone } from '@/features/zones/hooks';
+import { useCreateRack } from '../hooks';
+import { useSubZone } from '@/features/sub-zones/hooks';
 
 
 
 
-export function CreateSubZoneForm() {
+export function CreateRackForm() {
 
     const router = useRouter();
 
-    const createMutation = useCreateSubZone();
+    const createMutation = useCreateRack();
 
     const [error, setError] =
         useState('');
@@ -30,22 +30,22 @@ export function CreateSubZoneForm() {
     const [code, setCode] =
         useState('');
 
-    const [zoneId, setZoneId] =
+    const [subZoneId, setSubZoneId] =
         useState('');
 
     const [des, setDes] = useState('');
 
 
     const {
-        data: zonesData,
-        isLoading: zonesLoading,
-    } = useZone({
+        data: subZonesData,
+        isLoading: subZonesLoading,
+    } = useSubZone({
         page: 1,
         limit: 100,
     });
 
-    const zones =
-        zonesData?.data ?? [];
+    const subZones =
+        subZonesData?.data ?? [];
 
 
     const handleSubmit = async (
@@ -69,9 +69,9 @@ export function CreateSubZoneForm() {
             return;
         }
 
-        if (!zoneId) {
+        if (!subZoneId) {
             setError(
-                'Zone is required.',
+                'Sub Zone is required.',
             );
             return;
         }
@@ -82,13 +82,13 @@ export function CreateSubZoneForm() {
                 {
                     name: name,
                     code: code,
-                    zoneId: zoneId,
+                    subZoneId: subZoneId,
                     description: des
                 },
             );
 
             router.push(
-                '/sub-zone',
+                '/rack',
             );
 
             router.refresh();
@@ -96,7 +96,7 @@ export function CreateSubZoneForm() {
             setError(
                 error?.response?.data
                     ?.message ||
-                'Failed to create material',
+                'Failed to create rack',
             );
         }
     };
@@ -105,7 +105,7 @@ export function CreateSubZoneForm() {
         setName('');
         setDes('');
         setCode('');
-        setZoneId('');
+        setSubZoneId('');
         setError('');
     };
 
@@ -122,7 +122,7 @@ export function CreateSubZoneForm() {
                         <span className="h-10 w-1 rounded-full bg-[#476AB8]" />
 
                         <h2 className="text-sm font-semibold">
-                            Sub Zone Information
+                            Rack Information
                         </h2>
                     </div>
                 </div>
@@ -132,17 +132,17 @@ export function CreateSubZoneForm() {
                     {/* Warehouse Name */}
                     <div>
                         <label
-                            htmlFor="subZone-name"
+                            htmlFor="rack-name"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Sub Zone Name{' '}
+                            Rack Name{' '}
                             <span className="text-destructive">
                                 *
                             </span>
                         </label>
 
                         <input
-                            id="subZone-name"
+                            id="rack-name"
                             type="text"
                             value={name}
                             onChange={(
@@ -162,17 +162,17 @@ export function CreateSubZoneForm() {
                     {/* Warehouse Code */}
                     <div>
                         <label
-                            htmlFor="subZone-Code"
+                            htmlFor="rack-Code"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Sub Zone Code{' '}
+                            Rack Code{' '}
                             <span className="text-destructive">
                                 *
                             </span>
                         </label>
 
                         <input
-                            id="subZone-Code"
+                            id="rack-Code"
                             type="text"
                             value={code}
                             onChange={(
@@ -193,54 +193,54 @@ export function CreateSubZoneForm() {
                     {/* Warehouse */}
                     <div>
                         <label
-                            htmlFor="Zone"
+                            htmlFor="subZone"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Zone{' '}
+                            Sub Zone{' '}
                             <span className="text-destructive">
                                 *
                             </span>
                         </label>
 
                         <select
-                            id="Zone"
+                            id="subZone"
                             value={
-                                zoneId
+                                subZoneId
                             }
                             onChange={(
                                 event,
                             ) =>
-                                setZoneId(
+                                setSubZoneId(
                                     event
                                         .target
                                         .value,
                                 )
                             }
                             disabled={
-                                zonesLoading
+                                subZonesLoading
                             }
                             className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <option value="">
-                                {zonesLoading
+                                {subZonesLoading
                                     ? 'Loading categories...'
                                     : 'Select category'}
                             </option>
 
-                            {zones.map(
+                            {subZones.map(
                                 (
-                                    zone,
+                                    subZone,
                                 ) => (
                                     <option
                                         key={
-                                            zone.id
+                                            subZone.id
                                         }
                                         value={
-                                            zone.id
+                                            subZone.id
                                         }
                                     >
                                         {
-                                            zone.name
+                                            subZone.name
                                         }
                                     </option>
                                 ),

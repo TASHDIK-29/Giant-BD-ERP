@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { QueryRacksParams, RacksResponse } from './type';
+import { CreateRackRequest, CreateRackResponse, QueryRacksParams, RacksResponse } from './type';
 
 
 export async function getRacks(
@@ -11,6 +11,22 @@ export async function getRacks(
             {
                 params,
             },
+        );
+
+    return response.data;
+}
+
+
+
+
+
+export async function createRack(
+    data: CreateRackRequest,
+): Promise<CreateRackResponse> {
+    const response =
+        await api.post<CreateRackResponse>(
+            '/racks',
+            data,
         );
 
     return response.data;
