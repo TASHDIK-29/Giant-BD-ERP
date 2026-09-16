@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { createCategory, getCategories } from './api';
+import { createCategory, createSubCategory, getCategories } from './api';
 
 import type {
     QueryCategoriesParams,
@@ -36,3 +36,14 @@ export function useCreateCategory() {
             createCategory,
     });
 }
+
+
+export function useCreateSubCategory() {
+    return useMutation({
+        mutationFn:
+            createSubCategory,
+    });
+}
+
+
+

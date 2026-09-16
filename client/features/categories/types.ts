@@ -55,9 +55,22 @@ export interface QueryCategoriesParams {
 
 export interface CreateCategoryRequest {
     name: string;
-    description: string;
+    description?: string;
 }
 
 export interface CreateCategoryResponse {
+    message: string;
+}
+
+
+/* Create Sub Category */
+
+export interface CreateSubCategoryRequest {
+    name: string;
+    description?: string;
+    parentId: string;
+}
+
+export interface CreateSubCategoryResponse {
     message: string;
 }

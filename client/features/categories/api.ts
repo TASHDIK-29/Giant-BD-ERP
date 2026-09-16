@@ -4,6 +4,8 @@ import type {
     CategoriesResponse,
     CreateCategoryRequest,
     CreateCategoryResponse,
+    CreateSubCategoryRequest,
+    CreateSubCategoryResponse,
     QueryCategoriesParams,
 } from './types';
 
@@ -31,6 +33,20 @@ export async function createCategory(
     const response =
         await api.post<CreateCategoryResponse>(
             '/categories',
+            data,
+        );
+
+    return response.data;
+}
+
+
+
+export async function createSubCategory(
+    data: CreateSubCategoryRequest,
+): Promise<CreateSubCategoryResponse> {
+    const response =
+        await api.post<CreateSubCategoryResponse>(
+            '/categories/sub-categories',
             data,
         );
 
