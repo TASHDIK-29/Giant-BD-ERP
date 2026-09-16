@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { QueryZoneParams, ZoneResponse } from './type';
+import { CreateZoneRequest, CreateZoneResponse, QueryZoneParams, ZoneResponse } from './type';
 // import { QueryWarehouseParams, WarehouseResponse } from './type';
 
 
@@ -12,6 +12,22 @@ export async function getZones(
             {
                 params,
             },
+        );
+
+    return response.data;
+}
+
+
+
+
+
+export async function createZone(
+    data: CreateZoneRequest,
+): Promise<CreateZoneResponse> {
+    const response =
+        await api.post<CreateZoneResponse>(
+            '/zones',
+            data,
         );
 
     return response.data;

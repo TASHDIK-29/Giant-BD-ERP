@@ -39,3 +39,18 @@ export interface QueryZoneParams {
     search?: string;
     status?: ZoneStatus;
 }
+
+
+
+/** create zone */
+
+export interface CreateZoneRequest {
+    name: string;
+    code: string;
+    warehouseId: string;
+    description?: string;
+}
+
+export interface CreateZoneResponse {
+    message: string;
+}
