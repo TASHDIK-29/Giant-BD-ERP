@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { QueryVariantProductParams, VariantProductResponse } from './type';
+import { CreateVariantProductRequest, CreateVariantProductResponse, QueryVariantProductParams, VariantProductResponse } from './type';
 
 
 export async function getVariantProduct(
@@ -11,6 +11,20 @@ export async function getVariantProduct(
             {
                 params,
             },
+        );
+
+    return response.data;
+}
+
+
+
+export async function createVariantProduct(
+    data: CreateVariantProductRequest,
+): Promise<CreateVariantProductResponse> {
+    const response =
+        await api.post<CreateVariantProductResponse>(
+            '/products/variants',
+            data,
         );
 
     return response.data;

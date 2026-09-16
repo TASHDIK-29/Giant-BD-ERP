@@ -1,30 +1,3 @@
-/**
-        {
-            "id": 22,
-            "masterProductId": 6,
-            "colorId": 2,
-            "gender": "FEMALE",
-            "size": "456",
-            "sku": "TEST-MASTER-PRODUCT-2-ELECTRONIC-DEVICES-456-COLOR-FEMALE",
-            "modelNumber": null,
-            "uom": "PCS",
-            "productsPerPacket": 10,
-            "packagingType": "PACKET",
-            "status": "ACTIVE",
-            "createdAt": "2026-09-10T13:16:58.292Z",
-            "updatedAt": "2026-09-10T13:16:58.292Z",
-            "masterProduct": {
-                "id": 6,
-                "name": "Test Master Product 2",
-                "sku": "TEST-MASTER-PRODUCT-2-ELECTRONIC-DEVICES",
-                "status": "ACTIVE"
-            },
-            "color": {
-                "id": 2,
-                "name": "White"
-            }
-        },
- */
 
 
 
@@ -80,3 +53,44 @@ export interface QueryVariantProductParams {
     status?: VariantProductStatus;
 }
 
+
+
+/* Create Variant Types */
+
+export type VariantGender =
+    | 'MALE'
+    | 'FEMALE'
+    | 'KIDS';
+
+export type VariantUom =
+    | 'PAIR'
+    | 'LEFT'
+    | 'RIGHT';
+
+export type PackagingType =
+    | 'BOX'
+    | 'CARTON'
+    | 'PACKET'
+    | 'POLYBAG';
+
+export type VariantStatus =
+    | 'ACTIVE'
+    | 'INACTIVE';
+
+
+
+export interface CreateVariantProductRequest {
+    masterProductId: number;
+    colorId: number;
+    gender: VariantGender;
+    sizes: string[];
+    uom: VariantUom;
+    productsPerPacket: number;
+    packagingType: PackagingType;
+    modelNumber?: string;
+    status: VariantStatus;
+}
+
+export interface CreateVariantProductResponse {
+    message: string;
+}

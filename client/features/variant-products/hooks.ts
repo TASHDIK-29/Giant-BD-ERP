@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryVariantProductParams } from './type';
-import { getVariantProduct } from './api';
+import { createVariantProduct, getVariantProduct } from './api';
 
 
 
@@ -23,5 +23,15 @@ export function useVariantProduct(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+
+export function useCreateVariantProduct() {
+    return useMutation({
+        mutationFn:
+            createVariantProduct,
     });
 }
