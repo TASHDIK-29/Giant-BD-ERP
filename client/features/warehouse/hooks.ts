@@ -1,7 +1,7 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { getWarehouse } from './api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { createWarehouse, getWarehouse } from './api';
 import { QueryWarehouseParams } from './type';
 
 
@@ -23,5 +23,15 @@ export function useWarehouse(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+
+export function useCreateWarehouse() {
+    return useMutation({
+        mutationFn:
+            createWarehouse,
     });
 }

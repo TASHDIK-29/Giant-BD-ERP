@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { QueryWarehouseParams, WarehouseResponse } from './type';
+import { CreateWarehouseRequest, CreateWarehouseResponse, QueryWarehouseParams, WarehouseResponse } from './type';
 
 
 export async function getWarehouse(
@@ -11,6 +11,22 @@ export async function getWarehouse(
             {
                 params,
             },
+        );
+
+    return response.data;
+}
+
+
+
+
+
+export async function createWarehouse(
+    data: CreateWarehouseRequest,
+): Promise<CreateWarehouseResponse> {
+    const response =
+        await api.post<CreateWarehouseResponse>(
+            '/warehouses',
+            data,
         );
 
     return response.data;

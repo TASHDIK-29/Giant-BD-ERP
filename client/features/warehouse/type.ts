@@ -32,3 +32,17 @@ export interface QueryWarehouseParams {
     search?: string;
     status?: WarehouseStatus;
 }
+
+
+
+/** create color */
+
+export interface CreateWarehouseRequest {
+    name: string;
+    code: string;
+    description?: string;
+}
+
+export interface CreateWarehouseResponse {
+    message: string;
+}
