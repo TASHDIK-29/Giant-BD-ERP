@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryColorsParams } from './type';
-import { getColors } from './api';
+import { createColor, getColors } from './api';
 
 
 
@@ -25,3 +25,20 @@ export function useColors(
         ) => previousData,
     });
 }
+
+
+
+
+
+
+export function useCreateColor() {
+    return useMutation({
+        mutationFn:
+            createColor,
+    });
+}
+
+
+
+
+

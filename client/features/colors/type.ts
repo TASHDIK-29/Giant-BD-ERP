@@ -31,3 +31,15 @@ export interface QueryColorsParams {
     search?: string;
     status?: ColorsStatus;
 }
+
+
+/** create color */
+
+export interface CreateColorRequest {
+    name: string;
+    description?: string;
+}
+
+export interface CreateColorResponse {
+    message: string;
+}

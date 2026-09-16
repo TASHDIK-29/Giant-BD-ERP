@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { ColorsResponse, QueryColorsParams } from './type';
+import { ColorsResponse, CreateColorRequest, CreateColorResponse, QueryColorsParams } from './type';
 
 
 export async function getColors(
@@ -15,3 +15,32 @@ export async function getColors(
 
     return response.data;
 }
+
+
+
+
+
+
+export async function createColor(
+    data: CreateColorRequest,
+): Promise<CreateColorResponse> {
+    const response =
+        await api.post<CreateColorResponse>(
+            '/colors',
+            data,
+        );
+
+    return response.data;
+}
+
+
+
+
+
+
+
+
+
+
+
+
