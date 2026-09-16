@@ -97,6 +97,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/master-fg-product/new': {
+        title: 'Product',
+        breadcrumb: ['Product', 'Master FG Product', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/variant-fg-product': {
         title: 'Product',
         breadcrumb: ['Product', 'Variant FG Product'],
@@ -106,6 +117,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/variant-fg-product/new': {
+        title: 'Product',
+        breadcrumb: ['Product', 'Variant FG Product', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 
     '/buyer': {
@@ -119,6 +141,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/buyer/new': {
+        title: 'Buyer',
+        breadcrumb: ['CRM', 'Buyer', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/category': {
         title: 'Category',
         breadcrumb: ['Attribute', 'Category'],
@@ -128,6 +161,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/category/new': {
+        title: 'Category',
+        breadcrumb: ['Attribute', 'Category', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 
     '/sub-category': {
@@ -141,6 +185,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/sub-category/new': {
+        title: 'Sub Category',
+        breadcrumb: ['Attribute', 'Sub Category', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/material': {
         title: 'Material',
         breadcrumb: ['Attribute', 'Material'],
@@ -150,6 +205,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/material/new': {
+        title: 'Material',
+        breadcrumb: ['Attribute', 'Material', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 
     '/color': {
@@ -163,6 +229,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/color/new': {
+        title: 'Color',
+        breadcrumb: ['Attribute', 'Color', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/warehouse': {
         title: 'Warehouse',
         breadcrumb: ['Attribute', 'Warehouse'],
@@ -172,6 +249,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/warehouse/new': {
+        title: 'Warehouse',
+        breadcrumb: ['Attribute', 'Warehouse', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 
     '/zone': {
@@ -185,6 +273,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/zone/new': {
+        title: 'Zone',
+        breadcrumb: ['Attribute', 'Zone', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/sub-zone': {
         title: 'Sub Zone',
         breadcrumb: ['Attribute', 'Sub Zone'],
@@ -194,6 +293,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/sub-zone/new': {
+        title: 'Sub Zone',
+        breadcrumb: ['Attribute', 'Sub Zone', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 
     '/rack': {
@@ -207,6 +317,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/rack/new': {
+        title: 'Rack',
+        breadcrumb: ['Attribute', 'Rack', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/role': {
         title: 'Role',
         breadcrumb: ['Role'],
@@ -216,6 +337,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/role/new': {
+        title: 'Role',
+        breadcrumb: ['Role', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 
     '/permission': {
@@ -229,6 +361,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showNew: true,
     },
 
+    '/permission/new': {
+        title: 'Permission',
+        breadcrumb: ['Permission', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
+    },
+
     '/user': {
         title: 'User',
         breadcrumb: ['User'],
@@ -238,6 +381,17 @@ const pageConfigs: Record<string, PageConfig> = {
         showPrint: true,
         showPageSize: true,
         showNew: true,
+    },
+
+    '/user/new': {
+        title: 'User',
+        breadcrumb: ['User', 'New'],
+        showSearch: false,
+        showDownload: false,
+        showRefresh: false,
+        showPrint: false,
+        showPageSize: false,
+        showNew: false,
     },
 };
 
