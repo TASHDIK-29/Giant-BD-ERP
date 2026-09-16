@@ -46,3 +46,22 @@ export interface QueryBuyersParams {
     search?: string;
     status?: BuyersStatus;
 }
+
+
+
+
+/* Create Buyers Types */
+
+export type VariantType =
+    | 'LOCAL'
+    | 'INTERNATIONAL';
+
+
+export interface CreateBuyerRequest {
+    name: string;
+    type: VariantType;
+}
+
+export interface CreateBuyerResponse {
+    message: string;
+}

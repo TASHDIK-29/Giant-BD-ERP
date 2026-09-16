@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryBuyersParams } from './type';
-import { getBuyers } from './api';
+import { createBuyer, getBuyers } from './api';
 
 
 
@@ -23,5 +23,14 @@ export function useBuyers(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+
+export function useCreateBuyer() {
+    return useMutation({
+        mutationFn:
+            createBuyer,
     });
 }

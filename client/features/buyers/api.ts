@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios';
-import { BuyersResponse, QueryBuyersParams } from './type';
+import { BuyersResponse, CreateBuyerRequest, CreateBuyerResponse, QueryBuyersParams } from './type';
 
 
 export async function getBuyers(
@@ -14,5 +14,19 @@ export async function getBuyers(
         );
 
     // return response.data;
+    return response.data;
+}
+
+
+
+export async function createBuyer(
+    data: CreateBuyerRequest,
+): Promise<CreateBuyerResponse> {
+    const response =
+        await api.post<CreateBuyerResponse>(
+            '/buyers',
+            data,
+        );
+
     return response.data;
 }
