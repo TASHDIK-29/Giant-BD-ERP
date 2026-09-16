@@ -1,6 +1,7 @@
 import { api } from '@/lib/axios';
 
 import type {
+    CreatePermissionGroupPayload,
     PermissionGroupsResponse,
     QueryPermissionGroupsParams,
 } from './types';
@@ -15,6 +16,21 @@ export async function getPermissionGroups(
                 params,
             },
         );
+
+    return response.data;
+}
+
+
+
+
+
+export async function createPermissionGroup(
+    payload: CreatePermissionGroupPayload,
+) {
+    const response = await api.post(
+        '/permissions/groups',
+        payload,
+    );
 
     return response.data;
 }

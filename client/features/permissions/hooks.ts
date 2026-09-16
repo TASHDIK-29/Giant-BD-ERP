@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { getPermissionGroups } from './api';
+import { createPermissionGroup, getPermissionGroups } from './api';
 
 import type {
     QueryPermissionGroupsParams,
@@ -25,5 +25,12 @@ export function usePermissionGroups(
         placeholderData: (
             previousData,
         ) => previousData,
+    });
+}
+
+
+export function useCreatePermissionGroup() {
+    return useMutation({
+        mutationFn: createPermissionGroup,
     });
 }

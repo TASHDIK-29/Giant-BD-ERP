@@ -36,3 +36,11 @@ export interface QueryPermissionGroupsParams {
     limit?: number;
     search?: string;
 }
+
+
+
+export interface CreatePermissionGroupPayload {
+    name: string;
+    key: string;
+    actions: string[];
+}
