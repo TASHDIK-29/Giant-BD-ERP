@@ -3,8 +3,12 @@
 import {
     Check,
     Eye,
+    FileText,
+    Package,
     Pencil,
+    SquareCheckBig,
     Trash2,
+    Truck,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -186,9 +190,9 @@ export function StockOutListTable({
                                     <td className="px-4 py-3 text-center">
                                         <span
                                             className={`inline-flex rounded-sm px-2.5 py-1 text-xs font-medium ${item.status ===
-                                                    'ISSUED'
-                                                    ? 'bg-green-500 text-white'
-                                                    : item.status === 'DELEVIRED' 
+                                                'ISSUED'
+                                                ? 'bg-green-500 text-white'
+                                                : item.status === 'DELEVIRED'
                                                     ? 'bg-yellow-400 text-white'
                                                     : 'bg-blue-600 text-white'
                                                 }`}
@@ -205,7 +209,7 @@ export function StockOutListTable({
 
                                     {/* Actions */}
                                     <td className="px-4 py-3">
-                                        <div className="flex items-center justify-center gap-1">
+                                        <div className="flex items-center justify-start gap-2">
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -219,19 +223,39 @@ export function StockOutListTable({
                                                 variant="ghost"
                                                 size="icon"
                                                 className="h-8 w-8 bg-[#F3F8FE]"
-                                                title="Edit"
+                                                title="Package List"
                                             >
-                                                <Pencil className="h-4 w-4 text-black" />
+                                                <FileText className="h-4 w-4 text-black" />
                                             </Button>
 
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 className="h-8 w-8 text-destructive hover:text-destructive bg-[#F3F8FE]"
-                                                title="Delete"
+                                                title="Delivery Details"
                                             >
-                                                <Trash2 className="h-4 w-4 text-black" />
+                                                <Truck className="h-4 w-4 text-black" />
                                             </Button>
+
+
+                                            {item.status === "ISSUED" && <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 text-destructive hover:text-destructive bg-[#F3F8FE]"
+                                                title="Deliver"
+                                            >
+                                                <Package className="h-4 w-4 text-black" />
+                                            </Button>}
+
+                                            {item.status === "DELIVERED" && <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 text-destructive hover:text-destructive bg-[#F3F8FE]"
+                                                title="Deliver"
+                                            >
+                                                <SquareCheckBig className="h-4 w-4 text-black" />
+                                            </Button>}
+
                                         </div>
                                     </td>
                                 </tr>
