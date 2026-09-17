@@ -41,7 +41,7 @@ export const navigationGroups: NavigationGroup[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutDashboard,
-        // permission: 'dashboard:read',
+        permission: 'dashboard:read',
       },
       {
         title: 'Stock In',

@@ -49,4 +49,6 @@ export const routePermissions: Record<
     '/rack': 'rack:read',
     '/rack/new': 'rack:create',
 
+    '/dashboard': 'dashboard:read'
+
 };

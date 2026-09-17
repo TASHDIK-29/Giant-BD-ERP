@@ -17,6 +17,10 @@ import {
     routePermissions,
 } from '@/constants/route-permissions';
 
+import {
+    getDefaultRoute,
+} from '@/lib/default-route';
+
 interface PermissionGuardProps {
     children: React.ReactNode;
 }
@@ -47,25 +51,43 @@ export function PermissionGuard({
         }
 
         const requiredPermission =
-            routePermissions[
-                pathname
-            ];
+            routePermissions[pathname];
 
-        // No permission rule means
-        // the route is allowed.
         if (!requiredPermission) {
             return;
         }
 
         if (
-            !hasPermission(
+            hasPermission(
                 requiredPermission,
             )
         ) {
-            router.replace(
-                '/dashboard',
-            );
+            return;
         }
+
+        const defaultRoute =
+            getDefaultRoute(
+                session?.permissions ?? [],
+            );
+
+        /*
+         * User has another accessible page.
+         */
+        if (defaultRoute) {
+            router.replace(
+                defaultRoute,
+            );
+
+            return;
+        }
+
+        /*
+         * User has no accessible page.
+         *
+         * Don't redirect to /dashboard because
+         * they don't have dashboard:read.
+         */
+        router.replace('/login');
     }, [
         pathname,
         isLoading,
@@ -90,9 +112,7 @@ export function PermissionGuard({
     }
 
     const requiredPermission =
-        routePermissions[
-            pathname
-        ];
+        routePermissions[pathname];
 
     if (
         requiredPermission &&

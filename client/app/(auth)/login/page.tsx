@@ -46,6 +46,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { AuthShell } from '@/features/auth/components/auth-shell';
+import { getSession } from '@/features/auth/api';
+import { getDefaultRoute } from '@/lib/default-route';
 
 type AuthStep = 'login' | 'otp';
 
@@ -60,8 +62,30 @@ export default function LoginPage() {
         setStep('otp');
     };
 
-    const handleOtpSuccess = () => {
-        router.replace('/dashboard');
+    const handleOtpSuccess = async () => {
+        // router.replace('/dashboard');
+        // router.refresh();
+
+        const session =
+            await getSession();
+
+        const defaultRoute =
+            getDefaultRoute(
+                session.permissions,
+            );
+
+        if (!defaultRoute) {
+            alert(
+                'You do not have permission to access the system.',
+            );
+
+            return;
+        }
+
+        router.replace(
+            defaultRoute,
+        );
+
         router.refresh();
     };
 
