@@ -27,7 +27,7 @@ export function DashboardSidebar({
     const pathname = usePathname();
     const router = useRouter();
 
-    const { session } = useAuth();
+    const { session, hasPermission } = useAuth();
 
     const logoutMutation = useLogout();
 
@@ -146,13 +146,27 @@ export function DashboardSidebar({
                 <nav className="flex-1 overflow-y-auto px-3 py-5">
                     <div className="space-y-2">
                         {navigationGroups.map((group) => {
+                            const visibleItems =
+                                group.items.filter(
+                                    (item) =>
+                                        !item.permission ||
+                                        hasPermission(
+                                            item.permission,
+                                        ),
+                                );
+
+                            // Don't show an empty group.
+                            if (visibleItems.length === 0) {
+                                return null;
+                            }
+
                             const GroupIcon = group.icon;
 
                             const isOpen =
                                 openGroups[group.title];
 
                             const groupActive =
-                                group.items.some((item) =>
+                                visibleItems.some((item) =>
                                     isItemActive(
                                         item.href,
                                     ),
@@ -225,7 +239,7 @@ export function DashboardSidebar({
                                                 : 'pl-3'
                                                 }`}
                                         >
-                                            {group.items.map(
+                                            {visibleItems.map(
                                                 (item) => {
                                                     const ItemIcon =
                                                         item.icon;
@@ -258,11 +272,10 @@ export function DashboardSidebar({
                                                         >
                                                             {/* Show icon */}
                                                             <ItemIcon
-                                                                className={`size-5 shrink-0 ${
-                                                                    active
-                                                                        ? 'text-white'
-                                                                        : 'text-blue-600'
-                                                                }`}
+                                                                className={`size-5 shrink-0 ${active
+                                                                    ? 'text-white'
+                                                                    : 'text-blue-600'
+                                                                    }`}
                                                             />
 
                                                             {/* Hide title */}
@@ -288,8 +301,15 @@ export function DashboardSidebar({
                         {/* ================================================== */}
 
                         <div className="space-y-1">
-                            {standaloneNavigationItems.map(
-                                (item) => {
+                            {standaloneNavigationItems
+                                .filter(
+                                    (item) =>
+                                        !item.permission ||
+                                        hasPermission(
+                                            item.permission,
+                                        ),
+                                )
+                                .map((item) => {
                                     const ItemIcon =
                                         item.icon;
 
@@ -336,7 +356,7 @@ export function DashboardSidebar({
                                         </Link>
                                     );
                                 },
-                            )}
+                                )}
                         </div>
                     </div>
                 </nav>

@@ -8,20 +8,50 @@ import {
   useState,
 } from 'react';
 
-import { usePathname, useRouter } from 'next/navigation';
+import {
+  usePathname,
+  useRouter,
+} from 'next/navigation';
 
-import { getSession, refreshToken } from './api';
-import type { SessionResponse } from './types';
+import {
+  getSession,
+  refreshToken,
+} from './api';
+
+import type {
+  SessionResponse,
+} from './types';
+
+import {
+  hasPermission as checkPermission,
+  hasAnyPermission as checkAnyPermission,
+  hasAllPermissions as checkAllPermissions,
+} from '@/lib/permissions';
 
 interface AuthContextValue {
   session: SessionResponse | null;
+
   isAuthenticated: boolean;
+
   isLoading: boolean;
+
+  hasPermission: (
+    permission: string,
+  ) => boolean;
+
+  hasAnyPermission: (
+    permissions: string[],
+  ) => boolean;
+
+  hasAllPermissions: (
+    permissions: string[],
+  ) => boolean;
 }
 
-const AuthContext = createContext<AuthContextValue | undefined>(
-  undefined,
-);
+const AuthContext =
+  createContext<
+    AuthContextValue | undefined
+  >(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -34,40 +64,50 @@ export function AuthProvider({
   const pathname = usePathname();
 
   const [session, setSession] =
-    useState<SessionResponse | null>(null);
+    useState<SessionResponse | null>(
+      null,
+    );
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] =
+    useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const checkSession = async () => {
       try {
-        // First try the existing access token.
-        const currentSession = await getSession();
+        const currentSession =
+          await getSession();
 
         if (mounted) {
-          setSession(currentSession);
+          setSession(
+            currentSession,
+          );
         }
       } catch {
         try {
-          // Access token may have expired.
-          // Try refreshing it using the refresh-token cookie.
           await refreshToken();
 
-          const refreshedSession = await getSession();
+          const refreshedSession =
+            await getSession();
 
           if (mounted) {
-            setSession(refreshedSession);
+            setSession(
+              refreshedSession,
+            );
           }
         } catch {
           if (mounted) {
             setSession(null);
           }
 
-          // Do not redirect if already on the login page.
-          if (pathname !== '/login') {
-            router.replace('/login');
+          if (
+            pathname !==
+            '/login'
+          ) {
+            router.replace(
+              '/login',
+            );
           }
         }
       } finally {
@@ -84,12 +124,48 @@ export function AuthProvider({
     };
   }, [pathname, router]);
 
+  const permissions =
+    session?.permissions ?? [];
+
+  const hasPermission = (
+    permission: string,
+  ) =>
+    checkPermission(
+      permissions,
+      permission,
+    );
+
+  const hasAnyPermission = (
+    requiredPermissions: string[],
+  ) =>
+    checkAnyPermission(
+      permissions,
+      requiredPermissions,
+    );
+
+  const hasAllPermissions = (
+    requiredPermissions: string[],
+  ) =>
+    checkAllPermissions(
+      permissions,
+      requiredPermissions,
+    );
+
   return (
     <AuthContext.Provider
       value={{
         session,
-        isAuthenticated: !!session,
+
+        isAuthenticated:
+          !!session,
+
         isLoading,
+
+        hasPermission,
+
+        hasAnyPermission,
+
+        hasAllPermissions,
       }}
     >
       {children}
@@ -98,7 +174,8 @@ export function AuthProvider({
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const context =
+    useContext(AuthContext);
 
   if (!context) {
     throw new Error(

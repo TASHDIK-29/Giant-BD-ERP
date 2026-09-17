@@ -6,9 +6,15 @@ export interface AuthUser {
   roleId: number;
 }
 
+
+export interface AuthPermission {
+  id: number;
+  name: string;
+}
+
 export interface SessionResponse {
   user: AuthUser;
-  permissions: string[];
+  permissions: AuthPermission[];
 }
 
 export interface LoginRequest {
