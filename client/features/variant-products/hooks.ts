@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryVariantProductParams } from './type';
 import { createVariantProduct, getVariantProduct } from './api';
 
@@ -30,8 +30,17 @@ export function useVariantProduct(
 
 
 export function useCreateVariantProduct() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createVariantProduct,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['variantProduct'],
+            });
+        },
     });
 }

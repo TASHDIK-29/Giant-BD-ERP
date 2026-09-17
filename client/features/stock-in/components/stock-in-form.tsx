@@ -437,33 +437,7 @@ export function StockInForm() {
         );
     };
 
-    // const handleMasterChange = (
-    //     value: string,
-    // ) => {
-    //     setMasterProductId(value);
-    //     setColorId('');
-    //     setGender('');
-    //     setRows([]);
-    //     setError('');
-    //     setSuccess('');
-    // };
-
-    // const handleColorChange = (
-    //     value: string,
-    // ) => {
-    //     setColorId(value);
-    //     setGender('');
-    //     setRows([]);
-    //     setError('');
-    // };
-
-    // const handleGenderChange = (
-    //     value: Gender,
-    // ) => {
-    //     setGender(value);
-    //     setRows([]);
-    //     setError('');
-    // };
+   
 
 
     const handleMasterChange = (

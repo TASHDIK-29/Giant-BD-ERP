@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createZone, getZones } from './api';
 import { QueryZoneParams } from './type';
 // import { QueryWarehouseParams } from './type';
@@ -32,8 +32,17 @@ export function useZone(
 
 
 export function useCreateZone() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createZone,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['zones'],
+            });
+        },
     });
 }

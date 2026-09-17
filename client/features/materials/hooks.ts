@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryMaterialsParams } from './types';
 import { createMaterial, getMaterials } from './api';
 
@@ -12,7 +12,7 @@ export function useMaterials(
 ) {
     return useQuery({
         queryKey: [
-            'materias',
+            'materials',
             params,
             refreshKey,
         ],
@@ -29,8 +29,17 @@ export function useMaterials(
 
 
 export function useCreateMaterial() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createMaterial,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['materials'],
+            });
+        },
     });
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { createUser, getUsers } from './api';
 
@@ -29,8 +29,17 @@ export function useUsers(
 
 
 export function useCreateUser() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createUser,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['users'],
+            });
+        },
     });
 }

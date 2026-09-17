@@ -224,7 +224,7 @@ export default function NewRolePage() {
 
             <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                 {permissionsLoading ? (
-                    <div className="flex min-h-[250px] items-center justify-center">
+                    <div className="flex min-h-62.5 items-center justify-center">
                         <div className="flex items-center gap-2 text-sm text-slate-500">
                             <Loader2
                                 size={18}
@@ -234,11 +234,11 @@ export default function NewRolePage() {
                         </div>
                     </div>
                 ) : permissionsError ? (
-                    <div className="flex min-h-[250px] items-center justify-center px-4 text-sm text-red-500">
+                    <div className="flex min-h-62.5 items-center justify-center px-4 text-sm text-red-500">
                         Failed to load permissions.
                     </div>
                 ) : permissionGroups.length === 0 ? (
-                    <div className="flex min-h-[250px] items-center justify-center text-sm text-slate-500">
+                    <div className="flex min-h-62.5 items-center justify-center text-sm text-slate-500">
                         No permissions available.
                     </div>
                 ) : (
@@ -248,7 +248,7 @@ export default function NewRolePage() {
                                 <tr className="h-11 bg-slate-50">
                                     {/* Module */}
 
-                                    <th className="sticky left-0 z-20 min-w-[165px] bg-slate-50 px-3 text-left text-xs font-semibold text-slate-800">
+                                    <th className="sticky left-0 z-20 min-w-41.25 bg-slate-50 px-3 text-left text-xs font-semibold text-slate-800">
                                         Module
                                     </th>
 
@@ -260,7 +260,7 @@ export default function NewRolePage() {
                                                 key={
                                                     action
                                                 }
-                                                className="min-w-[75px] whitespace-nowrap px-2 text-center text-xs font-semibold capitalize text-slate-800"
+                                                className="min-w-18.75 whitespace-nowrap px-2 text-center text-xs font-semibold capitalize text-slate-800"
                                             >
                                                 {
                                                     action

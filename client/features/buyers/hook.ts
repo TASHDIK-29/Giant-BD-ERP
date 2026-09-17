@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryBuyersParams } from './type';
 import { createBuyer, getBuyers } from './api';
 
@@ -29,8 +29,17 @@ export function useBuyers(
 
 
 export function useCreateBuyer() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createBuyer,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['buyers'],
+            });
+        },
     });
 }

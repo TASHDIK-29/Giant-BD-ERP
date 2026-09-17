@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QuerySubZoneParams } from './type';
 import { createSubZone, getSubZones } from './api';
 
@@ -30,8 +30,17 @@ export function useSubZone(
 
 
 export function useCreateSubZone() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createSubZone,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['sub-zones'],
+            });
+        },
     });
 }

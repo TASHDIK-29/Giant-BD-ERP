@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryRacksParams } from './type';
 import { createRack, getRacks } from './api';
 
@@ -32,8 +32,17 @@ export function useRacks(
 
 
 export function useCreateRack() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createRack,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['racks'],
+            });
+        },
     });
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryColorsParams } from './type';
 import { createColor, getColors } from './api';
 
@@ -32,9 +32,18 @@ export function useColors(
 
 
 export function useCreateColor() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn:
             createColor,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['colors'],
+            });
+        },
     });
 }
 

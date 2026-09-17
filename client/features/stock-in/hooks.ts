@@ -3,6 +3,7 @@
 import {
     useMutation,
     useQuery,
+    useQueryClient,
 } from '@tanstack/react-query';
 
 import {
@@ -58,7 +59,16 @@ export function useStockInRacks() {
 }
 
 export function useCreateStockIn() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn: createStockIn,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['batchList'],
+            });
+        },
     });
 }

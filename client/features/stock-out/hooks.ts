@@ -104,8 +104,17 @@ export function useCreatePurchaseOrder() {
 }
 
 export function useCreateStockOut() {
+    const queryClient =
+        useQueryClient();
+
     return useMutation({
         mutationFn: createStockOut,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['stockOut'],
+            });
+        },
     });
 }
 
